@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract UmblNFT is ERC721URIStorage, Ownable {
+contract UmblNFT is ERC721URIStorage, Ownable {    
     // this contract's owner address
     address payable tokenOwnerAddress;    
     // this contract's token name
@@ -16,7 +16,7 @@ contract UmblNFT is ERC721URIStorage, Ownable {
     string public tokenSymbol;
     // total number of token minted
     uint256 public tokenCounter;
-    // token data structure
+    // token data structure    
     struct UmblData {
         uint256 tokenId;
         string tokenName;
@@ -28,6 +28,10 @@ contract UmblNFT is ERC721URIStorage, Ownable {
         uint256 numberOfTransfers;
         bool forSale;
     }
+    // flag for reselling feature
+    bool private resellFlag;
+    // flag for allowing users to use token in game
+    bool private useFlag;
 
     // map token id to umbl data
     mapping(uint256 => UmblData) public allUmblData;
@@ -41,6 +45,26 @@ contract UmblNFT is ERC721URIStorage, Ownable {
         tokenName = name();
         tokenSymbol = symbol();
         tokenOwnerAddress = payable(msg.sender);
+        resellFlag = false;
+        useFlag = false;
+    }
+
+    // switch resell flag for marketplace feature
+    function toggleResell() public onlyOwner {
+        if(resellFlag == true) {
+            resellFlag = false;
+        } else {
+            resellFlag = true;
+        }
+    }
+
+    // switch use flag for game feature
+    function toggleUse() public onlyOwner {
+        if(useFlag == false) {
+            useFlag = true;
+        } else {
+            useFlag = false;
+        }
     }
 
     // mint a new token
@@ -137,10 +161,54 @@ contract UmblNFT is ERC721URIStorage, Ownable {
         return _tokenExists;
     }
 
+    // use token for game feature
+    function useToken(uint256 _tokenId) 
+        public payable
+    {
+        // check if the use flag is true
+        require(useFlag == true);
+
+        // check if the function caller is not an zero address account
+        require(msg.sender != address(0));
+
+        // check if the token id of the token being bought exists or not
+        require(_exists(_tokenId));
+
+        // get the token's owner
+        address tokenOwner = ownerOf(_tokenId);
+
+        // token's owner should not be an zero address account
+        require(tokenOwner != address(0));
+
+        // check current call is same with the token's owner
+        require(tokenOwner == msg.sender);
+
+        // get the token from all UmblData mapping and create a memory of it as defined
+        UmblData memory umblData = allUmblData[_tokenId];
+
+        // transfer the token from owner to the contract owner
+        _transfer(tokenOwner, tokenOwnerAddress, _tokenId);
+
+        // update the token's previous owner
+        umblData.previousOwner = umblData.currentOwner;
+
+        // update the token's current owner
+        umblData.currentOwner = tokenOwnerAddress;
+
+        // update the token's transferred time
+        umblData.numberOfTransfers += 1;
+
+        // update the token's forSale to false
+        umblData.forSale = true;
+
+        // set and update that token in the mapping
+        allUmblData[_tokenId] = umblData;
+    }
+
     // buy a token by passing in the token's id
     function buyToken(uint256 _tokenId)
         public payable
-    {
+    {        
         // check if the function caller is not an zero address account
         require(msg.sender != address(0));
 
@@ -227,6 +295,9 @@ contract UmblNFT is ERC721URIStorage, Ownable {
     function toggleForSale(uint256 _tokenId)
         public
     {
+        // require the resell flag is true
+        require(resellFlag == true);
+
         // require caller of the function is not an empty address account
         require(msg.sender != address(0));
 
