@@ -4,6 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserTableSeeder;
+use Database\Seeders\FactionTableSeeder;
+use Database\Seeders\RarityTableSeeder;
+use Database\Seeders\CategoryTableSeeder;
+use Database\Seeders\CrateTableSeeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,6 +21,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserTableSeeder::class,
+            FactionTableSeeder::class,
+            RarityTableSeeder::class,
+            CategoryTableSeeder::class,
+            CrateTableSeeder::class,
         ]);
 
 

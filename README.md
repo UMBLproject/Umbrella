@@ -6,27 +6,37 @@
 
 It was based ERC721 smart contract and contains specific functions.
 
-### `Main functions`
+### `------- Main functions`
 
-### `- mintToken`
+##### `- mintToken`
 Only owner can mint tokens
-### `- buyToken`
+##### `- buyToken`
 Users can buy tokens by using BNB
-### `- updateTokenPrice`
+##### `- updateTokenPrice`
 Users can update it's price for reselling
-### `- useToken`
+##### `- useToken`
 Users can use tokens in the game
-### `- allowResellToken`
+##### `- allowResellToken`
 Only owner allow resell feature for all users
-### `- allowUseToken`
+##### `- allowUseToken`
 Only owner allow use token feature for all users
 
-### `Technical Notes`
+### `------- Technical Notes`
 
-### `- truffle compile`
+##### `- truffle compile`
 Compile solidity files
-### `- truffle test`
+##### `- truffle test`
 Test smart contract
-### `- truffle deploy`
+##### `- truffle deploy`
 Deploy smart contract to blockchain
+
+
+## 2. Backend
+
+### `------- Technical Notes`
+
+##### `- Laravel 8`
+##### `- Tymon/JWT-auth`
+
+
 

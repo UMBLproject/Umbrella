@@ -24,6 +24,7 @@ class UserTableSeeder extends Seeder
                     'role' => config('admin.admin_role'),
                     'email_verified_at' => now(),
                     'remember_token' => Str::random(10),
+                    'referral_code' => Str::uuid(),
                 ]
             );
         }

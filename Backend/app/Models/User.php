@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\Group;
+use App\Models\Level;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -60,4 +62,20 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims() {
         return [];
     }    
+
+    public function isAdmin() {
+        return $this->role === 'admin';
+    }
+ 
+    public function isUser() {
+        return $this->role === 'user';
+    }
+
+    public function hasRole($role) {
+        return $this->role == $role? true : false;
+    }
+
+    public function group() {
+        return Group::findOrFail($this->group_id);
+    }
 }

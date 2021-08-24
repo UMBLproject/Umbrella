@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('referral_code');
+            $table->boolean('2fa')->default(false);
             $table->timestamps();
         });
     }
