@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateObjectsTable extends Migration
+class CreateEquipmentTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateObjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('objects', function (Blueprint $table) {
+        Schema::create('equipment', function (Blueprint $table) {
             $table->id();
             
             $table->unsignedBigInteger('tokenId')->unique();
@@ -21,12 +21,12 @@ class CreateObjectsTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
 
-            $table->unsignedBigInteger('rarity_id');
-            $table->foreign('rarity_id')->references('id')->on('rarities')->onDelete('cascade');
+            $table->unsignedBigInteger('rarity_id')->nullable();
+            $table->foreign('rarity_id')->references('id')->on('rarities')->onDelete('set null');
             
             $table->string('name');
-            $table->string('description')->nullable();
-            $table->string('image')->nullable();
+            $table->text('description');
+            $table->string('image');
             $table->json('attributes')->nullable();
 
             $table->timestamps();

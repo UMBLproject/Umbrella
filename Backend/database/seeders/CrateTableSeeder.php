@@ -19,36 +19,28 @@ class CrateTableSeeder extends Seeder
         $Surviors = Faction::where('name', 'Survivors')->firstOrFail();
         $Scientists = Faction::where('name', 'Scientists')->firstOrFail();
 
-        $Common = Rarity::where('name', 'Common')->firstOrFail();
-        $Uncommon = Rarity::where('name', 'Uncommon')->firstOrFail();
-        $Unique = Rarity::where('name', 'Unique')->firstOrFail();
-
         $crates = [
             [
                 'faction_id' => $Surviors->id,
                 'level' => 1,
-                'rarities' => json_encode([$Common->id, $Uncommon->id]),            
                 'name' => 'Survior Biocrate',
                 'price' => 0.062,
             ],
             [
                 'faction_id' => $Surviors->id,
                 'level' => 2,
-                'rarities' => json_encode([$Unique->id]),                
                 'name' => 'Tactical Biocrate',
                 'price' => 0.093,
             ],
             [
                 'faction_id' => $Scientists->id,
                 'level' => 1,
-                'rarities' => json_encode([$Common->id, $Uncommon->id]),             
                 'name' => 'Alpha Type',
                 'price' => 0.062,
             ],
             [
                 'faction_id' => $Scientists->id,
                 'level' => 2,
-                'rarities' => json_encode([$Unique->id]),             
                 'name' => 'Omega Type',
                 'price' => 0.093,
             ],

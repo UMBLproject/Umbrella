@@ -9,7 +9,22 @@ class Crate extends Model
 {
     use HasFactory;
 
-    protected $casts = [
-        'rarities' => 'array'
+    protected $hidden = [
+        'faction_id',
+        'created_at',
+        'updated_at',
     ];
+
+
+    public function faction()
+    {
+        return $this->belongsTo(Faction::class);
+    }
+
+    public function rarities()
+    {
+        return $this->belongsToMany(Rarity::class, 'crate_rarities', 'crate_id', 'rarity_id');
+    }
+
+    protected $with = ['faction', 'rarities'];
 }

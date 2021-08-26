@@ -21,6 +21,7 @@ class CategoryTableSeeder extends Seeder
             ['faction_id' => 2,'name' => 'Viruses and Bacteria'],
             ['faction_id' => 2,'name' => 'Parasites and Fungus'],
             ['faction_id' => 2,'name' => 'Virus Variants'],
+            ['name' => 'Badges'],
         ];
 
         foreach($categories as $category) {

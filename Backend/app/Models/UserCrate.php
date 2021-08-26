@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class UserCrate extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'crate_id',
+        'payment_id',
+    ];
 }

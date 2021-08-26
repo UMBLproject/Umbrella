@@ -8,6 +8,7 @@ use Database\Seeders\FactionTableSeeder;
 use Database\Seeders\RarityTableSeeder;
 use Database\Seeders\CategoryTableSeeder;
 use Database\Seeders\CrateTableSeeder;
+use Database\Seeders\CrateRarityTableSeeder;
 
 
 class DatabaseSeeder extends Seeder
@@ -25,9 +26,11 @@ class DatabaseSeeder extends Seeder
             RarityTableSeeder::class,
             CategoryTableSeeder::class,
             CrateTableSeeder::class,
+            CrateRarityTableSeeder::class,
         ]);
 
 
         \App\Models\User::factory(10)->create();
+        \App\Models\Equipment::factory(100)->create();
     }
 }

@@ -21,9 +21,7 @@ class CreateLoginHistoriesTable extends Migration
 
             $table->ipAddress('ip_address');          
             $table->macAddress('mac_address')->nullable();
-            $table->string('os')->nullable();
             $table->string('browser')->nullable();
-            $table->string('browser_version')->nullable();
 
             $table->timestamps();
         });

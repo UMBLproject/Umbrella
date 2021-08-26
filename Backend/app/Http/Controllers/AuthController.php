@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\LoginHistory;
+use Illuminate\Support\Str;
 use Validator;
 
 class AuthController extends Controller
@@ -40,6 +42,23 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
+        if(auth()->user()->status == 'banned') {
+            auth()->logout();
+            return response()->json(['error' => 'The account was banned'], 401);
+        }
+
+        $ipAddr = $request->ip();
+        $macAddr = explode(" ", exec('getmac'))[0];
+        $browserInfo = $request->header('User-Agent');
+
+        // Save login history
+        $loginHistory = LoginHistory::create([
+            'user_id' => auth()->user()->id,
+            'ip_address' => $ipAddr,
+            'mac_address' => $macAddr,
+            'browser' => $browserInfo,
+        ]);
+
         return $this->createNewToken($token);
     }
 
@@ -53,15 +72,26 @@ class AuthController extends Controller
             'name' => 'required|string|between:2,100',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|confirmed|min:6',
+            'referrer' => 'string|between:6, 100',
         ]);
 
         if($validator->fails()){
             return response()->json($validator->errors(), 400);
         }
 
+        $validated = $validator->validated();
+
+        $referrer = null;
+        if(isset($validated['referrer']))
+            $referrer = User::where('referral_code', $validated['referrer'])->first();
+
         $user = User::create(array_merge(
                     $validator->validated(),
-                    ['password' => bcrypt($request->password)]
+                    [
+                        'password' => bcrypt($request->password),
+                        'referrer_id' => $referrer ? $referrer->id : null,
+                        'referral_code' => Str::uuid(),
+                    ]
                 ));
 
         return response()->json([

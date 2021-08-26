@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class LoginHistory extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'ip_address',
+        'mac_address',
+        'browser',
+    ];
 }

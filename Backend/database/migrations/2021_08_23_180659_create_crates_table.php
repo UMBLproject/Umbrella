@@ -21,7 +21,6 @@ class CreateCratesTable extends Migration
             $table->unsignedBigInteger('faction_id')->nullable();
             $table->foreign('faction_id')->references('id')->on('factions')->onDelete('set null');
 
-            $table->json('rarities');
             $table->unsignedTinyInteger('level')->default(1);            
             $table->unsignedTinyInteger('quantity')->default(4);
             $table->double('price', 8, 3)->default(0.000);

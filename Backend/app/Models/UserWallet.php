@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class UserWallet extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'wallet_id',
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }

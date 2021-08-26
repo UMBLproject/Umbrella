@@ -8,8 +8,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use App\Models\Group;
-use App\Models\Level;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -24,6 +22,8 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'referral_code',
+        'referrer_id',
     ];
 
     /**
@@ -34,6 +34,10 @@ class User extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'remember_token',
+        'referral_code',
+        '2fa',
+        'status',
+        'referrer_id',
     ];
 
     /**
@@ -75,7 +79,28 @@ class User extends Authenticatable implements JWTSubject
         return $this->role == $role? true : false;
     }
 
-    public function group() {
-        return Group::findOrFail($this->group_id);
+    public function equipment() {
+        return $this->belongsToMany(Equipment::class, 'inventories', 'user_id', 'equipment_id');
+    }
+
+    public function referral() {
+        return $this->belongsTo(User::class, 'referrer_id', 'id');
+    }
+
+    public function referrals() {
+        return $this->hasMany(User::class, 'referrer_id', 'id');
+    }
+
+    protected $appends = ['referral_link'];
+
+    public function getReferralLinkAttribute()
+    {
+        return $this->referral_link = route('register', ['ref' => $this->referral_code]);
+    }
+
+    protected $with = ['wallets'];
+
+    public function wallets() {
+        return $this->belongsToMany(Wallet::class, 'user_wallets', 'user_id', 'wallet_id');
     }
 }
