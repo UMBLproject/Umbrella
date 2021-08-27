@@ -14,6 +14,16 @@ class Inventory extends Model
         'equipment_id',
     ];
 
-    protected $hidden = [        
+    protected $hidden = [     
+        'created_at',
+        'updated_at',
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class, 'inventories', 'user_id', 'equipment_id');
+    }
+
+    public function equipment() {
+        return $this->belongsTo(User::class, 'inventories', 'user_id', 'equipment_id');
+    }
 }

@@ -14,10 +14,17 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        return response()->json([
-            'success' => true,
-            'inventory' => auth()->user()->equipment,
-        ], 200);
+        if(auth()->user()->isAdmin()) {
+            return response()->json([
+                'success' => true,
+                'inventory' => Inventory::all(),
+            ], 200);
+        } else {
+            return response()->json([
+                'success' => true,
+                'inventory' => auth()->user()->equipment,
+            ], 200);
+        }
     }
 
     /**
@@ -63,5 +70,5 @@ class InventoryController extends Controller
     public function destroy(Inventory $inventory)
     {
         //
-    }
+    }    
 }

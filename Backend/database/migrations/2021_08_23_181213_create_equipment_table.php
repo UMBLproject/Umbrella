@@ -15,6 +15,9 @@ class CreateEquipmentTable extends Migration
     {
         Schema::create('equipment', function (Blueprint $table) {
             $table->id();
+
+            $table->boolean('assigned')->default(false);
+            $table->boolean('equipped')->default(false);
             
             $table->unsignedBigInteger('tokenId')->unique();
 

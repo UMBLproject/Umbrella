@@ -31,6 +31,7 @@ Route::group([
     ]);
     Route::post('/lootbox/buy', [CrateController::class, 'buy'])->name('lootbox.buy');
     Route::apiResource('inventory', InventoryController::class)->only(['index', 'show']);
+    Route::post('/equipment/switch/{equipment}', [EquipmentController::class, 'switch'])->name('equipment.switch');
     Route::post('/wallet/connect', [WalletController::class, 'connect'])->name('wallet.connect');
 });
 

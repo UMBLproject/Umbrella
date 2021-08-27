@@ -162,29 +162,33 @@ class CrateController extends Controller
         // distribute objects included in the crate
         $objects = array();
         foreach($crate->rarities as $rarity) {
-            $objects = array_merge($objects, Equipment::where('rarity_id', $rarity->id)->get()->toArray());
+            $objects = array_merge($objects, Equipment::where('rarity_id', $rarity->id)->where('assigned', false)->get()->toArray());
         }        
 
         $keys = array_rand($objects, $crate->quantity);
 
         $result = array();
 
-        foreach($keys as $key) {
-            $equipment = $objects[$key];            
+        foreach($keys as $key) {            
+            $equipment = Equipment::find($objects[$key]['id']);
+            
+            // Update equipment assigned flag to true
+            $equipment->assigned = true;
+            $equipment->save();
 
             // Store CrateEquipment
             $crate_equipment = CrateEquipment::create([
                 'crate_id' => $crate->id,
-                'equipment_id' => $equipment['id'],
+                'equipment_id' => $equipment->id,
             ]);
 
             // Store Inventory
             $inventory = Inventory::create([
                 'user_id' => $user->id,
-                'equipment_id' => $equipment['id'],
+                'equipment_id' => $equipment->id,
             ]);
 
-            $result[] = $equipment['id'];
+            $result[] = $equipment->id;
         }
 
         return response()->json([

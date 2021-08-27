@@ -38,4 +38,9 @@ class Equipment extends Model
     }
 
     protected $with = ['category', 'rarity'];
+
+    public function users() 
+    {
+        return $this->belongsToMany(User::class, 'inventories', 'equipment_id', 'user_id');
+    }
 }
