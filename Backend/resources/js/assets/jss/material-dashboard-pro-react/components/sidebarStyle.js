@@ -166,7 +166,7 @@ const sidebarStyle = theme => ({
     transform: "translate3d(25px, 0, 0)"
   },
   img: {
-    width: "35px",
+    width: "30px",
     verticalAlign: "middle",
     border: "0"
   },

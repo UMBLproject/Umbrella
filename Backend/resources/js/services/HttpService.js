@@ -1,6 +1,7 @@
 export default class HttpService
 {
-    url = "http://localhost:8000/api";
+    // url = "http://localhost:8000/api";
+    url = "http://umbrella.localhost/api";
 
     postData = async(item, added_url, tokenId="") => {
         const token = await localStorage.getItem(tokenId);

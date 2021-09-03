@@ -1,55 +1,89 @@
 import * as ActionTypes from '../ActionTypes';
 
 const initState = {
-    authResponse: "",
+    loading: false,
+    isAuthenticated: false,
+    isAdmin: false,
+    currentUser: null,
+    token: localStorage.getItem("user-token")
+        ? localStorage.getItem("user-token")
+        : null,
+    error: "",    
 };
 
 const AuthReducer = (state = initState, action) => {
     switch (action.type) {
         case ActionTypes.RESTART_AUTH_RESPONSE:
             return {
-                ...state,
-                authResponse: "",
+                ...state,   
+                loading: false,             
+                isAuthenticated: false,
+                isAdmin: false,
+                currentUser: null,
             };
         case ActionTypes.LOADING:
             return {
                 ...state,
-                authResponse: "loading...",
+                loading: true,
             };
         case ActionTypes.SIGNUP_SUCCESS:
             return {
                 ...state,
-                authResponse: action.res,
+                loading: false,
+                error: "",  
             };
         case ActionTypes.SIGNUP_ERROR:
             return {
                 ...state,
-                authResponse: action.res,
+                loading: false,
             };
         case ActionTypes.LOGIN_SUCCESS:
             return {
                 ...state,
-                authResponse: "redirecting to dashboard...",
+                loading: false,
+                isAuthenticated: true,
+                isAdmin: action.payload.user.role === "admin",
+                currentUser: action.payload.user.email,
+                token: action.payload.token,
+                error: "",
             };
         case ActionTypes.LOGIN_ERROR:
             return {
                 ...state,
-                authResponse: action.res,
+                loading: false,
+                error: action.payload.error,
+                currentUser: null,
+                isAuthenticated: false,
+                isAdmin: false,
             }; 
         case ActionTypes.LOGOUT_SUCCESS:
             return {
                 ...state,
-                authResponse: action.res,
+                loading: false,
+                isAuthenticated: false,
+                isAdmin: false,
+                currentUser: null,
+                token: null,
+                error: "",
             };
         case ActionTypes.LOGOUT_ERROR:
             return {
                 ...state,
-                authResponse: action.res,
+                loading: false,
+                isAuthenticated: false,
+                isAdmin: false,
+                error: action.payload.error,
+                currentUser: null,
             }; 
         case ActionTypes.CODE_ERROR:
             return {
                 ...state,
-                authResponse: "There seems to be a problem, please refresh your browser",
+                loading: false,
+                isAuthenticated: false,
+                isAdmin: false,
+                error: action.payload,
+                currentUser: null,
+                token: null,
             };
         default:
             return state;

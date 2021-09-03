@@ -39,6 +39,10 @@ class User extends Authenticatable implements JWTSubject
         'status',
         'referrer_id',
         'pivot',
+        'email_verified_at',
+        'created_at',
+        'updated_at',
+        'id',
     ];
 
     /**
@@ -96,10 +100,9 @@ class User extends Authenticatable implements JWTSubject
 
     public function getReferralLinkAttribute()
     {
-        return $this->referral_link = route('register', ['ref' => $this->referral_code]);
-    }
-
-    protected $with = ['wallets'];
+        // return $this->referral_link = route('register', ['ref' => $this->referral_code]);
+        return $this->referral_link = $this->referral_code;
+    }    
 
     public function wallets() {
         return $this->belongsToMany(Wallet::class, 'user_wallets', 'user_id', 'wallet_id');

@@ -16,6 +16,8 @@ import FixedPlugin from "@/components/FixedPlugin/FixedPlugin.js";
 
 import routes from "@/routes.js";
 
+import { AdminGuard } from "@/guard.js";
+
 import styles from "@/assets/jss/material-dashboard-pro-react/layouts/adminStyle.js";
 
 var ps;
@@ -25,6 +27,7 @@ const useStyles = makeStyles(styles);
 import sidebar2 from "@/assets/img/sidebar-2.jpg";
 import logo_white from "@/assets/img/logo-white.svg";
 import logo from "@/assets/img/logo.svg";
+import mainIcon from "@/assets/img/umbl_ico.png";
 
 export default function Dashboard(props) {
   const { ...rest } = props;
@@ -37,7 +40,7 @@ export default function Dashboard(props) {
   const [bgColor, setBgColor] = React.useState("black");
   // const [hasImage, setHasImage] = React.useState(true);
   const [fixedClasses, setFixedClasses] = React.useState("dropdown");
-  const [logo, setLogo] = React.useState(logo_white);
+  const [logo, setLogo] = React.useState(mainIcon);
 
   // styles
   const classes = useStyles();
@@ -126,18 +129,13 @@ export default function Dashboard(props) {
       }
       if (prop.layout === "/admin") {
         return (
-          <Route
+          <AdminGuard
+            exact
+            routeRedirect="/login"
             path={prop.layout + prop.path}
             component={prop.component}
             key={key}
           />
-          // <Guard 
-          //   path={prop.layout + prop.path} 
-          //   token="user-token" 
-          //   routeRedirect="/auth/login" 
-          //   component={prop.component}
-          //   key={key}
-          // /> 
         );
       } else {
         return null;
@@ -157,7 +155,7 @@ export default function Dashboard(props) {
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
-        logoText={"Creative Tim"}
+        logoText={"UMBRELLA"}
         logo={logo}
         image={image}
         handleDrawerToggle={handleDrawerToggle}

@@ -33,7 +33,7 @@ export default function Footer(props) {
     <footer className={classes.footer}>
       <div className={container}>
         <div className={classes.left}>
-          <List className={classes.list}>
+          {/* <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
               <a href="#home" className={block}>
                 {rtlActive ? "الصفحة الرئيسية" : "Home"}
@@ -54,20 +54,20 @@ export default function Footer(props) {
                 {rtlActive ? "مدونة" : "Blog"}
               </a>
             </ListItem>
-          </List>
+          </List> */}
         </div>
         <p className={classes.right}>
           &copy; {1900 + new Date().getYear()}{" "}
           <a
-            href="https://www.creative-tim.com?ref=mdpr-footer"
+            href="https://www.umbrella.io"
             className={anchor}
             target="_blank"
           >
-            {rtlActive ? "توقيت الإبداعية" : "Creative Tim"}
+            {rtlActive ? "توقيت الإبداعية" : "Umbrella Project"}
           </a>
           {rtlActive
             ? ", مصنوعة مع الحب لشبكة الإنترنت أفضل"
-            : ", made with love for a better web"}
+            : ", "}
         </p>
       </div>
     </footer>

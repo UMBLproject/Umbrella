@@ -23,6 +23,7 @@ import Search from "@material-ui/icons/Search";
 // core components
 import CustomInput from "@/components/CustomInput/CustomInput.js";
 import Button from "@/components/CustomButtons/Button.js";
+import ConnectWallet from "@/components/Wallet/ConnectWallet";
 
 import styles from "@/assets/jss/material-dashboard-pro-react/components/adminNavbarLinksStyle.js";
 
@@ -60,7 +61,7 @@ export default function HeaderLinks(props) {
     " " +
     classNames({
       [classes.searchRTL]: rtlActive
-    });
+    });  
   const dropdownItem = classNames(classes.dropdownItem, classes.primaryHover, {
     [classes.dropdownItemRTL]: rtlActive
   });
@@ -70,30 +71,10 @@ export default function HeaderLinks(props) {
   const managerClasses = classNames({
     [classes.managerClasses]: true
   });
+  
   return (
-    <div className={wrapper}>
-      <CustomInput
-        rtlActive={rtlActive}
-        formControlProps={{
-          className: classes.top + " " + classes.search
-        }}
-        inputProps={{
-          placeholder: rtlActive ? "بحث" : "Search",
-          inputProps: {
-            "aria-label": rtlActive ? "بحث" : "Search",
-            className: classes.searchInput
-          }
-        }}
-      />
-      <Button
-        color="white"
-        aria-label="edit"
-        justIcon
-        round
-        className={searchButton}
-      >
-        <Search className={classes.headerLinksSvg + " " + classes.searchIcon} />
-      </Button>
+    <div className={wrapper}>      
+      <ConnectWallet />
       <Button
         color="transparent"
         simple

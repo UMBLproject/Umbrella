@@ -67,6 +67,13 @@ const adminNavbarLinksStyle = theme => ({
       float: "right"
     }
   },
+  connectButton: {
+    [theme.breakpoints.down("sm")]: {
+      top: "-50px !important",
+      marginRight: "38px",
+      float: "right"
+    }
+  },
   top: {
     zIndex: "4"
   },

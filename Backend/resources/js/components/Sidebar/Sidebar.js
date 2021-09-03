@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
@@ -109,6 +109,9 @@ class Sidebar extends React.Component {
     const { classes, color, rtlActive } = this.props;
     return routes.map((prop, key) => {
       if (prop.redirect) {
+        return null;
+      }
+      if (prop.layout === "/user") {
         return null;
       }
       if (prop.collapse) {

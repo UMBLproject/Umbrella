@@ -27,6 +27,7 @@ import ValidationForms from "@/views/Forms/ValidationForms.js";
 import VectorMap from "@/views/Maps/VectorMap.js";
 import Widgets from "@/views/Widgets/Widgets.js";
 import Wizard from "@/views/Forms/Wizard.js";
+import HomePage from "@/views/Pages/HomePage.js";
 
 // @material-ui/icons
 import Apps from "@material-ui/icons/Apps";
@@ -38,7 +39,13 @@ import Place from "@material-ui/icons/Place";
 import Timeline from "@material-ui/icons/Timeline";
 import WidgetsIcon from "@material-ui/icons/Widgets";
 
-var dashRoutes = [
+var dashRoutes = [  
+  {
+    path: "/",
+    name: "Home Page",
+    component: HomePage,
+    layout: "/user"
+  },
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -82,7 +89,7 @@ var dashRoutes = [
         layout: "/admin"
       },
       {
-        path: "/login-page",
+        path: "/login",
         name: "Login Page",
         rtlName: "هعذاتسجيل الدخول",
         mini: "L",
@@ -118,7 +125,7 @@ var dashRoutes = [
         layout: "/admin"
       },
       {
-        path: "/error-page",
+        path: "/404",
         name: "Error Page",
         rtlName: "صفحة الخطأ",
         mini: "E",

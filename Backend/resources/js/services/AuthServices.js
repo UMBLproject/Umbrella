@@ -14,7 +14,7 @@ export const RegisterUserService = (credentials) => {
 
 export const LoginUserService = (credentials) => {
     const http = new HttpService();
-    let loginUrl = "users/login";
+    let loginUrl = "login";
 
     return http.postData(credentials, loginUrl).then((data) => {
         console.log(data);
@@ -26,9 +26,9 @@ export const LoginUserService = (credentials) => {
 
 export const LogOutUserService = () => {
     const http = new HttpService();
-    let loginUrl = "users/logout";
+    let logoutUrl = "logout";
     const tokenId = "user-token";
-    return http.getData(loginUrl, tokenId).then((data) => {
+    return http.getData(logoutUrl, tokenId).then((data) => {
         console.log(data);
         return data;
     }).catch((error) => {

@@ -8,7 +8,8 @@ import {
   whiteColor,
   blackColor,
   grayColor,
-  hexToRgb
+  hexToRgb,
+  darkRedColor
 } from "@/assets/jss/material-dashboard-pro-react.js";
 
 const cardStyle = {
@@ -180,6 +181,19 @@ const cardStyle = {
   cardLogin: {
     transform: "translate3d(" + hexToRgb(blackColor) + ")",
     transition: "all 300ms linear"
+  },
+  cardMain: {
+    marginBottom: "0",
+    backgroundColor: "rgba(0,0,0,.35)",
+    backgroundSize: "cover",
+    background: "transparent",
+    boxShadow: "none",
+    border: "2px solid " + blackColor,
+    "&:hover,&:focus": {
+      backgroundColor: "rgba(0,0,0,.15);",
+      border: "2px solid " + darkRedColor,
+      cursor: "pointer"
+    }
   }
 };
 

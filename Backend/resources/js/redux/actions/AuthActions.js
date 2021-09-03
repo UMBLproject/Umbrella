@@ -8,12 +8,12 @@ export const RegisterAction = (credentials) => {
 
         RegisterUserService(credentials).then((res) => {
             if(res.hasOwnProperty('success') && res.success === true) {
-                dispatch({type: ActionTypes.SIGNUP_SUCCESS, res});
+                dispatch({type: ActionTypes.SIGNUP_SUCCESS, payload: res});
             } else if(res.hasOwnProperty('success') && res.success === false) {
-                dispatch({type: ActionTypes.SIGNUP_ERROR,res});
+                dispatch({type: ActionTypes.SIGNUP_ERROR, payload: res});
             }
         }, error => {
-            dispatch({type : ActionTypes.CODE_ERROR, error})
+            dispatch({type : ActionTypes.CODE_ERROR, payload: error})
         })
     }
 }
@@ -24,14 +24,18 @@ export const LoginAction = (credentials, history) => {
 
         LoginUserService(credentials).then((res) => {
             if(res.hasOwnProperty('success') && res.success === true) {
-                localStorage.setItem('user-token',res.token)
-                dispatch({type: ActionTypes.LOGIN_SUCCESS});
-                history.push('/user');
-            } else if(res.hasOwnProperty('success') && res.success === false){
-                dispatch({type: ActionTypes.LOGIN_ERROR,res});
+                localStorage.setItem('user-token', res.token)
+                dispatch({type: ActionTypes.LOGIN_SUCCESS, payload: res});
+                if(res.user.role === "admin") {
+                    history.push('/admin');
+                } else {
+                    history.push('/');
+                }
+            } else if(res.hasOwnProperty('error') && res.error !== ""){
+                dispatch({type: ActionTypes.LOGIN_ERROR, payload: res});
             }
         }, error => {
-            dispatch({type : ActionTypes.CODE_ERROR, error})
+            dispatch({type : ActionTypes.CODE_ERROR, payload: error})
         })
     }
 }
@@ -40,12 +44,12 @@ export const LogoutAction = () => {
         dispatch({type: ActionTypes.RESTART_AUTH_RESPONSE});
         LogOutUserService().then((res) => {
             if(res.hasOwnProperty('success') && res.success === true) {
-                dispatch({type: ActionTypes.LOGOUT_SUCCESS,res});
+                dispatch({type: ActionTypes.LOGOUT_SUCCESS, payload: res});
             } else if(res.hasOwnProperty('success') && res.success === false) {
-                dispatch({type: ActionTypes.LOGOUT_SUCCESS,res});
+                dispatch({type: ActionTypes.LOGOUT_SUCCESS, payload: res});
             }
         }, error => {
-            dispatch({type : ActionTypes.CODE_ERROR, error})
+            dispatch({type : ActionTypes.CODE_ERROR, payload: error})
         })
     }
 }

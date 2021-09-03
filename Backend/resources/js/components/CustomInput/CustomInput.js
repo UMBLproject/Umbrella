@@ -37,7 +37,7 @@ export default function CustomInput(props) {
     [classes.underlineError]: error,
     [classes.underlineSuccess]: success && !error,
     [classes.underline]: true,
-    [classes.whiteUnderline]: white
+    // [classes.whiteUnderline]: white
   });
   const marginTop = classNames({
     [inputRootCustomClasses]: inputRootCustomClasses !== undefined
@@ -86,6 +86,7 @@ export default function CustomInput(props) {
         id={id}
         {...inputProps}
         inputProps={newInputProps}
+        autoComplete={"off"}
       />
       {helperText !== undefined ? (
         <FormHelperText id={id + "-text"} className={helpTextClasses}>

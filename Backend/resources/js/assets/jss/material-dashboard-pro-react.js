@@ -174,6 +174,7 @@ const tumblrColor = "#35465c";
 const behanceColor = "#1769ff";
 const dribbbleColor = "#ea4c89";
 const redditColor = "#ff4500";
+const darkRedColor = "#790606";
 
 const boxShadow = {
   boxShadow:
@@ -408,6 +409,7 @@ export {
   behanceColor,
   dribbbleColor,
   redditColor,
+  darkRedColor,
   primaryBoxShadow,
   infoBoxShadow,
   successBoxShadow,

@@ -16,6 +16,15 @@ mix.webpackConfig({
             extensions: [".js", ".jsx"],
             alias: {
                 "@": __dirname + "/resources/js"
+            },
+            fallback: {
+                "crypto": false,
+                "stream": require.resolve("stream-browserify"),
+                "assert": false,
+                "util": false,
+                "http": false,
+                "https": false,
+                "os": false
             }
         }
     }).js('resources/js/app.js', 'public/js')
