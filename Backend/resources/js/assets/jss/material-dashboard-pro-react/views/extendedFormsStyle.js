@@ -29,6 +29,9 @@ const extendedFormsStyle = {
   },
   mlAuto: {
     marginLeft: "auto"
+  },
+  imageUpload: {
+    marginTop: "30px"
   }
 };
 

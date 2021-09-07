@@ -54,7 +54,6 @@ export default function ConnectButton() {
         } 
         
         if(active) {
-            console.log('connected!');
             dispatch({type: ActionTypes.WALLET_CONNECT_SUCCESS, payload: {
                 chainId: chainId,
                 account: account,
@@ -62,6 +61,10 @@ export default function ConnectButton() {
             }});
         }    
     }, [active, error]);
+
+    useEffect(() => {
+        window.ethereum.enable();
+    }, []);
 
     const handleButtonClick = async (e) => {
         if(!active) {

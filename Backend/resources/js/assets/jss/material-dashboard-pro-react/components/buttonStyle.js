@@ -678,7 +678,16 @@ const buttonStyle = {
         height: "17px"
       }
     }
-  }
+  },  
+  validationError: {
+    color: dangerColor[0] + "!important",
+    backgroundColor: "transparent !important",
+    boxShadow: "transparent !important",
+    "&:hover,&:focus": {
+      backgroundColor: "transparent !important",
+      boxShadow: "transparent !important"
+    }    
+  },
 };
 
 export default buttonStyle;

@@ -1,6 +1,10 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
+
+import { LogoutAction } from '@/redux/actions/AuthActions';
+import { useDispatch, useSelector } from 'react-redux';
+
 // import { Manager, Target, Popper } from "react-popper";
 
 // @material-ui/core components
@@ -30,6 +34,7 @@ import styles from "@/assets/jss/material-dashboard-pro-react/components/adminNa
 const useStyles = makeStyles(styles);
 
 export default function HeaderLinks(props) {
+  const dispatch = useDispatch();
   const [openNotification, setOpenNotification] = React.useState(null);
   const handleClickNotification = event => {
     if (openNotification && openNotification.contains(event.target)) {
@@ -51,6 +56,11 @@ export default function HeaderLinks(props) {
   };
   const handleCloseProfile = () => {
     setOpenProfile(null);
+  };
+  const handleLogout = (e) => {
+    e.preventDefault();    
+
+    dispatch(LogoutAction());
   };
   const classes = useStyles();
   const { rtlActive } = props;
@@ -258,7 +268,7 @@ export default function HeaderLinks(props) {
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={handleLogout}
                       className={dropdownItem}
                     >
                       {rtlActive ? "الخروج" : "Log out"}

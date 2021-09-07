@@ -7,6 +7,10 @@ use App\Http\Controllers\CrateController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\RarityController;
+use App\Http\Controllers\MintController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +46,10 @@ Route::group([
 ], function() {
     Route::apiResource('crates', Cratecontroller::class);
     Route::apiResource('equipment', EquipmentController::class);
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('categories', CategoryController::class)->only(['index']);
+    Route::apiResource('rarities', RarityController::class)->only(['index']);
+    Route::post('/mint', [MintController::class, 'mint'])->name('mint');
 });
 
 Route::any('{any}', function(){

@@ -28,6 +28,8 @@ import VectorMap from "@/views/Maps/VectorMap.js";
 import Widgets from "@/views/Widgets/Widgets.js";
 import Wizard from "@/views/Forms/Wizard.js";
 import HomePage from "@/views/Pages/HomePage.js";
+import UserListPage from "@/views/Users/UserList.js";
+import MintNFTPage from "@/views/Tokens/MintNFTPage.js";
 
 // @material-ui/icons
 import Apps from "@material-ui/icons/Apps";
@@ -38,6 +40,7 @@ import Image from "@material-ui/icons/Image";
 import Place from "@material-ui/icons/Place";
 import Timeline from "@material-ui/icons/Timeline";
 import WidgetsIcon from "@material-ui/icons/Widgets";
+import PeopleAltSharpIcon from '@material-ui/icons/PeopleAltSharp';
 
 var dashRoutes = [  
   {
@@ -53,6 +56,40 @@ var dashRoutes = [
     icon: DashboardIcon,
     component: Dashboard,
     layout: "/admin"
+  },
+  {
+    collapse: true,
+    name: "Users",
+    icon: PeopleAltSharpIcon,
+    state: "usersCollapse",
+    views: [
+      {
+        path: "/user-list",
+        name: "Users List",
+        rtlName: "عالتسعير",
+        mini: "UL",
+        rtlMini: "ع",
+        component: UserListPage,
+        layout: "/admin"
+      }
+    ]
+  },
+  {
+    collapse: true,
+    name: "Tokens",
+    icon: PeopleAltSharpIcon,
+    state: "tokenCollapse",
+    views: [
+      {
+        path: "/mint",
+        name: "Mint NFT",
+        rtlName: "عالتسعير",
+        mini: "MN",
+        rtlMini: "ع",
+        component: MintNFTPage,
+        layout: "/admin"
+      }
+    ]
   },
   {
     collapse: true,

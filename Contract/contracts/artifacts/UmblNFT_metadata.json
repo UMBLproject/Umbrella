@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.4+commit.c7e474f2"
+		"version": "0.8.7+commit.e28d00a7"
 	},
 	"language": "Solidity",
 	"output": {
@@ -770,7 +770,7 @@
 		"compilationTarget": {
 			"contracts/UmblNFT.sol": "UmblNFT"
 		},
-		"evmVersion": "istanbul",
+		"evmVersion": "london",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -895,11 +895,11 @@
 			]
 		},
 		"contracts/UmblNFT.sol": {
-			"keccak256": "0x11425cc34dfd4b0385904433109672d795298715b0ab2bb3b8a43c1ac6aa0571",
+			"keccak256": "0xa9a22e629d60b13865d8c28485615518163b1d06ab09884738227f819af726cd",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://fb68b0974afcead3e49cd8baa435ad1aae4edd63e4bb17b87a686d440c72e3f5",
-				"dweb:/ipfs/QmSuenxxZ88fkFPJ5MVbH9AxxXHrb1TZazcSnK8wgnVEzC"
+				"bzz-raw://6558b1e3c396e5d0ae2ee5288b81ce5e3e389427e8264f824d3da786b9df214b",
+				"dweb:/ipfs/QmNmBJxgJntNWJAVn7YQ1xLj3qf3ghopZbE4HpU32PcDWX"
 			]
 		}
 	},

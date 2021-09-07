@@ -25,6 +25,7 @@ export default function ImageUpload(props) {
     if (file) {
       reader.readAsDataURL(file);
     }
+    props.onChange(file);
   };
   // eslint-disable-next-line
   const handleSubmit = e => {
@@ -40,6 +41,7 @@ export default function ImageUpload(props) {
     setFile(null);
     setImagePreviewUrl(props.avatar ? defaultAvatar : defaultImage);
     fileInput.current.value = null;
+    props.onChange(null);
   };
   let { avatar, addButtonProps, changeButtonProps, removeButtonProps } = props;
   return (

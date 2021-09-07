@@ -9,6 +9,7 @@ const modalStyle = theme => ({
   modal: {
     [theme.breakpoints.up("sm")]: {
       maxWidth: "500px",
+      minWidth: "400px",
       margin: "auto"
     },
     borderRadius: "6px",
@@ -32,7 +33,8 @@ const modalStyle = theme => ({
   },
   modalCloseButton: {
     color: grayColor[0],
-    marginTop: "-12px",
+    marginTop: "-20px",
+    marginRight: "-20px",
     WebkitAppearance: "none",
     padding: "0",
     cursor: "pointer",

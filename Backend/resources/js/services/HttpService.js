@@ -12,6 +12,15 @@ export default class HttpService
         )
     }
 
+    formData = async(item, added_url, tokenId="") => {
+        const token = await localStorage.getItem(tokenId);
+        const requestOptions = this.formRequestOptions(token, item);
+
+        return fetch(this.url+"/"+added_url, requestOptions).then(
+            response=>response.json()
+        )
+    }
+
     getData = async(added_url, tokenId="") => {
         const token = await localStorage.getItem(tokenId);
         const requestOptions = this.getRequestOptions(token);
@@ -40,6 +49,18 @@ export default class HttpService
                 'Content-type' : 'application/json'
             },
             body : JSON.stringify(item)
+        }
+        return requestOptions;
+    }
+
+    formRequestOptions = (token, item) => {
+        let requestOptions = {
+            method: 'POST',
+            headers: {
+                'Authorization' : 'Bearer ' + token,
+                // 'Content-type' : 'multipart/form-data; boundary=' + item._boundary
+            },
+            body : item
         }
         return requestOptions;
     }

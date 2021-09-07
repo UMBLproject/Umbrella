@@ -30,10 +30,10 @@ var ps;
 // There might be something with the Hidden component from material-ui, and we didn't have access to
 // the links, and couldn't initialize the plugin.
 class SidebarWrapper extends React.Component {
-  sidebarWrapper = React.createRef();
+  sidebarWrapperRef = React.createRef();
   componentDidMount() {
     if (navigator.platform.indexOf("Win") > -1) {
-      ps = new PerfectScrollbar(this.sidebarWrapper.current, {
+      ps = new PerfectScrollbar(this.sidebarWrapperRef.current, {
         suppressScrollX: true,
         suppressScrollY: false
       });
@@ -47,7 +47,7 @@ class SidebarWrapper extends React.Component {
   render() {
     const { className, user, headerLinks, links } = this.props;
     return (
-      <div className={className} ref={this.sidebarWrapper}>
+      <div className={className} ref={this.sidebarWrapperRef}>
         {user}
         {headerLinks}
         {links}

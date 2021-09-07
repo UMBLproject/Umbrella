@@ -252,7 +252,8 @@ contract UmblNFT is ERC721, ERC721Enumerable, Ownable, ReentrancyGuard {
         returns (string memory) 
     {
         string memory _tokenURI = super.tokenURI(tokenId);
-        return bytes(_tokenURI).length > 0 ? string(abi.encodePacked(_tokenURI, ".json")) : "";
+        // return bytes(_tokenURI).length > 0 ? string(abi.encodePacked(_tokenURI, ".json")) : "";
+        return bytes(_tokenURI).length > 0 ? string(abi.encodePacked(_tokenURI)) : "";
     }      
 
     function _setBaseURI(string memory baseURI) 

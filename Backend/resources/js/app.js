@@ -29,7 +29,6 @@ import "@/assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
 const hist = createBrowserHistory();
 
 ReactDOM.render(
-  <React.StrictMode>
     <Provider store={store}>
       <Router history={hist}>
         <Switch>
@@ -38,7 +37,6 @@ ReactDOM.render(
           <Redirect from="/" to="/" />
         </Switch>
       </Router>
-    </Provider>
-  </React.StrictMode>,
+    </Provider>,  
   document.getElementById("root")
 );

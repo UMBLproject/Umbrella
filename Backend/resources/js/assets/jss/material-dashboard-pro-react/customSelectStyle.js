@@ -28,6 +28,11 @@ const customSelectStyle = {
     }
   },
   selectFormControl: {
+    height: "100%",
+    maxWidth: "400px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "end",
     margin: "7px 0 17px 0 !important",
     "& > div": {
       "&:before": {

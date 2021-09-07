@@ -131,7 +131,7 @@ export default function Dashboard(props) {
         return (
           <AdminGuard
             exact
-            routeRedirect="/login"
+            routeRedirect="/"
             path={prop.layout + prop.path}
             component={prop.component}
             key={key}
