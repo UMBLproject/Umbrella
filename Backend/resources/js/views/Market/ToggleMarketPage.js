@@ -88,8 +88,9 @@ const style = {
   toggleContainer: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-    paddingTop: "30px !important"
+    justifyContent: "normal",
+    paddingTop: "36px !important",
+    paddingLeft: "50px !important",
   },
   bigTitle: {
     fontSize: "1.25rem !important",
@@ -250,9 +251,9 @@ function ToggleMarketPage(props) {
           <CardBody>
             { !accountError ? (
             <GridContainer>
-              <GridItem xs={12} sm={2}>
+              <GridItem xs={12} sm={4}>
                 <FormLabel className={classes.labelHorizontal + ' ' + classes.bigTitle}>
-                  Market Flag
+                  Enable/Disable Marketplace
                 </FormLabel>
               </GridItem>
               <GridItem xs={12} sm={4} className={classes.toggleContainer}>
@@ -263,7 +264,7 @@ function ToggleMarketPage(props) {
                   inputProps={{ 'aria-label': 'secondary checkbox' }}
                 />
               </GridItem>
-              <GridItem xs={12} sm={6}></GridItem>
+              <GridItem xs={12} sm={4}></GridItem>
             </GridContainer>) : (
               <h4>Please connect with owner account, and refresh this page again</h4>
             )}

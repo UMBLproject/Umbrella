@@ -32,6 +32,7 @@ import UserListPage from "@/views/Users/UserList.js";
 import MintNFTPage from "@/views/Tokens/MintNFTPage.js";
 import AssignNFTPage from "@/views/Tokens/AssignNFTPage.js";
 import ToggleMarketPage from "@/views/Market/ToggleMarketPage.js";
+import CratesPage from "@/views/Market/CratesPage.js";
 
 // @material-ui/icons
 import Apps from "@material-ui/icons/Apps";
@@ -110,6 +111,15 @@ var dashRoutes = [
     icon: ReceiptIcon,
     state: "marketCollapse",
     views: [
+      {
+        path: "/crates",
+        name: "Crates",
+        rtlName: "عالتسعير",
+        mini: "C",
+        rtlMini: "ع",
+        component: CratesPage,
+        layout: "/admin"
+      },
       {
         path: "/market",
         name: "Toggle",

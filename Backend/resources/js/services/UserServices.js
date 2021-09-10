@@ -64,3 +64,16 @@ export const GetTokenInformationService = (id) => {
         return error;;
     })
 }
+
+export const GetCratesService = () => {
+    const http = new HttpService();
+    let getUrl = "admin/crates";
+    const tokenId = "user-token";
+
+    return http.getData(getUrl, tokenId).then((data) => {
+        console.log(data);
+        return data;
+    }).catch((error) => {
+        return error;;
+    })
+}
