@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MintController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,5 +13,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/metadata/{id}', [MintController::class, 'getMetadata'])->name('metadata');
 
 Route::view('/{any}', 'index')->where('any', '.*');

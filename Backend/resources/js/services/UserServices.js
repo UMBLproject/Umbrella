@@ -51,3 +51,16 @@ export const PostMintTokensService = (postData) => {
         return error;;
     })
 }
+
+export const GetTokenInformationService = (id) => {
+    const http = new HttpService();
+    let getUrl = "admin/token/" + id;
+    const tokenId = "user-token";
+
+    return http.getData(getUrl, tokenId).then((data) => {
+        console.log(data);
+        return data;
+    }).catch((error) => {
+        return error;;
+    })
+}

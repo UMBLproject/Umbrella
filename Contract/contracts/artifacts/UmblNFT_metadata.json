@@ -325,7 +325,13 @@
 					}
 				],
 				"name": "mint",
-				"outputs": [],
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -389,7 +395,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "pauseMint",
+				"name": "pauseMarketPlace",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -503,7 +509,7 @@
 			},
 			{
 				"inputs": [],
-				"name": "startMint",
+				"name": "startMarketPlace",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -895,11 +901,11 @@
 			]
 		},
 		"contracts/UmblNFT.sol": {
-			"keccak256": "0xa9a22e629d60b13865d8c28485615518163b1d06ab09884738227f819af726cd",
+			"keccak256": "0xe5cbf527658bd3339689ec4e31ecae476c267a73e113a3b63c24018c1e74b935",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6558b1e3c396e5d0ae2ee5288b81ce5e3e389427e8264f824d3da786b9df214b",
-				"dweb:/ipfs/QmNmBJxgJntNWJAVn7YQ1xLj3qf3ghopZbE4HpU32PcDWX"
+				"bzz-raw://011314d5577c0ae5901eb7ac51d67f7445e4ca0a4964e3301e230fdaf3e04a86",
+				"dweb:/ipfs/QmUJSYeMn1aTPkkFd33YTJPTKUSkSxztSYvRa3LsAfHL8i"
 			]
 		}
 	},

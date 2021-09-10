@@ -9,6 +9,10 @@ class Equipment extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'attributes' => 'array'
+    ];
+
     protected $fillable = [
         'tokenId',
         'category_id' ,

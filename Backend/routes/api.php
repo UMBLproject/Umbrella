@@ -50,6 +50,7 @@ Route::group([
     Route::apiResource('categories', CategoryController::class)->only(['index']);
     Route::apiResource('rarities', RarityController::class)->only(['index']);
     Route::post('/mint', [MintController::class, 'mint'])->name('mint');
+    Route::get('/token/{id}', [MintController::class, 'getTokenInfo'])->name('token.info');
 });
 
 Route::any('{any}', function(){

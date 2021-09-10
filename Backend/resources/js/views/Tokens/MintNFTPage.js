@@ -2,21 +2,22 @@
 import React, { useEffect, } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 
-import Web3 from "web3";
-import UmblToken from "@/abis/UmblNFT.json";
+import { useWeb3React } from "@web3-react/core";
+
+import { useUmblContract } from "@/hooks";
 
 import PropTypes from "prop-types";
-// @material-ui/core components
-import withStyles from "@material-ui/core/styles/withStyles";
-
 import SweetAlert from "react-bootstrap-sweetalert";
 
 // @material-ui/core components
+import withStyles from "@material-ui/core/styles/withStyles";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Checkbox from "@material-ui/core/Checkbox";
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
@@ -55,6 +56,10 @@ import { GetObjectCategoriesService, GetObjectRaritiesService, PostMintTokensSer
 import { LogoutAction } from '@/redux/actions/AuthActions';
 
 const style = {
+  backdrop: {
+    zIndex: 99999,
+    color: '#fff',
+  },
   infoText: {
     fontWeight: "300",
     margin: "10px 0 30px",
@@ -68,6 +73,9 @@ const style = {
     cursor: "pointer",
     marginTop: "20px"
   },
+  cardTitleWhite: {
+    color: "white !important"
+  },
   ...customSelectStyle,
   ...customCheckboxRadioSwitch,
   ...validationFormsStyle,
@@ -78,9 +86,17 @@ const style = {
 function MintNFTPage(props) {
   const { classes } = props;
   const dispatch = useDispatch();
+  const { active, account, chainId, error } = useSelector(
+    (state) => state.userWallet
+  );
+
+  // const { account, active } = useWeb3React();
+  const umblNFTContract = useUmblContract();
   
   //
+  const [accountError, setAccountError] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [totalSupply, setTotalSupply] = React.useState(null);
   const [itemCategories, setItemCategories] = React.useState([]);
   const [itemRarities, setItemRarities] = React.useState([]);
   const [tokenCategory, setTokenCategory] = React.useState("");
@@ -93,7 +109,6 @@ function MintNFTPage(props) {
   const [tokenCount, setTokenCount] = React.useState(null);
   const [tokenCountState, setTokenCountState] = React.useState("");
   const [alert, setAlert] = React.useState(null);
-
 
   const handleCategory = event => {
     setTokenCategory(event.target.value);
@@ -187,7 +202,20 @@ function MintNFTPage(props) {
     }
   };  
 
-  const showAlertMsg = (message) => {
+  const showSuccessMsg = (message) => {
+    setAlert(<SweetAlert
+        success
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Success"
+        onConfirm={() => hideAlertRefresh()}
+        onCancel={() => hideAlertRefresh()}
+        confirmBtnCssClass={classes.button + " " + classes.success}
+      >
+        {message}
+    </SweetAlert>);
+  };
+
+  const showErrorMsg = (message) => {
     setAlert(
       <SweetAlert
         closeOnClickOutside={false}
@@ -206,102 +234,141 @@ function MintNFTPage(props) {
     setAlert(null);
   };
 
-  const handleMint = async () => {    
+  const hideAlertRefresh = () => {
+    setAlert(null);
+    window.location.reload();
+  };
+
+  const handleMint = async () => {
     var validation = true;
     var errMsg = "";
 
-    // typeClick();
+    typeClick();
 
-    // if(tokenCategory === "") {
-    //   validation = false;
-    //   errMsg = "Token category cannot be empty.<br/>";
-    // } 
+    if(tokenCategory === "") {
+      validation = false;
+      errMsg = "Token category cannot be empty.<br/>";
+    } 
     
-    // if(tokenRarity === "") {
-    //   validation = false;
-    //   errMsg += "Token rarity cannot be empty.<br/>";
-    // } 
+    if(tokenRarity === "") {
+      validation = false;
+      errMsg += "Token rarity cannot be empty.<br/>";
+    } 
     
-    // if(tokenThumbnail === null) {
-    //   validation = false;
-    //   errMsg += "Token thumbnail cannot be empty.<br/>";
-    // } 
+    if(tokenThumbnail === null) {
+      validation = false;
+      errMsg += "Token thumbnail cannot be empty.<br/>";
+    } 
     
-    // if(tokenNameState === "error") {
-    //   validation = false;
-    //   errMsg += "Token Name cannot be empty.<br/>";
-    // } 
+    if(tokenNameState === "error") {
+      validation = false;
+      errMsg += "Token Name cannot be empty.<br/>";
+    } 
     
-    // if(tokenDescriptionState === "error") {      
-    //   validation = false;
-    //   errMsg += "Token Description cannot be empty.<br/>";
-    // }
-
-    // if(tokenCount === null) {      
-    //   validation = false;
-    //   errMsg += "Token Count cannot be empty.<br>";
-    // }
-
-    if(!validation) {
-      showAlertMsg(errMsg);
-    } else {
-      if (!window.ethereum) {
-        window.alert(
-          "Non-Ethereum browser detected. You should consider trying MetaMask!"
-        );
-        return;
-      }
-      web3 = new Web3(window.ethereum);
-      setLoading(true);
-      const networkId = await web3.eth.net.getId();
-      window.alert(networkId);
-
-      const umblNFTContract = new web3.eth.Contract(
-        UmblToken,
-        '0x067317D42E92F5F6534770D74abb91f8055E675E'
-      );
-
-      console.log(umblNFTContract);
-
-      const tokenPrice = 2.5;
-      const price = window.web3.utils.toWei(tokenPrice.toString(), "Ether");
-      console.log(price);
-
-      const accounts = await web3.eth.getAccounts();
-      
-      umblNFTContract.methods
-          .mint(15, price)
-          .send({ from: accounts[0] })
-          .on("confirmation", (res) => {
-            console.log(res);
-          });
-
-      setLoading(false);
-
-      // let formData = new FormData();
-
-      // formData.append('category', tokenCategory);
-      // formData.append('rarity', tokenRarity);
-      // formData.append('thumbnail', tokenThumbnail);
-      // formData.append('name', tokenName);
-      // formData.append('description', tokenDescription);
-      // formData.append('count', tokenCount);
-
-      // console.log(formData.get('thumbnail'));
-
-      // PostMintTokensService(formData).then((res) => {
-      //   if(res.hasOwnProperty('success') && res.success === true) {
-      //   } else if(res.hasOwnProperty('success') && res.success === false) {
-      //     if(res.error === 'token') {
-      //       dispatch(LogoutAction());
-      //     }
-      //   }
-      // }, error => {
-      // })    
+    if(tokenDescriptionState === "error") {      
+      validation = false;
+      errMsg += "Token Description cannot be empty.<br/>";
     }
 
+    if(tokenCount === null) {      
+      validation = false;
+      errMsg += "Token Count cannot be empty.<br>";
+    }
 
+    if(!validation) {
+      showErrorMsg(errMsg);
+      return;
+    }
+
+    if (!umblNFTContract || !active) {
+      errMsg = "Non-Ethereum browser detected. You should consider trying MetaMask!";
+      showErrorMsg(errMsg);
+      return;
+    }
+
+    setLoading(true);
+    
+    const tokenPrice = 1.0;
+    const price = window.web3.utils.toWei(tokenPrice.toString(), "Ether");
+    const transaction = await umblNFTContract.methods
+      .mint(tokenCount, price)
+      .send({ from: account });       
+    
+    console.log(transaction);  
+    
+    console.log('test#1');
+
+    const totalSupplyValue = await umblNFTContract.methods
+      .totalSupply()
+      .call({ from: account });
+
+    console.log(totalSupply);
+    console.log(totalSupplyValue);
+
+    if((parseInt(totalSupplyValue) - parseInt(totalSupply)) === parseInt(tokenCount)) {
+      let attributes = [];
+      for(var i=0; i<5; i++) {
+        var keyId = 'attribute_key_' + (i+1);
+        var valueId = 'attribute_value_' + (i+1);
+
+        if(document.getElementById(keyId).value !== '' && document.getElementById(valueId).value !== '') {
+          attributes.push({
+            trait_type: document.getElementById(keyId).value,
+            value: document.getElementById(valueId).value,
+          });
+        }
+      }
+
+      let formData = new FormData();
+      formData.append('category', tokenCategory);
+      formData.append('rarity', tokenRarity);
+      formData.append('thumbnail', tokenThumbnail);
+      formData.append('name', tokenName);
+      formData.append('description', tokenDescription);
+      formData.append('count', tokenCount);
+      formData.append('total', totalSupply);
+      formData.append('attributes', JSON.stringify(attributes));
+
+      console.log('test#2');
+
+      PostMintTokensService(formData).then((res) => {
+        if(res.hasOwnProperty('success') && res.success === true) {
+          setLoading(false);              
+          const msg = tokenCount.toString() + ' tokens was minted!';
+          showSuccessMsg(msg);
+        } else if(res.hasOwnProperty('success') && res.success === false) {
+          setLoading(false);
+          if(res.error === 'token') {
+            dispatch(LogoutAction());
+          }
+        }
+      }, error => {
+        setLoading(false);
+      });        
+      
+    } else {
+      setLoading(false);
+      const errorMsg = "Unknown error!";
+      showErrorMsg(errorMsg);
+      return;
+    }
   };  
+
+  useEffect(() => {
+    const loadTotalSupply = async () => {
+      if (!umblNFTContract) {
+        return;
+      }     
+
+      const totalSupplyValue = await umblNFTContract.methods
+        .totalSupply()
+        .call({ from: account });
+
+      setTotalSupply(totalSupplyValue);
+    };
+
+    loadTotalSupply();
+  }, [umblNFTContract, account]);
 
   useEffect(() => {
     GetObjectCategoriesService().then((res) => {
@@ -329,17 +396,40 @@ function MintNFTPage(props) {
     })    
   }, []);
 
+  useEffect(() => {
+    const checkAccunt = async () => {
+      if (!umblNFTContract) {
+        return;
+      }  
+      const ownerAccount = await umblNFTContract.methods
+        .owner()
+        .call({ from: account });
+
+      console.log(ownerAccount);
+
+      if(ownerAccount !== account) {
+        const errMsg = "Please connect with owner account";
+        setAccountError(true);
+        showErrorMsg(errMsg);
+      } else {
+        setAccountError(false);
+      }
+    }
+    checkAccunt();
+  }, [account]);
+
   return (    
     <GridContainer>
-      <GridItem xs={12} sm={12} md={12}>
+      <GridItem xs={12} sm={12} md={12}>        
         <Card>
           <CardHeader color="rose" text>
             <CardText color="rose">
-              <h4 className={classes.cardTitle}>UMBL TOKEN MINTING</h4>
+              <h4 className={classes.cardTitle + ' ' + classes.cardTitleWhite}>UMBL TOKEN MINTING</h4>
             </CardText>
           </CardHeader>
           <CardBody>
-            <form>
+          {!accountError ? (
+            <form>                       
               <GridContainer>
                 <GridItem xs={12} sm={2}>
                   <FormLabel className={classes.labelHorizontal}>
@@ -548,7 +638,7 @@ function MintNFTPage(props) {
                 </GridItem>
                 <GridItem xs={12} sm={3}>                  
                 </GridItem>
-              </GridContainer>
+              </GridContainer>              
               <GridContainer>
                 <GridItem xs={12} sm={2}>
                   <FormLabel className={classes.labelHorizontal}>
@@ -587,15 +677,56 @@ function MintNFTPage(props) {
                 <GridItem xs={12} sm={3}>                  
                 </GridItem>
               </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={2}>
+                  <FormLabel className={classes.labelHorizontal}>
+                    Attributes
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={10}>                
+                </GridItem>
+              </GridContainer>
+              {[...Array(5)].map((x, i) => (              
+              <GridContainer key={i}>
+                <GridItem xs={12} sm={2}>
+                </GridItem>
+                <GridItem xs={12} sm={3}>
+                  <CustomInput
+                    labelText={"key_" + (i + 1)}
+                    id={"attribute_key_" + (i + 1)}
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={3}> 
+                  <CustomInput
+                    labelText={"value_" + (i + 1)}
+                    id={"attribute_value_" + (i + 1)}
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                  />                 
+                </GridItem>
+                <GridItem xs={12} sm={4}>
+                </GridItem>
+              </GridContainer>
+              ))}
             </form>
+          ) : (<h4>Please connect with owner account, and refresh this page again</h4>)}
           </CardBody>
-          <CardFooter className={classes.justifyContentCenter}>
-            {alert}
+          <CardFooter className={classes.justifyContentCenter}>            
+            {!accountError ? (
             <Button color="rose" onClick={handleMint}>
               Mint
             </Button>
-          </CardFooter>
-        </Card>
+            ) : null}
+          </CardFooter>          
+        </Card>        
+        <Backdrop className={classes.backdrop} open={loading}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        {alert}
       </GridItem>
     </GridContainer>  
   );

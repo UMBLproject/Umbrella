@@ -50,7 +50,7 @@ const tableStyle = theme => ({
     textTransform: "uppercase !important"
   },
   tableHeadFontSize: {
-    fontSize: "1.25em !important"
+    fontSize: "1em !important"
   },
   tableHeadCell: {
     color: "rgba(" + hexToRgb(blackColor) + ", 0.87)",

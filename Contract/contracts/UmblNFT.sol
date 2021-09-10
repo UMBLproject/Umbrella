@@ -73,6 +73,7 @@ contract UmblNFT is ERC721, ERC721Enumerable, Ownable, ReentrancyGuard {
         public 
         onlyOwner 
         nonReentrant 
+        returns(uint256)
     {
         require(numTokens > 0 && numTokens <= MAX_MINTING_TOKENS, "Must mint from 1 to 100000 NFTs");
 
@@ -94,6 +95,8 @@ contract UmblNFT is ERC721, ERC721Enumerable, Ownable, ReentrancyGuard {
             // add the token id and it's struct to all tokens mapping
             tokenUmblData[nextTokenId] = newUmblData;
         }
+
+        return numTokens;
     }
 
     // get owner of the token
@@ -271,14 +274,14 @@ contract UmblNFT is ERC721, ERC721Enumerable, Ownable, ReentrancyGuard {
         _setBaseURI(baseURI);
     }
 
-    function startMint() 
+    function startMarketPlace() 
         public 
         onlyOwner 
     {
         isEnabledSale = true;
     }
 
-    function pauseMint() 
+    function pauseMarketPlace() 
         public 
         onlyOwner 
     {
