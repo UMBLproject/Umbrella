@@ -20,6 +20,14 @@ class EquipmentController extends Controller
         ], 200);
     }
 
+    public function count()
+    {
+        return response()->json([
+            'success' => true,
+            'objects' => count(Equipment::all())
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

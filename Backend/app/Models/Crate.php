@@ -9,6 +9,14 @@ class Crate extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'faction_id',
+        'level',
+        'quantity',
+        'price',
+    ];
+
     protected $hidden = [
         'faction_id',
         'created_at',

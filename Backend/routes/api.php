@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RarityController;
 use App\Http\Controllers\MintController;
+use App\Http\Controllers\LoginHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,10 @@ Route::group([
     Route::apiResource('rarities', RarityController::class)->only(['index']);
     Route::post('/mint', [MintController::class, 'mint'])->name('mint');
     Route::get('/token/{id}', [MintController::class, 'getTokenInfo'])->name('token.info');
+    Route::get('/usercount', [UserController::class, 'count'])->name('user.count');
+    Route::get('/cratecount', [CrateController::class, 'count'])->name('crate.count');
+    Route::get('/objectcount', [EquipmentController::class, 'count'])->name('equipment.count');
+    Route::get('/logincount', [LoginHistoryController::class, 'count'])->name('login.count');
 });
 
 Route::any('{any}', function(){

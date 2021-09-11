@@ -10,6 +10,7 @@ use App\Models\UserCrate;
 use App\Models\Equipment;
 use App\Models\CrateEquipment;
 use App\Models\Inventory;
+use App\Models\CrateRarity;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -28,6 +29,14 @@ class CrateController extends Controller
         ], 200);
     }
 
+    public function count()
+    {
+        return response()->json([
+            'success' => true,
+            'crates' => count(Crate::all())
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -38,17 +47,33 @@ class CrateController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,255|unique:crates',
-            'faction_id' => 'required|integer|gt:0',
+            'faction' => 'required|integer|gt:0',
             'level' => 'required|integer|gt:0',
             'quantity' => 'required|integer|gt:0',
             'price' => 'required|numeric|gt:0',
+            'rarity' => 'required|array|min:1',
+            'rarity.*' => 'required|integer|gt:0',
         ]);
 
         if($validator->fails()){
             return response()->json($validator->errors(), 400);
         }
 
-        $crate = Crate::create($validator->validated());
+        $validated = $validator->validated();
+        $crate = Crate::create([
+            'name' => $validated['name'],
+            'faction_id' => $validated['faction'],
+            'level' => $validated['level'],
+            'quantity' => $validated['quantity'],
+            'price' => $validated['price'],
+        ]);
+
+        foreach($validated['rarity'] as $rarity) {
+            CrateRarity::create([
+                'crate_id' => $crate->id,
+                'rarity_id' => $rarity
+            ]);
+        }
 
         return response()->json([
             'success' => true,
@@ -81,18 +106,41 @@ class CrateController extends Controller
     public function update(Request $request, Crate $crate)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'string|between:2,255|unique:crates',
-            'faction_id' => 'integer|gt:0',
-            'level' => 'integer|gt:0',
-            'quantity' => 'integer|gt:0',
-            'price' => 'numeric|gt:0',
+            'id' => 'required|integer|gt:0',
+            'name' => 'required|string|between:2,255',
+            'faction' => 'required|integer|gt:0',
+            'level' => 'required|integer|gt:0',
+            'quantity' => 'required|integer|gt:0',
+            'price' => 'required|numeric|gt:0',
+            'rarity' => 'required|array|min:1',
+            'rarity.*' => 'required|integer|gt:0',
         ]);
 
         if($validator->fails()){
             return response()->json($validator->errors(), 400);
         }
 
-        $equipment->update($validator->validated());
+        $validated = $validator->validated();
+        $crate = Crate::where('id', $validated['id'])->firstOrFail();
+        $crate->update([
+            'name' => $validated['name'],
+            'faction_id' => $validated['faction'],
+            'level' => $validated['level'],
+            'quantity' => $validated['quantity'],
+            'price' => $validated['price'],
+        ]);
+
+        $crate_rarities = CrateRarity::where('crate_id', $crate->id)->get();        
+        foreach($crate_rarities as $crate_rarity) {
+            $crate_rarity->delete();
+        }
+
+        foreach($validated['rarity'] as $rarity) {
+            CrateRarity::create([
+                'crate_id' => $crate->id,
+                'rarity_id' => $rarity
+            ]);
+        }
 
         return response()->json([
             'success' => true,

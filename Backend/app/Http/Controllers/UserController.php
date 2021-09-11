@@ -21,6 +21,15 @@ class UserController extends Controller
         ], 200);
     }
 
+    public function count()
+    {
+        $users = User::where('role', 'user')->get();
+        return response()->json([
+            'success' => true,
+            'users' => count($users)
+        ], 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

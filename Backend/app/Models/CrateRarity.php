@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class CrateRarity extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'crate_id',
+        'rarity_id',
+    ];
 }

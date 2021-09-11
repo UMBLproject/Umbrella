@@ -20,6 +20,7 @@ export default function CustomInput(props) {
     formControlProps,
     labelText,
     id,
+    value,
     labelProps,
     inputProps,
     error,
@@ -84,6 +85,7 @@ export default function CustomInput(props) {
           underline: underlineClasses
         }}
         id={id}
+        value={value}
         {...inputProps}
         inputProps={newInputProps}
         autoComplete={"off"}
@@ -101,6 +103,10 @@ CustomInput.propTypes = {
   labelText: PropTypes.node,
   labelProps: PropTypes.object,
   id: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
   inputProps: PropTypes.object,
   formControlProps: PropTypes.object,
   inputRootCustomClasses: PropTypes.string,

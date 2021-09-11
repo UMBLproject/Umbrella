@@ -56,7 +56,7 @@ import extendedTablesStyle from "@/assets/jss/material-dashboard-pro-react/views
 
 import sweetAlertStyle from "@/assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.js";
 
-import { GetCratesService, } from '@/services/UserServices';
+import { GetCratesService, GetRaritiesService, AddNewCrateService, GetCrateService, UpdateCrateService, DeleteCrateService, } from '@/services/UserServices';
 import { LogoutAction } from '@/redux/actions/AuthActions';
 import { Grid } from "@material-ui/core";
 
@@ -106,6 +106,14 @@ const style = {
     textAlign: "right",
     margin: "20px",
   },
+  gridItemCenter: {
+    marginTop: "30px",
+    display: "flex",
+    justifyContent: "center"
+  },
+  customInputFormControl: {
+    maxWidth: "600px"
+  },
   ...customSelectStyle,
   ...customCheckboxRadioSwitch,
   ...validationFormsStyle,
@@ -122,6 +130,32 @@ function CratesPage(props) {
   const [loading, setLoading] = React.useState(false);
   const [alert, setAlert] = React.useState(null);
   const [cratesData, setCratesData] = React.useState([]);
+  const [status, setStatus] = React.useState(0);
+  const [crateName, setCrateName] = React.useState("");
+  const [crateNameState, setCrateNameState] = React.useState("");
+  const [crateFaction, setCrateFaction] = React.useState("");
+  const [crateLevel, setCrateLevel] = React.useState("");
+  const [crateQuantity, setCrateQuantity] = React.useState(1);
+  const [cratePrice, setCratePrice] = React.useState(0.000);
+  const [crateRarity, setCrateRarity] = React.useState([]);
+  const [objectRarities, setObjectRarities] = React.useState([]);
+  const [crateId, setCrateId] = React.useState(null);
+
+  // function that verifies if a string has a given length or not
+  const verifyLength = (value, length) => {
+    if (value.length >= length) {
+      return true;
+    }
+    return false;
+  };
+
+  const verifyNumber = value => {
+    var numberRex = new RegExp("^[0-9]+$");
+    if (numberRex.test(value)) {
+      return true;
+    }
+    return false;
+  };
 
   // sweet alert functions
   const hideAlert = (refresh=false) => {
@@ -129,13 +163,14 @@ function CratesPage(props) {
     if(refresh) window.location.reload();
   };
 
-  const showSuccessMsg = (message) => {
+  const showSuccessMsg = (message, refresh=false) => {
     setAlert(<SweetAlert
         success
+        closeOnClickOutside={false}
         style={{ display: "block", marginTop: "-100px" }}
         title="Success"
-        onConfirm={() => hideAlert()}
-        onCancel={() => hideAlert()}
+        onConfirm={() => hideAlert(refresh)}
+        onCancel={() => hideAlert(refresh)}
         confirmBtnCssClass={classes.button + " " + classes.success}
       >
         {message}
@@ -164,16 +199,159 @@ function CratesPage(props) {
     return temp.join(', ');
   };
 
+  const extractRarity = (rarities) => {
+    return rarities.map((prop, key) => {
+      return prop.id;
+    });
+  };
+
   const handleEdit = (id) => {
-    console.log('handleEdit ' + id);
+    setCrateId(id);
+    setStatus(2);
+  };
+
+  const successDelete = (id) => {
+    setLoading(true);
+    DeleteCrateService(id).then(res => {
+      if(res.hasOwnProperty('success') && res.success === true) {
+        setLoading(false);
+        setAlert(
+          <SweetAlert
+            success
+            closeOnClickOutside={false}
+            style={{ display: "block", marginTop: "-100px" }}
+            title="Deleted!"
+            onConfirm={() => hideAlert(true)}
+            onCancel={() => hideAlert(true)}
+            confirmBtnCssClass={classes.button + " " + classes.success}
+          >
+            The Crate has been deleted.
+          </SweetAlert>
+        );
+      } else {
+        setLoading(false);
+      }
+    }).catch(error => {
+      setLoading(false);
+      showErrorMsg(error);
+    });    
   };
 
   const handleRemove = (id) => {
-    console.log('handleRemove ' + id);
+    setAlert(
+      <SweetAlert
+        warning
+        closeOnClickOutside={false}
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Are you sure?"
+        onConfirm={() => successDelete(id)}
+        onCancel={() => hideAlert()}
+        confirmBtnCssClass={classes.button + " " + classes.success}
+        cancelBtnCssClass={classes.button + " " + classes.danger}
+        confirmBtnText="Yes, delete it!"
+        cancelBtnText="Cancel"
+        showCancel
+      >
+        You will not be able to recover this Crate!
+      </SweetAlert>
+    );
   };
 
   const handleAddNew = () => {
-    console.log('handleAddNew');
+    setStatus(1);
+  };
+
+  const validateCrateForm = () => {
+    if (crateNameState === "") {
+      setCrateNameState("error");
+    }
+  };
+
+  const applyCrateInfo = () => {
+    var validation = true;
+    var errMsg = "";
+
+    validateCrateForm();
+
+    if(crateFaction === "") {
+      validation = false;
+      errMsg = "Crate Faction cannot be empty.<br/>";
+    } 
+
+    if(crateLevel === "") {
+      validation = false;
+      errMsg += "Crate Level cannot be empty.<br/>";
+    } 
+
+    if(crateRarity.length === 0) {
+      validation = false;
+      errMsg += "Crate Rarity cannot be empty.<br/>";
+    }
+
+    if(crateQuantity <= 0 ) {
+      validation = false;
+      errMsg += "Crate Quantity cannot be less than 1.<br/>";
+    }
+
+    if(cratePrice <= 0 ) {
+      validation = false;
+      errMsg += "Crate Price cannot be less than 0.<br/>";
+    }
+
+    if(!validation) {
+      showErrorMsg(errMsg);
+      return;
+    }
+
+    setLoading(true);
+
+    let postData = {
+      'id': crateId,
+      'name': crateName,
+      'faction': crateFaction,
+      'level': crateLevel,
+      'rarity': crateRarity,
+      'quantity': crateQuantity,
+      'price': cratePrice,
+    };
+
+    if(status === 1) {
+      AddNewCrateService(postData).then(res => {
+        if(res.hasOwnProperty('success') && res.success === true) {
+          setLoading(false);
+          showSuccessMsg('New Crate was successfully created!', true);
+        } else {
+          setLoading(false);
+        }
+      }).catch(error => {
+        setLoading(false);
+        showErrorMsg(error);
+      });
+    } else if(status === 2) {
+      UpdateCrateService(crateId, postData).then(res => {
+        if(res.hasOwnProperty('success') && res.success === true) {
+          setLoading(false);
+          showSuccessMsg('The Crate was successfully updated!', true);
+        } else {
+          setLoading(false);
+        }
+      }).catch(error => {
+        setLoading(false);
+        showErrorMsg(error);
+      });
+    }   
+  };
+
+  const updateCrateFaction = event => {
+    setCrateFaction(event.target.value);
+  };
+
+  const updateCrateLevel = event => {
+    setCrateLevel(event.target.value);
+  };
+
+  const updateCrateRarity = event => {
+    setCrateRarity(event.target.value);
   };
 
   useEffect(() => {
@@ -194,11 +372,32 @@ function CratesPage(props) {
             </div>
           ];
         });
-        console.log(cratesDataValue);
         setCratesData(cratesDataValue);
       }
     });  
   }, []);
+
+  useEffect(() => {
+    GetRaritiesService().then((res) => {
+      if(res.hasOwnProperty('success') && res.success === true) {
+        setObjectRarities(res.rarities);
+      } 
+    }); 
+
+    if(status === 2 && crateId !== null) {
+      GetCrateService(crateId).then((res) => {
+        if(res.hasOwnProperty('success') && res.success === true) {
+          let crateDataValue = res.crate;
+          setCrateName(crateDataValue.name);
+          setCrateFaction(crateDataValue.faction.id);
+          setCrateLevel(crateDataValue.level);
+          setCrateRarity(extractRarity(crateDataValue.rarities));
+          setCrateQuantity(crateDataValue.quantity);
+          setCratePrice(crateDataValue.price);
+        } 
+      }); 
+    }
+  }, [status]);
 
   return (    
     <GridContainer>
@@ -210,36 +409,299 @@ function CratesPage(props) {
             </CardText>
           </CardHeader>
           <CardBody>
-            <GridContainer>
-              <GridItem xs={12} sm={12} className={classes.addNewItem}>
-                <Button color="info" className={classes.clearButton} onClick={handleAddNew}>
-                  Add New
-                </Button>
-              </GridItem>
-            </GridContainer>
-            <GridContainer>
-              <GridItem xs={12} sm={12}>
-                <Table
-                  tableHead={[
-                    "#",
-                    "Name",
-                    "Faction",
-                    "Level",
-                    "Rarity",
-                    "Quantity",
-                    "Price",
-                    "Actions",
-                  ]}
-                  tableData={cratesData}
-                  customCellClasses={[classes.center]}
-                  customClassesForCells={[7]}
-                  customHeadCellClasses={[
-                    classes.center
-                  ]}
-                  customHeadClassesForCells={[7]}
-                />
-              </GridItem>
-            </GridContainer>
+            { status === 0 ? (
+            <div>
+              <GridContainer>
+                <GridItem xs={12} sm={12} className={classes.addNewItem}>
+                  <Button color="info" className={classes.clearButton} onClick={handleAddNew}>
+                    Add New
+                  </Button>
+                </GridItem>
+              </GridContainer>
+              <GridContainer>
+                <GridItem xs={12} sm={12}>
+                  <Table
+                    tableHead={[
+                      "#",
+                      "Name",
+                      "Faction",
+                      "Level",
+                      "Rarity",
+                      "Quantity",
+                      "Price",
+                      "Actions",
+                    ]}
+                    tableData={cratesData}
+                    customCellClasses={[classes.center]}
+                    customClassesForCells={[7]}
+                    customHeadCellClasses={[
+                      classes.center
+                    ]}
+                    customHeadClassesForCells={[7]}
+                  />
+                </GridItem>
+              </GridContainer>
+            </div>
+            ) : (
+              <form>                       
+                <GridContainer>
+                  <GridItem xs={12} sm={3} lg={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                      Name
+                    </FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={9} lg={6}>
+                    <FormControl fullWidth className={classes.customInputFormControl}>
+                      <CustomInput
+                        success={crateNameState === "success"}
+                        error={crateNameState === "error"}
+                        id="crate_name"
+                        value={crateName}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          onChange: event => {
+                            if (verifyLength(event.target.value, 0)) {
+                              setCrateNameState("success");
+                            } else {
+                              setCrateNameState("error");
+                            }
+                            setCrateName(event.target.value);
+                          },
+                          type: "text",
+                          endAdornment:
+                            crateNameState === "error" ? (
+                              <InputAdornment position="end">
+                                <Close className={classes.validationError} />
+                              </InputAdornment>
+                            ) : (
+                              undefined
+                            )
+                        }}
+                      />
+                    </FormControl>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} lg={3} ></GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={3} lg={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                      Faction
+                    </FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={9} lg={6}>
+                    <FormControl fullWidth className={classes.selectFormControl}>
+                      <Select
+                        MenuProps={{
+                          className: classes.selectMenu
+                        }}
+                        classes={{
+                          select: classes.select
+                        }}
+                        value={crateFaction}
+                        onChange={updateCrateFaction}
+                        inputProps={{
+                          name: "crateFaction",
+                          id: "crate_faction"
+                        }}
+                      >
+                        <MenuItem
+                          disabled
+                          classes={{
+                            root: classes.selectMenuItem
+                          }}
+                        >
+                          Choose Faction
+                        </MenuItem>
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value='1'
+                        >
+                          Survivors
+                        </MenuItem>
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value='2'
+                        >
+                          Scientists
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} lg={3}></GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={3} lg={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                      Level
+                    </FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={9} lg={6}>
+                    <FormControl fullWidth className={classes.selectFormControl}>
+                      <Select
+                        MenuProps={{
+                          className: classes.selectMenu
+                        }}
+                        classes={{
+                          select: classes.select
+                        }}
+                        value={crateLevel}
+                        onChange={updateCrateLevel}
+                        inputProps={{
+                          name: "crateLevel",
+                          id: "crate_level"
+                        }}
+                      >
+                        <MenuItem
+                          disabled
+                          classes={{
+                            root: classes.selectMenuItem
+                          }}
+                        >
+                          Choose Level
+                        </MenuItem>
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value='1'
+                        >
+                          Level 1
+                        </MenuItem>
+                        <MenuItem
+                          classes={{
+                            root: classes.selectMenuItem,
+                            selected: classes.selectMenuItemSelected
+                          }}
+                          value='2'
+                        >
+                          Level 2
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} lg={3}></GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={3} lg={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                      Rarity
+                    </FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={9} lg={6}>
+                    <FormControl fullWidth className={classes.selectFormControl}>
+                      <Select
+                        MenuProps={{
+                          className: classes.selectMenu
+                        }}
+                        classes={{
+                          select: classes.select
+                        }}
+                        multiple
+                        value={crateRarity}
+                        onChange={updateCrateRarity}
+                        inputProps={{
+                          name: "crateRarity",
+                          id: "crate_rarity"
+                        }}
+                      >
+                        <MenuItem
+                          disabled
+                          classes={{
+                            root: classes.selectMenuItem
+                          }}
+                        >
+                          Choose Rarities
+                        </MenuItem>
+                        {objectRarities ? objectRarities.map((prop, key) => {
+                          return (
+                            <MenuItem
+                              classes={{
+                                root: classes.selectMenuItem,
+                                selected: classes.selectMenuItemSelected
+                              }}
+                              value={prop.id}
+                              key={prop.id}
+                            >
+                              {prop.name}
+                            </MenuItem>
+                          )
+                        }) : null }
+                      </Select>
+                    </FormControl>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} lg={3}></GridItem>
+                </GridContainer>
+                <GridContainer  className={classes.p20}>
+                  <GridItem xs={12} sm={3} lg={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                      Quantity
+                    </FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={9} lg={6}>
+                    <FormControl fullWidth className={classes.customInputFormControl}>
+                      <CustomInput
+                        id="crate_quantity"
+                        value={crateQuantity}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        value={crateQuantity}
+                        inputProps={{
+                          onChange: event => {
+                            setCrateQuantity(event.target.value);
+                          },
+                          type: "number",
+                        }}
+                      />
+                    </FormControl>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} lg={3}></GridItem>
+                </GridContainer>
+                <GridContainer  className={classes.p20}>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                      Price
+                    </FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={9} lg={6}>
+                    <FormControl fullWidth className={classes.customInputFormControl}>
+                      <CustomInput
+                        id="crate_price"
+                        value={cratePrice}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        value={cratePrice}
+                        inputProps={{
+                          onChange: event => {
+                            setCratePrice(parseFloat(event.target.value).toFixed(3));
+                          },
+                          type: "number",
+                        }}
+                      />
+                    </FormControl>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} lg={3}></GridItem>
+                </GridContainer>                
+                <GridContainer>
+                  <GridItem xs={12} sm={12} lg={9} className={classes.gridItemCenter}>
+                    <Button color="rose" onClick={applyCrateInfo}>
+                      Apply
+                    </Button>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} lg={3}></GridItem>
+                </GridContainer>
+              </form>
+            )}
           </CardBody>
           <CardFooter className={classes.justifyContentCenter}>
           </CardFooter>          

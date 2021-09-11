@@ -12,6 +12,24 @@ export default class HttpService
         )
     }
 
+    patchData = async(item, added_url, tokenId="") => {
+        const token = await localStorage.getItem(tokenId);
+        const requestOptions = this.patchRequestOptions(token, item);
+
+        return fetch(this.url+"/"+added_url, requestOptions).then(
+            response=>response.json()
+        )
+    }
+
+    deleteData = async(added_url, tokenId="") => {
+        const token = await localStorage.getItem(tokenId);
+        const requestOptions = this.deleteRequestOptions(token);
+
+        return fetch(this.url+"/"+added_url, requestOptions).then(
+            response=>response.json()
+        )
+    }
+
     formData = async(item, added_url, tokenId="") => {
         const token = await localStorage.getItem(tokenId);
         const requestOptions = this.formRequestOptions(token, item);
@@ -49,6 +67,29 @@ export default class HttpService
                 'Content-type' : 'application/json'
             },
             body : JSON.stringify(item)
+        }
+        return requestOptions;
+    }
+
+    patchRequestOptions = (token, item) => {
+        let requestOptions = {
+            method: 'PATCH',
+            headers: {
+                'Authorization' : 'Bearer ' + token,
+                'Content-type' : 'application/json'
+            },
+            body : JSON.stringify(item)
+        }
+        return requestOptions;
+    }
+
+    deleteRequestOptions = (token, item) => {
+        let requestOptions = {
+            method: 'DELETE',
+            headers: {
+                'Authorization' : 'Bearer ' + token,
+                'Content-type' : 'application/json'
+            }
         }
         return requestOptions;
     }
