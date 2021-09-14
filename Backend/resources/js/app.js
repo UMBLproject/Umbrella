@@ -25,6 +25,7 @@ import AdminLayout from "@/layouts/Admin.js"
 import UserLayout from "@/layouts/User.js"
 
 import "@/assets/scss/material-dashboard-pro-react.scss?v=1.9.0";
+import "@/app.css";
 
 const hist = createBrowserHistory();
 

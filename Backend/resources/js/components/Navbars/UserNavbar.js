@@ -23,12 +23,15 @@ import LockOpen from "@material-ui/icons/LockOpen";
 import MonetizationOn from "@material-ui/icons/MonetizationOn";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import House from "@material-ui/icons/House";
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import ShopIcon from '@material-ui/icons/Shop';
+
 // core components
 import Button from "@/components/CustomButtons/Button";
 
 import styles from "@/assets/jss/material-dashboard-pro-react/components/userNavbarStyle.js";
 
-import mainIcon from "@/assets/img/umbl_ico.png";
+import mainIcon from "@/assets/img/umbl_icon.png";
 
 const useStyles = makeStyles(styles);
 
@@ -45,7 +48,14 @@ export default function UserNavbar(props) {
   };
   // verifies if routeName is the one active (in browser input)
   const activeRoute = routeName => {
-    return window.location.href.indexOf(routeName) > -1 ? true : false;
+    let currentRoute = window.location.href;
+
+    if(routeName === '/') {
+      return false;
+      return (currentRoute.length === currentRoute.lastIndexOf(routeName) + 1) ? true : false;
+    } else {
+      return window.location.href.indexOf(routeName) > -1 ? true : false;
+    }
   };
   const classes = useStyles();
   const { color } = props;
@@ -60,90 +70,77 @@ export default function UserNavbar(props) {
   };
 
   var authorizedList = (
-    <List className={classes.list}>
-      <ListItem className={classes.listItem}>
-        <NavLink to={"/"} className={classes.navLink}>
-          <Dashboard className={classes.listItemIcon} />
-          <ListItemText
-            primary={"Dashboard"}
-            disableTypography={true}
-            className={classes.listItemText}
-          />
-        </NavLink>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <NavLink
-          to={"/pricing-page"}
-          className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute("/pricing-page")
-          })}
-        >
-          <MonetizationOn className={classes.listItemIcon} />
-          <ListItemText
-            primary={"Pricing"}
-            disableTypography={true}
-            className={classes.listItemText}
-          />
-        </NavLink>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <NavLink
-          to={"/register"}
-          className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute("/register")
-          })}
-        >
-          <PersonAdd className={classes.listItemIcon} />
-          <ListItemText
-            primary={"Register"}
-            disableTypography={true}
-            className={classes.listItemText}
-          />
-        </NavLink>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <NavLink
-          to={"/login"}
-          className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute("/login")
-          })}
-        >
-          <Fingerprint className={classes.listItemIcon} />
-          <ListItemText
-            primary={"Login"}
-            disableTypography={true}
-            className={classes.listItemText}
-          />
-        </NavLink>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <NavLink
-          to={"/lock-screen-page"}
-          className={cx(classes.navLink, {
-            [classes.navLinkActive]: activeRoute("/lock-screen-page")
-          })}
-        >
-          <LockOpen className={classes.listItemIcon} />
-          <ListItemText
-            primary={"Lock"}
-            disableTypography={true}
-            className={classes.listItemText}
-          />
-        </NavLink>
-      </ListItem>
-    </List>
+    <div className={classes.mainNavbarList}>
+      <List className={classes.list + ' ' + classes.centerSubNav}>
+        <ListItem className={classes.listItem}>
+          <NavLink 
+            to={"/"} 
+            className={cx(classes.navLink, {
+              [classes.navLinkActive]: activeRoute("/")
+            })}>
+            <House className={classes.listItemIcon} />
+            <ListItemText
+              primary={"Dashboard"}
+              disableTypography={true}
+              className={classes.listItemText}
+            />
+          </NavLink>
+        </ListItem>
+        <ListItem className={classes.listItem}>
+          <NavLink
+            to={"/inventory"}
+            className={cx(classes.navLink, {
+              [classes.navLinkActive]: activeRoute("/inventory")
+            })}
+          >
+            <AccountBalanceIcon className={classes.listItemIcon} />
+            <ListItemText
+              primary={"Inventory"}
+              disableTypography={true}
+              className={classes.listItemText}
+            />
+          </NavLink>
+        </ListItem>
+        <ListItem className={classes.listItem}>
+          <NavLink
+            to={"/marketplace"}
+            className={cx(classes.navLink, {
+              [classes.navLinkActive]: activeRoute("/marketplace")
+            })}
+          >
+            <ShopIcon className={classes.listItemIcon} />
+            <ListItemText
+              primary={"Marketplace"}
+              disableTypography={true}
+              className={classes.listItemText}
+            />
+          </NavLink>
+        </ListItem>        
+      </List>
+      <List className={classes.list + ' ' + classes.rightSubNav}>
+        <ListItem className={classes.listItem}>
+          <NavLink 
+            to={"/profile"} 
+            className={cx(classes.navLink, {
+              [classes.navLinkActive]: activeRoute("/profile")
+            })}>
+            <AccountCircle className={classes.listItemIcon} />
+            <Hidden mdUp>
+              <ListItemText
+                primary={"Profile"}
+                disableTypography={true}
+                className={classes.listItemText}
+              />
+            </Hidden>
+          </NavLink>
+        </ListItem>     
+      </List>
+    </div>
   );
   var unAuthorizedList = (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
-        <NavLink to={"/"} className={classes.navLink}>
-          <House className={classes.listItemIcon} />
-          <ListItemText
-            primary={"Home"}
-            disableTypography={true}
-            className={classes.listItemText}
-          />
-        </NavLink>
+        
       </ListItem>
     </List>
   );
@@ -165,7 +162,7 @@ export default function UserNavbar(props) {
                 <ListItemText
                   primary={"PROJECT"}
                   disableTypography={true}
-                  className={classes.listItemText}
+                  className={classes.smallListItemText}
                 />
               </div>
             </div>
@@ -176,6 +173,7 @@ export default function UserNavbar(props) {
             { isAuthenticated ? authorizedList : unAuthorizedList }
           </Hidden>
           <Hidden mdUp>
+            { isAuthenticated ? (
             <Button
               className={classes.sidebarButton}
               color="transparent"
@@ -185,6 +183,7 @@ export default function UserNavbar(props) {
             >
               <Menu />
             </Button>
+            ) : null }
           </Hidden>
           <Hidden mdUp>
             <Hidden mdUp>
@@ -219,12 +218,7 @@ export default function UserNavbar(props) {
                     Connect Wallet
                   </div>
                 </Button>
-              </ListItem>
-              <ListItem className={classes.listItem}>
-                <NavLink to={"/profile"} className={classes.navLinkOutline} onClick={logoutClick}>
-                  <AccountCircle className={classes.largeListItemIcon} />
-                </NavLink>
-              </ListItem>              
+              </ListItem>       
             </List>
           </Hidden>
           ) : null }

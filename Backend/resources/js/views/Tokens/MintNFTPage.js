@@ -329,8 +329,6 @@ function MintNFTPage(props) {
       formData.append('total', totalSupply);
       formData.append('attributes', JSON.stringify(attributes));
 
-      console.log('test#2');
-
       PostMintTokensService(formData).then((res) => {
         if(res.hasOwnProperty('success') && res.success === true) {
           setLoading(false);              

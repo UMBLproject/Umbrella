@@ -18,10 +18,11 @@ import {
   behanceColor,
   dribbbleColor,
   redditColor,
+  darkRedColor,
   hexToRgb
 } from "@/assets/jss/material-dashboard-pro-react.js";
 
-const buttonStyle = {
+const buttonStyle = theme => ({
   button: {
     minHeight: "auto",
     minWidth: "auto",
@@ -503,6 +504,30 @@ const buttonStyle = {
         ", 0.2)"
     }
   },
+  auth: {
+    background: "linear-gradient(to right, #500909, #7D2E2E)",
+    border: "2px solid #FF7777",
+    borderRadius: "8px !important",
+    boxShadow:
+      "0 2px 2px 0 rgba(" +
+      hexToRgb(primaryColor[0]) +
+      ", 0.14), 0 3px 1px -2px rgba(" +
+      hexToRgb(primaryColor[0]) +
+      ", 0.2), 0 1px 5px 0 rgba(" +
+      hexToRgb(primaryColor[0]) +
+      ", 0.12)",
+    "&:hover,&:focus": {
+      backgroundColor: primaryColor[0],
+      boxShadow:
+        "0 14px 26px -12px rgba(" +
+        hexToRgb(primaryColor[0]) +
+        ", 0.42), 0 4px 23px 0px rgba(" +
+        hexToRgb(blackColor) +
+        ", 0.12), 0 8px 10px -5px rgba(" +
+        hexToRgb(primaryColor[0]) +
+        ", 0.2)"
+    }
+  },
   simple: {
     "&,&:focus,&:hover": {
       color: whiteColor,
@@ -617,6 +642,17 @@ const buttonStyle = {
     lineHeight: "1.333333",
     borderRadius: "0.2rem"
   },
+  lgAuth: {
+    "&$justIcon": {
+      "& .fab,& .fas,& .far,& .fal,& svg,& .material-icons": {
+        marginTop: "-4px"
+      }
+    },
+    padding: "8px 32px",
+    fontSize: "12px",
+    lineHeight: "1.333333",
+    borderRadius: "8px"
+  },
   sm: {
     "&$justIcon": {
       "& .fab,& .fas,& .far,& .fal,& svg,& .material-icons": {
@@ -688,6 +724,6 @@ const buttonStyle = {
       boxShadow: "transparent !important"
     }    
   },
-};
+});
 
 export default buttonStyle;

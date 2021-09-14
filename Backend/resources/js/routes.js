@@ -28,6 +28,7 @@ import VectorMap from "@/views/Maps/VectorMap.js";
 import Widgets from "@/views/Widgets/Widgets.js";
 import Wizard from "@/views/Forms/Wizard.js";
 import HomePage from "@/views/Pages/HomePage.js";
+import MarketplacePage from "@/views/Pages/MarketplacePage.js";
 import UserListPage from "@/views/Users/UserList.js";
 import MintNFTPage from "@/views/Tokens/MintNFTPage.js";
 import AssignNFTPage from "@/views/Tokens/AssignNFTPage.js";
@@ -52,6 +53,12 @@ var dashRoutes = [
     path: "/",
     name: "Home Page",
     component: HomePage,
+    layout: "/user"
+  },
+  {
+    path: "/marketplace",
+    name: "Marketplace Page",
+    component: MarketplacePage,
     layout: "/user"
   },
   {

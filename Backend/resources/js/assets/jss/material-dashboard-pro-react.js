@@ -79,6 +79,9 @@ const container = {
   paddingLeft: "15px",
   marginRight: "auto",
   marginLeft: "auto",
+  "@media (max-width: 767px)": {
+    width: "100%"
+  },
   "@media (min-width: 768px)": {
     width: "750px"
   },
@@ -160,7 +163,8 @@ const grayColor = [
   "#e7e7e7",
   "#212121",
   "#c8c8c8",
-  "#505050"
+  "#505050",
+  "#8f8f8f"
 ];
 const blackColor = "#000";
 const whiteColor = "#FFF";
@@ -175,6 +179,8 @@ const behanceColor = "#1769ff";
 const dribbbleColor = "#ea4c89";
 const redditColor = "#ff4500";
 const darkRedColor = "#790606";
+const redColor = "#AC0000";
+const warmRedColor = "#AB3F3F";
 
 const boxShadow = {
   boxShadow:
@@ -399,6 +405,7 @@ export {
   grayColor,
   blackColor,
   whiteColor,
+  redColor,
   twitterColor,
   facebookColor,
   googleColor,
@@ -410,6 +417,7 @@ export {
   dribbbleColor,
   redditColor,
   darkRedColor,
+  warmRedColor,
   primaryBoxShadow,
   infoBoxShadow,
   successBoxShadow,

@@ -1,6 +1,20 @@
 import * as ActionTypes from '../ActionTypes';
 import {RegisterUserService, LoginUserService, LogOutUserService} from '../../services/AuthServices';
 
+export const ResetLoadingAction = () => {
+    return (dispatch) => {
+        console.log('RESET_LOADING');
+        dispatch({type: ActionTypes.RESET_LOADING});
+    };
+};
+
+export const ResetErrorAction = () => {
+    return (dispatch) => {
+        console.log('RESET_ERROR');
+        dispatch({type: ActionTypes.RESET_ERROR});
+    };
+};
+
 export const RegisterAction = (credentials) => {
     return (dispatch) => {
         dispatch({type: ActionTypes.RESTART_AUTH_RESPONSE});
@@ -31,7 +45,7 @@ export const LoginAction = (credentials, history) => {
                 } else {
                     history.push('/');
                 }
-            } else if(res.hasOwnProperty('error') && res.error !== ""){
+            } else {
                 dispatch({type: ActionTypes.LOGIN_ERROR, payload: res});
             }
         }, error => {

@@ -5,6 +5,7 @@ import {
   grayColor,
   blackColor,
   whiteColor,
+  warmRedColor,
   hexToRgb
 } from "@/assets/jss/material-dashboard-pro-react.js";
 
@@ -45,17 +46,25 @@ const customCheckboxRadioSwitch = {
   checked: {
     color: primaryColor[0] + "!important"
   },
+  checkedWarmRed: {
+    color: warmRedColor + "!important"
+  },
   checkedIcon: {
     width: "20px",
     height: "20px",
-    border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)",
-    borderRadius: "3px"
+    backgroundColor: grayColor[19],
+    // border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)",
+    border: "2px solid rgba(" + hexToRgb(grayColor[19]) + ", 1.0)",
+    borderRadius: "3px",
+    stroke: warmRedColor,
+    strokeWidth: "2",
   },
   uncheckedIcon: {
     width: "0px",
     height: "0px",
-    padding: "9px",
-    border: "1px solid rgba(" + hexToRgb(blackColor) + ", .54)",
+    padding: "8px",
+    backgroundColor: grayColor[19],
+    border: "2px solid rgba(" + hexToRgb(grayColor[19]) + ", 1.0)",
     borderRadius: "3px"
   },
   disabledCheckboxAndRadio: {
@@ -69,6 +78,17 @@ const customCheckboxRadioSwitch = {
     cursor: "pointer",
     paddingLeft: "0",
     color: grayColor[3],
+    fontSize: "14px",
+    lineHeight: "1.428571429",
+    fontWeight: "400",
+    display: "inline-flex",
+    transition: "0.3s ease all",
+    letterSpacing: "unset"
+  },
+  labelWhite: {
+    cursor: "pointer",
+    paddingLeft: "0",
+    color: whiteColor,
     fontSize: "14px",
     lineHeight: "1.428571429",
     fontWeight: "400",

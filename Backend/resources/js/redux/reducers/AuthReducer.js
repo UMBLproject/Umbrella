@@ -13,6 +13,16 @@ const initState = {
 
 const AuthReducer = (state = initState, action) => {
     switch (action.type) {
+        case ActionTypes.RESET_LOADING:
+            return {
+                ...state,
+                loading: false,
+            };
+        case ActionTypes.RESET_ERROR:
+            return {
+                ...state,
+                error: "",
+            };
         case ActionTypes.RESTART_AUTH_RESPONSE:
             return {
                 ...state,   

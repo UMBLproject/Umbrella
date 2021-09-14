@@ -15,15 +15,17 @@ import {
   blackColor,
   hexToRgb,
   darkRedColor,
+  warmRedColor,
 } from "@/assets/jss/material-dashboard-pro-react.js";
 
 const pagesHeaderStyle = theme => ({
   appBar: {    
-    backgroundColor: "rgba(" + hexToRgb(grayColor[16]) + ", 0.5)",
+    backgroundColor: "rgba(" + hexToRgb(blackColor) + ", 1)",
     boxShadow: "none",
-    borderBottomStyle: "solid",
-    borderBottom: "3px",
-    borderBottomColor: darkRedColor,
+    border: "none",
+    // borderBottomStyle: "solid",
+    // borderBottom: "3px",
+    // borderBottomColor: darkRedColor,
     marginBottom: "0",
     position: "absolute",
     width: "100%",
@@ -32,7 +34,7 @@ const pagesHeaderStyle = theme => ({
     borderRadius: "3px",
     padding: "0",
     transition: "all 150ms ease 0s",
-    minHeight: "50px",
+    minHeight: "64px",
     display: "block",
     position: "fixed"
   },
@@ -57,11 +59,13 @@ const pagesHeaderStyle = theme => ({
     height: "100%"
   },
   mainIcon: {
-    height: "32px !important"
+    height: "36px !important"
   },
   container: {
     ...container,
-    minHeight: "50px"
+    minHeight: "64px",    
+    display: "flex",
+    justifyContent: "center"
   },
   flex: {
     flex: 1
@@ -132,6 +136,7 @@ const pagesHeaderStyle = theme => ({
     }
   },
   walletButton: {
+    marginRight: "20px",
     padding: "2px"
   },
   connectWallet: {
@@ -143,20 +148,22 @@ const pagesHeaderStyle = theme => ({
   },
   navLink: {
     color: whiteColor,
-    margin: "0 5px",    
+    margin: "0 10px",    
     fontWeight: "500",
-    fontSize: "12px",
-    textTransform: "uppercase",
+    fontSize: "16px",
+    textTransform: "none",
     borderRadius: "3px",
     lineHeight: "20px",
     position: "relative",
     display: "block",
-    padding: "10px 15px",
+    padding: "24px 15px 16px 15px",
     textDecoration: "none",
     "&:hover,&:focus": {
-      color: whiteColor,
-      background: "rgba(" + hexToRgb(grayColor[17]) + ", 0.2)"
-    }
+      // color: whiteColor,
+      color: warmRedColor,
+      fontWeight: "bold",
+      // background: "rgba(" + hexToRgb(grayColor[17]) + ", 0.2)"
+    },
   },
   navLinkOutline: {
     color: whiteColor,
@@ -181,7 +188,7 @@ const pagesHeaderStyle = theme => ({
     lineHeight: "20px",
     position: "relative",
     display: "flex",
-    padding: "10px 15px 8px 15px",
+    padding: "15px 15px 12px 15px",
     textDecoration: "none",
     "&:hover,&:focus": {
       color: whiteColor,
@@ -198,8 +205,8 @@ const pagesHeaderStyle = theme => ({
     top: "0px",
     position: "relative",
     marginRight: "3px",
-    width: "20px",
-    height: "20px",
+    width: "32px",
+    height: "32px",
     verticalAlign: "middle",
     color: "inherit",
     display: "inline-block"
@@ -229,17 +236,29 @@ const pagesHeaderStyle = theme => ({
     whiteSpace: "nowrap"
   },
   largeListItemText: {
+    fontFamily: '"Microgramma"',
+    letterSpacing: "1px !important",
+    paddingTop: "4px !important",
     flex: "none",
-    padding: "0",
-    minWidth: "0",
-    margin: 0,
+    margin: "0px",
     display: "inline-block",
     position: "relative",
     whiteSpace: "nowrap",
-    fontSize: "14px",
+    fontSize: "16px",
     borderBottomStyle: "solid",
-    borderBottom: "2px",
-    borderBottomColor: darkRedColor,
+    borderBottom: "3px",
+    borderBottomColor: darkRedColor
+  },
+  smallListItemText: {
+    fontFamily: '"Michroma"',
+    letterSpacing: "1px !important",
+    padding: "0px",
+    margin: "0px",
+    flex: "none",
+    display: "inline-block",
+    position: "relative",
+    whiteSpace: "nowrap",
+    fontSize: "12px"
   },
   mainItemText: {
     flex: "none",
@@ -252,7 +271,8 @@ const pagesHeaderStyle = theme => ({
     marginLeft: "14px"
   },
   navLinkActive: {
-    backgroundColor: "rgba(" + hexToRgb(whiteColor) + ", 0.1)"
+    // backgroundColor: "rgba(" + hexToRgb(whiteColor) + ", 0.1)"
+    color: warmRedColor,
   },
   drawerPaper: {
     border: "none",
@@ -297,7 +317,47 @@ const pagesHeaderStyle = theme => ({
     "&,&:hover,&:focus": {
       color: whiteColor
     },
-    top: "-2px"
+    top: "5px"
+  },
+  mainNavbarList: {
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
+    flexDirection: "row",
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column",
+    }
+  },
+  centerSubNav: {
+    display: "flex",
+    justifyContent: "center",
+    width: "100%",    
+    flexDirection: "row",
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column",
+      height: "100%",
+    }
+  },
+  rightSubNav: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    "@media (min-width: 960px)": {
+      marginRight: "20px"
+    },
+    "@media (min-width: 992px)": {
+      marginRight: "100px"
+    },
+    "@media (min-width: 1200px)": {
+      marginRight: "100px"
+    },
+    "@media (min-width: 1500px)": {
+      marginRight: "0px"
+    },
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column",
+      height: "100%",
+    }
   }
 });
 

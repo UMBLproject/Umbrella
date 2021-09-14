@@ -774,7 +774,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contracts/UmblNFT.sol": "UmblNFT"
+			"Contract/contracts/UmblNFT.sol": "UmblNFT"
 		},
 		"evmVersion": "london",
 		"libraries": {},
@@ -788,7 +788,7 @@
 		"remappings": []
 	},
 	"sources": {
-		"contracts/Address.sol": {
+		"Contract/contracts/Address.sol": {
 			"keccak256": "0x9f87497f4a8ec7262035c797d6443df349699589359f0ba195c26e33ef0d8210",
 			"license": "MIT",
 			"urls": [
@@ -796,7 +796,7 @@
 				"dweb:/ipfs/QmVZi2WvhXt4JJaLGdAoe4Nes71T4Ex5PEWPrLGfu3Brym"
 			]
 		},
-		"contracts/Context.sol": {
+		"Contract/contracts/Context.sol": {
 			"keccak256": "0x2e9de12e5f76901a966fb17eef5eedbe76293c11ae5bd2e8987c2af64e72b361",
 			"license": "MIT",
 			"urls": [
@@ -804,7 +804,7 @@
 				"dweb:/ipfs/QmZ2G3L7wq4EWYNrkCkDLUPP2Kxw2S8TQF75XPkVrgx2Eh"
 			]
 		},
-		"contracts/ERC165.sol": {
+		"Contract/contracts/ERC165.sol": {
 			"keccak256": "0x6daeb7a509fb10e5e8a52e1f2bbcf749ada25fc50deccfc82cbabeccc2bd644e",
 			"license": "MIT",
 			"urls": [
@@ -812,7 +812,7 @@
 				"dweb:/ipfs/QmZM4c66SX6jLACEFJowRxZ7vgPNRD6eNm8kzuof16RZd5"
 			]
 		},
-		"contracts/ERC721.sol": {
+		"Contract/contracts/ERC721.sol": {
 			"keccak256": "0x9b7891a966c09646f5e5a995b7740ac221e7fb7055fcd641d3d3602755902b50",
 			"license": "MIT",
 			"urls": [
@@ -820,7 +820,7 @@
 				"dweb:/ipfs/QmbqqM3mvxwy5YvVSDchYSnSU5MzHYB49LgQkWiJCGka3G"
 			]
 		},
-		"contracts/ERC721Enumerable.sol": {
+		"Contract/contracts/ERC721Enumerable.sol": {
 			"keccak256": "0x5ccb33ae32093c87951e8aa92e4e2858ea699beb4bbf730db8bf03a30bc3433c",
 			"license": "MIT",
 			"urls": [
@@ -828,7 +828,7 @@
 				"dweb:/ipfs/QmaoxSsFxodqtEbhg5keQu1n6NuonzsAG8WFYnvz1DwkZ3"
 			]
 		},
-		"contracts/IERC165.sol": {
+		"Contract/contracts/IERC165.sol": {
 			"keccak256": "0xfc0296945555d45d710d7a0ab5cf09b90541ebbf92685780c70a6607d10e784a",
 			"license": "MIT",
 			"urls": [
@@ -836,7 +836,7 @@
 				"dweb:/ipfs/QmZDtbDjULZUNtq1z2RGNrBJw5WUtQzPHUFxTQxqzEq3om"
 			]
 		},
-		"contracts/IERC721.sol": {
+		"Contract/contracts/IERC721.sol": {
 			"keccak256": "0x59dd2375730ee78e7b660698c125c411d10d44f23129734e1cf36c53f57b1831",
 			"license": "MIT",
 			"urls": [
@@ -844,7 +844,7 @@
 				"dweb:/ipfs/QmYFMKk6EmrEJqto8XWbzVQ6fSFBjprX5q66YSCEwzJFHc"
 			]
 		},
-		"contracts/IERC721Enumerable.sol": {
+		"Contract/contracts/IERC721Enumerable.sol": {
 			"keccak256": "0x85be08c5523ff790d42caccb413800d94fe4b21e7f23acc46e0ad1f0c2585e18",
 			"license": "MIT",
 			"urls": [
@@ -852,7 +852,7 @@
 				"dweb:/ipfs/QmfDzLF2dQGZPvuQ6qxf4L1YbzxDt9hjy8y6dYMQqMAy2y"
 			]
 		},
-		"contracts/IERC721Metadata.sol": {
+		"Contract/contracts/IERC721Metadata.sol": {
 			"keccak256": "0x06eb9943bc1829a546404d32c8683c79969f8478da85821f329ac45438e22a7c",
 			"license": "MIT",
 			"urls": [
@@ -860,7 +860,7 @@
 				"dweb:/ipfs/Qmce4q1af9dPXtM59AnBDZpo2uDhzf6rtQDzACoRmMckqu"
 			]
 		},
-		"contracts/IERC721Receiver.sol": {
+		"Contract/contracts/IERC721Receiver.sol": {
 			"keccak256": "0x3e4d35ce1dcd96c3548f417aa39c84be1a55d2d65c106b7f615eac47729777e1",
 			"license": "MIT",
 			"urls": [
@@ -868,7 +868,7 @@
 				"dweb:/ipfs/QmbnJ172RmF2WTFQDsk6vcU28CBXSa1jvERuPW87DwGR1v"
 			]
 		},
-		"contracts/Ownable.sol": {
+		"Contract/contracts/Ownable.sol": {
 			"keccak256": "0x14245831e1c86e82bdcfa7ab939e1c1d3da3cc07f54d1d6afdb26012c984c694",
 			"license": "MIT",
 			"urls": [
@@ -876,7 +876,7 @@
 				"dweb:/ipfs/QmQPWgBvtwzJSy5t6Jz94cPHs1A6innsxcNqGnqmJncc7J"
 			]
 		},
-		"contracts/ReentrancyGuard.sol": {
+		"Contract/contracts/ReentrancyGuard.sol": {
 			"keccak256": "0xda3ce84b884b80d107f3ee32fa025bdc926ff1971f28554ad597a9703e0d062b",
 			"license": "MIT",
 			"urls": [
@@ -884,7 +884,7 @@
 				"dweb:/ipfs/QmReWJ6LLBXAW4FwMx3iPLzEqXNeLMUuH1y1pgmq3SZGgW"
 			]
 		},
-		"contracts/SafeMath.sol": {
+		"Contract/contracts/SafeMath.sol": {
 			"keccak256": "0xdf297ae5498c5a335398fac67c7dcb4479f2a0954c881ece4338637b44942a58",
 			"license": "MIT",
 			"urls": [
@@ -892,7 +892,7 @@
 				"dweb:/ipfs/QmPWYTn5eNUUGiyCm3EJx4mEQPRh9baePiQ1oztr4bTLhr"
 			]
 		},
-		"contracts/Strings.sol": {
+		"Contract/contracts/Strings.sol": {
 			"keccak256": "0x4a7637cd15b42d5ef983798a926991fcb4f218ac2f358681327cc369c883cff3",
 			"license": "MIT",
 			"urls": [
@@ -900,7 +900,7 @@
 				"dweb:/ipfs/QmWKb6bF5e3vSZD83x3nu9guPU8bmBYhTbypLSeJHgcS7V"
 			]
 		},
-		"contracts/UmblNFT.sol": {
+		"Contract/contracts/UmblNFT.sol": {
 			"keccak256": "0xe5cbf527658bd3339689ec4e31ecae476c267a73e113a3b63c24018c1e74b935",
 			"license": "MIT",
 			"urls": [

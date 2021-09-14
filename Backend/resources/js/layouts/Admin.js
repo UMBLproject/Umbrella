@@ -26,7 +26,7 @@ const useStyles = makeStyles(styles);
 import sidebar2 from "@/assets/img/sidebar-2.jpg";
 import logo_white from "@/assets/img/logo-white.svg";
 import logo from "@/assets/img/logo.svg";
-import mainIcon from "@/assets/img/umbl_ico.png";
+import mainIcon from "@/assets/img/umbl_icon.png";
 
 export default function Dashboard(props) {
   const { ...rest } = props;

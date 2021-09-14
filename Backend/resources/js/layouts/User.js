@@ -6,13 +6,13 @@ import { makeStyles } from "@material-ui/core/styles";
 
 // core components
 import UserNavbar from "@/components/Navbars/UserNavbar.js";
-import Footer from "@/components/Footer/Footer.js";
+// import Footer from "@/components/Footer/Footer.js";
 
 import routes from "@/routes.js";
 
 import styles from "@/assets/jss/material-dashboard-pro-react/layouts/mainStyle.js";
 
-import backImage from "@/assets/img/bg_1.514ae9d2.jpg";
+import backImage from "@/assets/img/crushpixel-1995899.png";
 
 const useStyles = makeStyles(styles);
 
@@ -59,7 +59,7 @@ export default function Pages(props) {
             {getRoutes(routes)}
             {/* <Redirect from="/" to="/" /> */}
           </Switch>
-          <Footer white />
+          {/* <Footer white /> */}
         </div>
       </div>
     </div>

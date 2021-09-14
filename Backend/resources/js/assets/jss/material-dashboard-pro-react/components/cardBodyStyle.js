@@ -3,9 +3,19 @@ import {
   hexToRgb
 } from "@/assets/jss/material-dashboard-pro-react.js";
 
-const cardBodyStyle = {
+const cardBodyStyle = theme => ({
   cardBody: {
-    padding: "0.9375rem 20px",
+    // padding: "0.9375rem 20px",
+    padding: "8px",
+    [theme.breakpoints.down("md")]: {
+      padding: "4px",
+    },
+    [theme.breakpoints.down("sm")]: {
+      padding: "2px",
+    },
+    [theme.breakpoints.down("xs")]: {
+      padding: "1px",
+    },
     flex: "1 1 auto",
     WebkitBoxFlex: "1",
     position: "relative"
@@ -22,6 +32,13 @@ const cardBodyStyle = {
   cardBodyPlain: {
     paddingLeft: "5px",
     paddingRight: "5px"
+  },
+  cardBodyBorder: {
+    border: "3px solid transparent",
+    "&:hover,&:focus": {
+      transition: "border-color 1s ease",
+      border: "3px solid #51202c",
+    },
   },
   cardBodyFormHorizontal: {
     paddingLeft: "15px",
@@ -51,6 +68,6 @@ const cardBodyStyle = {
   cardBodyCalendar: {
     padding: "0px !important"
   }
-};
+});
 
 export default cardBodyStyle;

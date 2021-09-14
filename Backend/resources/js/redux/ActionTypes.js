@@ -1,5 +1,7 @@
 export const RESTART_AUTH_RESPONSE = 'RESTART_AUTH_RESPONSE';
 export const LOADING = 'LOADING';
+export const RESET_LOADING = 'RESET_LOADING';
+export const RESET_ERROR = 'RESET_ERROR';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_ERROR = 'SIGNUP_ERROR';
 export const CODE_ERROR = 'CODE_ERROR';

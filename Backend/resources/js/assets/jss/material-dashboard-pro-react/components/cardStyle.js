@@ -188,10 +188,11 @@ const cardStyle = {
     backgroundSize: "cover",
     background: "transparent",
     boxShadow: "none",
-    border: "2px solid " + blackColor,
+    borderRadius: "0px",
+    border: "1px solid #636363",
     "&:hover,&:focus": {
-      backgroundColor: "rgba(0,0,0,.15);",
-      border: "2px solid " + darkRedColor,
+      backgroundColor: "rgba(0,0,0,.1);",
+      border: "1px solid #885964",
       cursor: "pointer"
     }
   }

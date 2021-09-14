@@ -17,6 +17,7 @@ const useStyles = makeStyles(styles);
 export default function CustomInput(props) {
   const classes = useStyles();
   const {
+    umbl,
     formControlProps,
     labelText,
     id,
@@ -45,7 +46,7 @@ export default function CustomInput(props) {
   });
   const inputClasses = classNames({
     [classes.input]: true,
-    [classes.whiteInput]: white
+    [classes.whiteInput]: white,
   });
   var formControlClasses;
   if (formControlProps !== undefined) {
