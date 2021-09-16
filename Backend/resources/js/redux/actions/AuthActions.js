@@ -3,14 +3,12 @@ import {RegisterUserService, LoginUserService, LogOutUserService} from '../../se
 
 export const ResetLoadingAction = () => {
     return (dispatch) => {
-        console.log('RESET_LOADING');
         dispatch({type: ActionTypes.RESET_LOADING});
     };
 };
 
 export const ResetErrorAction = () => {
     return (dispatch) => {
-        console.log('RESET_ERROR');
         dispatch({type: ActionTypes.RESET_ERROR});
     };
 };

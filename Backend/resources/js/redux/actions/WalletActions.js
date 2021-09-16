@@ -1,16 +1,40 @@
 import * as ActionTypes from '../ActionTypes';
-import { WalletConnectService } from '../../services/WalletService';
+import { WalletNonceService, WalletAuthService, } from '../../services/WalletService';
 
-export const WalletConnectAction = (res) => {
+export const WalletNonceAction = (account) => {
     return (dispatch) => {
-        dispatch({type: ActionTypes.RESTART_WALLET_CONNECT});
-        dispatch({type: ActionTypes.WALLET_CONNECT_SUCCESS, payload: res});
+        dispatch({type: ActionTypes.WALLET_NONCE_START});
+        WalletNonceService(account).then((res) => {
+            if(res.hasOwnProperty('success') && res.success === true) {
+                dispatch({type: ActionTypes.WALLET_NONCE_SUCCESS, payload: res.nonce});
+            } else {
+                dispatch({type: ActionTypes.WALLET_NONCE_ERROR, payload: res.error});
+            }
+        }).catch((err) => {
+            console.log(err);
+            dispatch({type: ActionTypes.WALLET_NONCE_ERROR, payload: err});
+        });        
+    }
+}
+
+export const WalletAuthAction = (account, signature) => {
+    return (dispatch) => {
+        dispatch({type: ActionTypes.WALLET_AUTH_START});
+        WalletAuthService(account, signature).then((res) => {
+            if(res.hasOwnProperty('success') && res.success === true) {
+                dispatch({type: ActionTypes.WALLET_AUTH_SUCCESS, payload: res});
+            } else {
+                dispatch({type: ActionTypes.WALLET_AUTH_ERROR, payload: res.error});
+            }
+        }).catch((err) => {
+            console.log(err);
+            dispatch({type: ActionTypes.WALLET_AUTH_ERROR, payload: err});
+        });    
     }
 }
 
 export const WalletDisconnectAction = () => {
     return (dispatch) => {
-        dispatch({type: ActionTypes.WALLET_DISCONNECT_START});
-        dispatch({type: ActionTypes.WALLET_DISCONNECT_SUCCESS});
+        dispatch({type: ActionTypes.WALLET_DISCONNECT});
     }
 }

@@ -2,64 +2,65 @@ import * as ActionTypes from '../ActionTypes';
 
 const initState = {
     loading: false,
-    active: false,
+    nonce: null,
+    tried: false,
+    status: false,
     account: null,
-    chainId: null,
-    error: "",    
+    error: "",
 };
 
 const WalletReducer = (state = initState, action) => {
     switch (action.type) {
-        case ActionTypes.RESTART_WALLET_CONNECT:
-            return {
-                ...state,   
-                loading: true,             
-                active: false,
-                account: null,
-                chainId: null,
-                error: "",
-            };
-        case ActionTypes.WALLET_CONNECT_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                active: action.payload.active,
-                account: action.payload.account,
-                chainId: action.payload.chainId,
-                error: "",
-            };
-        case ActionTypes.WALLET_CONNECT_ERROR:
-            return {
-                ...state,
-                loading: false,
-                active: false,
-                account: null,
-                chainId: null,
-                error: action.payload.error,
-            }; 
-        case ActionTypes.WALLET_DISCONNECT_START:
+        case ActionTypes.WALLET_NONCE_START:
             return {
                 ...state,   
                 loading: true,
+                tried: false,
+                status: false,
+                account: null,
+                error: "",            
             };
-        case ActionTypes.WALLET_DISCONNECT_SUCCESS:
+        case ActionTypes.WALLET_NONCE_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                active: false,
+                tried: true,
+                nonce: action.payload,
+            };
+        case ActionTypes.WALLET_NONCE_ERROR:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+            };
+        case ActionTypes.WALLET_AUTH_START:
+            return {
+                ...state,
+                loading: true,
+                tried: false,
+            };
+        case ActionTypes.WALLET_AUTH_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                status: action.payload.status,
+                account: action.payload.account,
+            };
+        case ActionTypes.WALLET_AUTH_ERROR:
+            return {
+                ...state,
+                loading: false,
+                status: false,             
                 account: null,
-                chainId: null,
+                error: action.payload,
+            }; 
+        case ActionTypes.WALLET_DISCONNECT: 
+            return {
+                ...state,
+                status: false,             
+                account: null,
                 error: "",
-            }; 
-        case ActionTypes.WALLET_DISCONNECT_ERROR:
-            return {
-                ...state,
-                loading: false,
-                active: false,
-                account: null,
-                chainId: null,
-                error: action.payload.error,
-            }; 
+            }
         default:
             return state;
     }

@@ -27,7 +27,7 @@ import Search from "@material-ui/icons/Search";
 // core components
 import CustomInput from "@/components/CustomInput/CustomInput.js";
 import Button from "@/components/CustomButtons/Button.js";
-import ConnectWallet from "@/components/Wallet/ConnectWallet";
+import ConnectWallet from "@/components/Connect/ConnectWallet";
 
 import styles from "@/assets/jss/material-dashboard-pro-react/components/adminNavbarLinksStyle.js";
 

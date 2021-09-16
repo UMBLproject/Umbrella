@@ -4,8 +4,6 @@ import { useWeb3React } from "@web3-react/core";
 import { useDispatch, } from 'react-redux';
 import { injected } from "@/utils/connectors";
 
-import * as ActionTypes from '@/redux/ActionTypes';
-
 const useEagerConnect = () => {
   const dispatch = useDispatch();
   
@@ -29,12 +27,6 @@ const useEagerConnect = () => {
   useEffect(() => {
     if (!tried && active) {
       setTried(true);
-
-      dispatch({type: ActionTypes.WALLET_CONNECT_SUCCESS, payload: {
-        chainId: chainId,
-        account: account,
-        active: active
-      }});
     }
   }, [tried, active]);
 

@@ -1,39 +1,34 @@
-import Web3 from "web3";
+import HttpService from './HttpService';
 
-export const WalletConnectService = async() => {
-    if(window.ethereum === undefined) {
-        return new Promise((resolve, reject) => {
-            reject({
-                error: 'Non-Ethereum browser detected. You should consider trying MetaMask!',
-            });
-        });
-    }
+export const WalletNonceService = (account) => {
+    const http = new HttpService();
+    let postUrl = "user/wallet/nonce";
+    const tokenId = "user-token";
+    let postData = {
+        'address': account.toLowerCase()
+    };
 
-    try {
-        // await window.ethereum.enable();
-        await window.ethereum.send('eth_requestAccounts');
-        const web3 = new Web3(window.ethereum);
-        const accounts = await web3.eth.getAccounts();
-        if (accounts.length === 0) {
-            return new Promise((resolve, reject) => {
-                reject({
-                    error: 'Account is not detected!',
-                });
-            });
-        }
+    return http.postData(postData, postUrl, tokenId).then((data) => {
+        console.log(data);
+        return data;
+    }).catch((error) => {
+        return error;;
+    })
+};
 
-        return new Promise((resolve, reject) => {
-            resolve({
-                'success': true,
-                'address': accounts[0],
-            });
-        });
-    } catch (err) {
-        return new Promise((resolve, reject) => {
-            reject({
-                error: err,
-            });
-        });
-    }
-    
+export const WalletAuthService = (account, signature) => {
+    const http = new HttpService();
+    let postUrl = "user/wallet/auth";
+    const tokenId = "user-token";
+    let postData = {
+        'address': account.toLowerCase(),
+        'signature': signature.toLowerCase(),
+    };
+
+    return http.postData(postData, postUrl, tokenId).then((data) => {
+        console.log(data);
+        return data;
+    }).catch((error) => {
+        return error;;
+    })
 };

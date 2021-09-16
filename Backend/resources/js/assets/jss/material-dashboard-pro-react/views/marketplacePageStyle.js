@@ -11,10 +11,21 @@ const marketplacePageStyle = theme => ({
     [theme.breakpoints.down("sm")]: {
       paddingBottom: "100px"
     }
-  },
-  welcomTitle: {
-    fontFamily: '"Microgramma"',
+  },  
+  mainBlock: {
+    textTransform: "uppercase",
+    minHeight: "200px",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "start",
+    alignItems: "center",
     color: grayColor[19],
+    "&:hover" : {
+      color: warmRedColor,
+    }
+  },
+  mainTitle: {
+    fontFamily: '"Microgramma"',
     fontSize: "28px",
     [theme.breakpoints.down("sm")]: {
       fontSize: "22px",
@@ -24,22 +35,6 @@ const marketplacePageStyle = theme => ({
     },
     textAlign: "right",
     fontWeight: "bold"
-  },
-  welcomeBanner: {
-    textTransform: "uppercase",
-    minHeight: "280px",
-    [theme.breakpoints.down("md")]: {
-      minHeight: "220px",
-    },
-    [theme.breakpoints.down("sm")]: {
-      minHeight: "160px",
-    },
-    [theme.breakpoints.down("xs")]: {
-      minHeight: "90px",
-    },
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-end",
   },
   fullBackImage: {
     position: "absolute",

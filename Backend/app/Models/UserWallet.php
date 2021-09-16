@@ -12,6 +12,7 @@ class UserWallet extends Model
     protected $fillable = [
         'user_id',
         'wallet_id',
+        'nonce'
     ];
 
     protected $hidden = [

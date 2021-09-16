@@ -140,11 +140,12 @@ const pagesHeaderStyle = theme => ({
     padding: "2px"
   },
   connectWallet: {
+    background: "linear-gradient(to right, #500909, #7D2E2E)",
     textTransform: "uppercase",
-    borderRadius: "10px",
-    border: "2px solid white",
+    border: "2px solid #FF7777",
+    borderRadius: "6px !important",
     fontSize: "12px",
-    padding: "6px 12px"
+    padding: "4px 8px"
   },
   navLink: {
     color: whiteColor,

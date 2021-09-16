@@ -15,27 +15,19 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
 // @material-ui/icons
-import Dashboard from "@material-ui/icons/Dashboard";
 import Menu from "@material-ui/icons/Menu";
-import PersonAdd from "@material-ui/icons/PersonAdd";
-import Fingerprint from "@material-ui/icons/Fingerprint";
-import LockOpen from "@material-ui/icons/LockOpen";
-import MonetizationOn from "@material-ui/icons/MonetizationOn";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import House from "@material-ui/icons/House";
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import ShopIcon from '@material-ui/icons/Shop';
+import mainIcon from "@/assets/img/umbl_icon.png";
 
 // core components
 import Button from "@/components/CustomButtons/Button";
+import ConnectWallet from "@/components/Connect/ConnectWallet";
 
 import styles from "@/assets/jss/material-dashboard-pro-react/components/userNavbarStyle.js";
-
-import mainIcon from "@/assets/img/umbl_icon.png";
-
 const useStyles = makeStyles(styles);
-
-import { LogoutAction } from '@/redux/actions/AuthActions';
 
 export default function UserNavbar(props) {
   const dispatch = useDispatch();
@@ -51,7 +43,6 @@ export default function UserNavbar(props) {
     let currentRoute = window.location.href;
 
     if(routeName === '/') {
-      return false;
       return (currentRoute.length === currentRoute.lastIndexOf(routeName) + 1) ? true : false;
     } else {
       return window.location.href.indexOf(routeName) > -1 ? true : false;
@@ -62,12 +53,6 @@ export default function UserNavbar(props) {
   const appBarClasses = cx({
     [" " + classes[color]]: color
   });
-
-  const logoutClick = (e) => {
-    e.preventDefault();    
-
-    dispatch(LogoutAction());
-  };
 
   var authorizedList = (
     <div className={classes.mainNavbarList}>
@@ -207,19 +192,7 @@ export default function UserNavbar(props) {
         <div className={classes.rightLink}>
           { isAuthenticated ? (
           <Hidden smDown>
-            <List className={classes.list}>
-              <ListItem className={classes.listItem}>
-                <Button
-                  className={classes.walletButton}
-                  color="transparent"
-                  aria-label="open drawer"
-                >
-                  <div className={classes.connectWallet}>
-                    Connect Wallet
-                  </div>
-                </Button>
-              </ListItem>       
-            </List>
+            <ConnectWallet className={classes.walletButton} />
           </Hidden>
           ) : null }
         </div>

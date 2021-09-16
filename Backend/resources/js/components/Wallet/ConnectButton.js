@@ -31,7 +31,7 @@ export default function ConnectButton() {
             error instanceof UserRejectedRequestErrorWalletConnect ||
             error instanceof UserRejectedRequestErrorFrame
         ) {
-            return 'Please authorize this website to access your Ethereum account.';
+            return '1234 Please authorize this website to access your Ethereum account.';
         } else {
             console.error(error);
             return 'An unknown error occurred. Check the console for more details.';
@@ -48,12 +48,13 @@ export default function ConnectButton() {
         if(!!error) {
             const errMsg = getErrorMessage(error);
             console.log(errMsg);
-            dispatch({type: ActionTypes.WALLET_CONNECT_ERROR, payload: {
-                error: errMsg
-            }});
+            // dispatch({type: ActionTypes.WALLET_CONNECT_ERROR, payload: {
+            //     error: errMsg
+            // }});
         } 
         
         if(active) {
+            console.log('123123123123123123');
             dispatch({type: ActionTypes.WALLET_CONNECT_SUCCESS, payload: {
                 chainId: chainId,
                 account: account,

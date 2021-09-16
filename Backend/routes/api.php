@@ -38,6 +38,8 @@ Route::group([
     Route::post('/lootbox/buy', [CrateController::class, 'buy'])->name('lootbox.buy');
     Route::apiResource('inventory', InventoryController::class)->only(['index', 'show']);
     Route::post('/equipment/switch/{equipment}', [EquipmentController::class, 'switch'])->name('equipment.switch');
+    Route::post('/wallet/nonce', [WalletController::class, 'getNonce'])->name('wallet.nonce');
+    Route::post('/wallet/auth', [WalletController::class, 'getAuth'])->name('wallet.auth');
     Route::post('/wallet/connect', [WalletController::class, 'connect'])->name('wallet.connect');
 });
 

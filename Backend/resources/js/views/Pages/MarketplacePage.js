@@ -36,8 +36,8 @@ export default function MarketplacePage() {
           { isAuthenticated ? (
           <Card main>
             <CardBody border>
-              <div className={classes.welcomeBanner}>
-                <div className={classes.welcomTitle}></div>
+              <div className={classes.mainBlock}>
+                <div className={classes.mainTitle}>Coming Soon</div>
               </div>              
               <div
                 className={classes.fullBackImage}
