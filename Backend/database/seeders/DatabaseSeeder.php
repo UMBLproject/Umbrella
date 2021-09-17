@@ -25,12 +25,12 @@ class DatabaseSeeder extends Seeder
             FactionTableSeeder::class,
             RarityTableSeeder::class,
             CategoryTableSeeder::class,
-            CrateTableSeeder::class,
-            CrateRarityTableSeeder::class,
+            // CrateTableSeeder::class,
+            // CrateRarityTableSeeder::class,
         ]);
 
 
         \App\Models\User::factory(10)->create();
-        \App\Models\Equipment::factory(100)->create();
+        // \App\Models\Equipment::factory(100)->create();
     }
 }

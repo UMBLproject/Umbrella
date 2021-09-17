@@ -52,6 +52,19 @@ export const PostMintTokensService = (postData) => {
     })
 }
 
+export const AssignTokenService = (postData) => {
+    const http = new HttpService();
+    let postUrl = "admin/assign";
+    const tokenId = "user-token";
+
+    return http.postData(postData, postUrl, tokenId).then((data) => {
+        console.log(data);
+        return data;
+    }).catch((error) => {
+        return error;;
+    })
+}
+
 export const GetTokenInformationService = (id) => {
     const http = new HttpService();
     let getUrl = "admin/token/" + id;

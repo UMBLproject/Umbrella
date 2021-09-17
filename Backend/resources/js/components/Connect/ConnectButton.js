@@ -13,7 +13,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import styles from "@/assets/jss/material-dashboard-pro-react/components/connectWalletStyle.js";
 const useStyles = makeStyles(styles);
 
-import { WalletNonceAction, WalletAuthAction, WalletDisconnectAction, } from '@/redux/actions/WalletActions';
+import { WalletNonceAction, WalletAuthAction, WalletDisconnectAction, WalletDisableTriedAction, } from '@/redux/actions/WalletActions';
 
 export default function ConnectButton() {
     const dispatch = useDispatch();
@@ -25,6 +25,7 @@ export default function ConnectButton() {
     const { connector, chainId, account, activate, deactivate, active, error } = useWeb3React();
 
     const [ activatingConnector, setActivatingConnector ] = useState(null);
+    const [ authTried, setAuthTried ] = useState(false);
 
     const getErrorMessage = (error) => {
         if (error instanceof NoEthereumProviderError) {
@@ -43,6 +44,7 @@ export default function ConnectButton() {
             setActivatingConnector(undefined);
 
             if(active && account && error === undefined) {
+                setAuthTried(true);
                 dispatch(WalletNonceAction(account));
             }
         }
@@ -64,16 +66,17 @@ export default function ConnectButton() {
     // }, []);
 
     useEffect( async () => { 
-        if(nonce && active && account && tried && !status) {
+        if(nonce && active && account && tried && !status && authTried) {
+            setAuthTried(false);
             const web3 = new Web3(window.ethereum);
-            const authMsg = 'Nonce: ' + nonce;
+            const authMsg = 'Nonce: ' + nonce;            
             let signed = await web3.eth.personal.sign(authMsg, account,
                 function (err, sig) {
                     console.dir("Signature: " + sig);
                     dispatch(WalletAuthAction(account, sig));
                 });
         }
-    }, [nonce, tried, status]);
+    }, [tried]);
 
     const handleConnect = async (e) => {
         if(!status) {
@@ -82,6 +85,7 @@ export default function ConnectButton() {
                 await activate(injected);                
             } else {
                 if(account && error === undefined) {
+                    setAuthTried(true);
                     dispatch(WalletNonceAction(account));
                 }
             }

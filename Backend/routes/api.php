@@ -53,6 +53,7 @@ Route::group([
     Route::apiResource('categories', CategoryController::class)->only(['index']);
     Route::apiResource('rarities', RarityController::class)->only(['index']);
     Route::post('/mint', [MintController::class, 'mint'])->name('mint');
+    Route::post('/assign', [MintController::class, 'assign'])->name('assign');
     Route::get('/token/{id}', [MintController::class, 'getTokenInfo'])->name('token.info');
     Route::get('/usercount', [UserController::class, 'count'])->name('user.count');
     Route::get('/cratecount', [CrateController::class, 'count'])->name('crate.count');

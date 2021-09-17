@@ -57,7 +57,7 @@ export default function UserList() {
             res.users.map((prop, key) => {
               return {
                 id: prop.id,
-                name: prop.name,
+                username: prop.username,
                 email: prop.email,
                 actions: (
                   // we've added some custom button actions
@@ -70,11 +70,11 @@ export default function UserList() {
                       onClick={() => {
                         let obj = res.users.find(o => o.id === prop.id);
                         alert(
-                          "You've clicked LIKE button on \n{ \nName: " +
-                            obj.name +
-                            ", \nemail: "+
+                          "Username: " +
+                            obj.username +
+                            ", \nEmail: "+
                             obj.email +
-                            "\n}."
+                            "\n"
                         );
                       }}
                       color="info"
@@ -114,7 +114,7 @@ export default function UserList() {
             </CardIcon>
             <h4 className={classes.cardIconTitle}>User Table</h4>
           </CardHeader>
-          <CardBody>
+          <CardBody style={{ padding: "20px 40px 50px 40px"}}>
             <ReactTable
               columns={[
                 {
@@ -122,8 +122,8 @@ export default function UserList() {
                   accessor: "id"
                 },
                 {
-                  Header: "Name",
-                  accessor: "name"
+                  Header: "Username",
+                  accessor: "username"
                 },
                 {
                   Header: "Email",

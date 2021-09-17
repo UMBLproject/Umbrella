@@ -195,8 +195,8 @@ export default function RegularForms() {
       </GridItem>
       <GridItem xs={12} sm={12} md={12}>
         <Card>
-          <CardHeader color="rose" text>
-            <CardText color="rose">
+          <CardHeader color="info" text>
+            <CardText color="info">
               <h4 className={classes.cardTitle}>Form Elements</h4>
             </CardText>
           </CardHeader>

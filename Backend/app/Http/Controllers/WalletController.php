@@ -121,9 +121,7 @@ class WalletController extends Controller
                 'success' => false,
                 'error' => 'Signature validation was failed.'
             ], 201);
-        }
-
-        
+        }        
     }
 
     public function connect(Request $request) {

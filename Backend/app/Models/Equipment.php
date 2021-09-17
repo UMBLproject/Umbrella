@@ -15,6 +15,8 @@ class Equipment extends Model
 
     protected $fillable = [
         'tokenId',
+        'assigned',
+        'equipped',
         'category_id' ,
         'rarity_id',
         'name', 

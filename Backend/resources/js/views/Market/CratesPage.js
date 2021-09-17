@@ -58,7 +58,6 @@ import sweetAlertStyle from "@/assets/jss/material-dashboard-pro-react/views/swe
 
 import { GetCratesService, GetRaritiesService, AddNewCrateService, GetCrateService, UpdateCrateService, DeleteCrateService, } from '@/services/UserServices';
 import { LogoutAction } from '@/redux/actions/AuthActions';
-import { Grid } from "@material-ui/core";
 
 const style = {
   alertMsg: {
@@ -126,11 +125,18 @@ function CratesPage(props) {
   const { classes } = props;
   const dispatch = useDispatch();
 
+  const { status, account, } = useSelector(
+    (state) => state.userWallet
+  );
+
+  const umblNFTContract = useUmblContract();
+
   // state variables
   const [loading, setLoading] = React.useState(false);
+  const [accountError, setAccountError] = React.useState(false);
   const [alert, setAlert] = React.useState(null);
   const [cratesData, setCratesData] = React.useState([]);
-  const [status, setStatus] = React.useState(0);
+  const [pageStatus, setPageStatus] = React.useState(0);
   const [crateName, setCrateName] = React.useState("");
   const [crateNameState, setCrateNameState] = React.useState("");
   const [crateFaction, setCrateFaction] = React.useState("");
@@ -163,12 +169,12 @@ function CratesPage(props) {
     if(refresh) window.location.reload();
   };
 
-  const showSuccessMsg = (message, refresh=false) => {
+  const showSuccessMsg = (title='Success!', message='', refresh=false) => {
     setAlert(<SweetAlert
         success
         closeOnClickOutside={false}
         style={{ display: "block", marginTop: "-100px" }}
-        title="Success"
+        title={title}
         onConfirm={() => hideAlert(refresh)}
         onCancel={() => hideAlert(refresh)}
         confirmBtnCssClass={classes.button + " " + classes.success}
@@ -192,6 +198,26 @@ function CratesPage(props) {
     );
   };
 
+  const showMultiErrorMsg = (messages) => {
+    setAlert(
+      <SweetAlert
+        closeOnClickOutside={false}
+        html={true}
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Error!"
+        onConfirm={() => hideAlert()}
+        onCancel={() => hideAlert()}
+        confirmBtnCssClass={classes.button + " " + classes.info}
+      >
+        {messages.map((data, key) => {
+          return (
+            <p key={key}>{data}</p>
+          )
+        })}
+      </SweetAlert>
+    );
+  };
+
   const combineRarity = (rarities) => {
     const temp = rarities.map((prop, key) => {
       return prop.name;
@@ -207,27 +233,32 @@ function CratesPage(props) {
 
   const handleEdit = (id) => {
     setCrateId(id);
-    setStatus(2);
+    setPageStatus(2);
   };
 
-  const successDelete = (id) => {
+  const successDelete = async (id) => {
+    hideAlert();
     setLoading(true);
+
+    if (!umblNFTContract || !status) {
+      errMsg = "Non-Ethereum browser detected. You should consider trying MetaMask!";
+      showErrorMsg(errMsg);
+      return;
+    }
+
+    const transaction = await umblNFTContract.methods
+        .deleteCrate(parseInt(id))
+        .send({ from: account }, (error, transactionHash) => {
+          if(transactionHash === undefined) {
+            setLoading(false);
+            return;
+          }
+        });   
+
     DeleteCrateService(id).then(res => {
       if(res.hasOwnProperty('success') && res.success === true) {
         setLoading(false);
-        setAlert(
-          <SweetAlert
-            success
-            closeOnClickOutside={false}
-            style={{ display: "block", marginTop: "-100px" }}
-            title="Deleted!"
-            onConfirm={() => hideAlert(true)}
-            onCancel={() => hideAlert(true)}
-            confirmBtnCssClass={classes.button + " " + classes.success}
-          >
-            The Crate has been deleted.
-          </SweetAlert>
-        );
+        showSuccessMsg('Deleted!', 'The Crate has been deleted.', true);
       } else {
         setLoading(false);
       }
@@ -258,7 +289,7 @@ function CratesPage(props) {
   };
 
   const handleAddNew = () => {
-    setStatus(1);
+    setPageStatus(1);
   };
 
   const validateCrateForm = () => {
@@ -267,43 +298,56 @@ function CratesPage(props) {
     }
   };
 
-  const applyCrateInfo = () => {
+  const cancelAdd = () => {
+    setPageStatus(0);
+  };
+
+  const applyCrateInfo = async () => {
     var validation = true;
-    var errMsg = "";
+    var errMsg = [];
 
     validateCrateForm();
 
+    if(crateNameState === "error") {
+      validation = false;
+      errMsg.push("Crate name cannot be empty.");
+    }
+
     if(crateFaction === "") {
       validation = false;
-      errMsg = "Crate Faction cannot be empty.<br/>";
+      errMsg.push("Crate faction cannot be empty.");
     } 
 
     if(crateLevel === "") {
       validation = false;
-      errMsg += "Crate Level cannot be empty.<br/>";
+      errMsg.push("Crate level cannot be empty.");
     } 
 
     if(crateRarity.length === 0) {
       validation = false;
-      errMsg += "Crate Rarity cannot be empty.<br/>";
+      errMsg.push("Crate rarity cannot be empty.");
     }
 
     if(crateQuantity <= 0 ) {
       validation = false;
-      errMsg += "Crate Quantity cannot be less than 1.<br/>";
+      errMsg.push("Crate quantity cannot be less than 1.");
     }
 
     if(cratePrice <= 0 ) {
       validation = false;
-      errMsg += "Crate Price cannot be less than 0.<br/>";
+      errMsg.push("Crate price cannot be less than 0.");
     }
 
     if(!validation) {
-      showErrorMsg(errMsg);
+      showMultiErrorMsg(errMsg);
       return;
     }
 
-    setLoading(true);
+    if (!umblNFTContract || !status) {
+      errMsg = "Non-Ethereum browser detected. You should consider trying MetaMask!";
+      showErrorMsg(errMsg);
+      return;
+    }
 
     let postData = {
       'id': crateId,
@@ -315,23 +359,59 @@ function CratesPage(props) {
       'price': cratePrice,
     };
 
-    if(status === 1) {
-      AddNewCrateService(postData).then(res => {
-        if(res.hasOwnProperty('success') && res.success === true) {
+    setLoading(true);
+
+    if(pageStatus === 1) {
+      const previousValue = await umblNFTContract.methods
+        .nextCrateId()
+        .call({ from: account });
+
+      const price = window.web3.utils.toWei(cratePrice.toString(), "Ether");
+
+      const transaction = await umblNFTContract.methods
+        .applyCrate(0, parseInt(crateQuantity), parseInt(crateFaction), parseInt(crateLevel), crateRarity, price)
+        .send({ from: account }, (error, transactionHash) => {
+          if(transactionHash === undefined) {
+            setLoading(false);
+            return;
+          }
+        });       
+      
+      console.log(transaction); 
+
+      const nextValue = await umblNFTContract.methods
+        .nextCrateId()
+        .call({ from: account });
+
+      if((parseInt(nextValue) - parseInt(previousValue)) === 1) {
+        AddNewCrateService(postData).then(res => {
+          if(res.hasOwnProperty('success') && res.success === true) {
+            setLoading(false);
+            showSuccessMsg('Success!', 'New Crate was successfully created!', true);
+          } else {
+            setLoading(false);
+          }
+        }).catch(error => {
           setLoading(false);
-          showSuccessMsg('New Crate was successfully created!', true);
-        } else {
-          setLoading(false);
-        }
-      }).catch(error => {
-        setLoading(false);
-        showErrorMsg(error);
-      });
-    } else if(status === 2) {
+          showErrorMsg(error);
+        });
+      }
+    } else if(pageStatus === 2) {
+      const price = window.web3.utils.toWei(cratePrice.toString(), "Ether");
+
+      const transaction = await umblNFTContract.methods
+        .applyCrate(parseInt(crateId), parseInt(crateQuantity), parseInt(crateFaction), parseInt(crateLevel), crateRarity, price)
+        .send({ from: account }, (error, transactionHash) => {
+          if(transactionHash === undefined) {
+            setLoading(false);
+            return;
+          }
+        });   
+
       UpdateCrateService(crateId, postData).then(res => {
         if(res.hasOwnProperty('success') && res.success === true) {
           setLoading(false);
-          showSuccessMsg('The Crate was successfully updated!', true);
+          showSuccessMsg('Success!', 'The Crate was successfully updated!', true);
         } else {
           setLoading(false);
         }
@@ -339,7 +419,7 @@ function CratesPage(props) {
         setLoading(false);
         showErrorMsg(error);
       });
-    }   
+    }    
   };
 
   const updateCrateFaction = event => {
@@ -373,18 +453,53 @@ function CratesPage(props) {
           ];
         });
         setCratesData(cratesDataValue);
+      } else if(res.error === 'token') {
+        dispatch(LogoutAction());
       }
     });  
   }, []);
 
+  useEffect( async () => {
+    const checkOwnerAccount = async () => {
+      if (!umblNFTContract) {
+        return;
+      }  
+
+      if (!status) {
+        const errMsg = "Please connect with owner account";
+        setAccountError(true);
+        showErrorMsg(errMsg);
+        return;
+      }
+
+      const ownerAccount = await umblNFTContract.methods
+        .owner()
+        .call({ from: account });
+
+      if(ownerAccount.toLowerCase() !== account.toLowerCase()) {
+        const errMsg = "Please connect with owner account";
+        setAccountError(true);
+        showErrorMsg(errMsg);
+      } else {
+        setAccountError(false);
+      }
+    }
+    await checkOwnerAccount();
+  }, [umblNFTContract, account, status]);
+
   useEffect(() => {
     GetRaritiesService().then((res) => {
       if(res.hasOwnProperty('success') && res.success === true) {
-        setObjectRarities(res.rarities);
-      } 
+        let tempItemRarities = res.rarities.filter((data) => {
+          return data.id < 8;
+        })
+        setObjectRarities(tempItemRarities);
+      } else if(res.error === 'token') {
+        dispatch(LogoutAction());
+      }
     }); 
 
-    if(status === 2 && crateId !== null) {
+    if(pageStatus === 2 && crateId !== null) {
       GetCrateService(crateId).then((res) => {
         if(res.hasOwnProperty('success') && res.success === true) {
           let crateDataValue = res.crate;
@@ -397,19 +512,20 @@ function CratesPage(props) {
         } 
       }); 
     }
-  }, [status]);
+  }, [pageStatus]);
 
   return (    
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>        
         <Card>
-          <CardHeader color="rose" text>
-            <CardText color="rose">
+          <CardHeader color="info" text>
+            <CardText color="info">
               <h4 className={classes.cardTitle + ' ' + classes.cardTitleWhite}>CRATES</h4>
             </CardText>
           </CardHeader>
-          <CardBody>
-            { status === 0 ? (
+          <CardBody style={{padding: "30px"}}>
+            { !accountError ? 
+            pageStatus === 0 ? (
             <div>
               <GridContainer>
                 <GridItem xs={12} sm={12} className={classes.addNewItem}>
@@ -676,7 +792,6 @@ function CratesPage(props) {
                     <FormControl fullWidth className={classes.customInputFormControl}>
                       <CustomInput
                         id="crate_price"
-                        value={cratePrice}
                         formControlProps={{
                           fullWidth: true
                         }}
@@ -694,13 +809,18 @@ function CratesPage(props) {
                 </GridContainer>                
                 <GridContainer>
                   <GridItem xs={12} sm={12} lg={9} className={classes.gridItemCenter}>
-                    <Button color="rose" onClick={applyCrateInfo}>
+                    <Button color="rose" onClick={cancelAdd} style={{ marginRight: '30px'}}>
+                      Cancel
+                    </Button>
+                    <Button color="info" onClick={applyCrateInfo}>
                       Apply
                     </Button>
                   </GridItem>
                   <GridItem xs={12} sm={12} lg={3}></GridItem>
                 </GridContainer>
               </form>
+            ) : (
+              <h4 style={{margin: "30px"}}>Please connect with owner account, and refresh this page again</h4>
             )}
           </CardBody>
           <CardFooter className={classes.justifyContentCenter}>

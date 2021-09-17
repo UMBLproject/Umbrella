@@ -15,13 +15,18 @@ class RarityTableSeeder extends Seeder
     public function run()
     {
         $rarities = [
-            ['class' => 'S+','name' => 'Mythical'],
-            ['class' => 'S','name' => 'Legendary'],
-            ['class' => 'A','name' => 'Epic'],
-            ['class' => 'B','name' => 'Rare'],
-            ['class' => 'C','name' => 'Unique'],
-            ['class' => 'D','name' => 'Uncommon'],
             ['class' => 'E','name' => 'Common'],
+            ['class' => 'D','name' => 'Uncommon'],
+            ['class' => 'C','name' => 'Unique'],
+            ['class' => 'B','name' => 'Rare'],
+            ['class' => 'A','name' => 'Epic'],
+            ['class' => 'S','name' => 'Legendary'],
+            ['class' => 'S+','name' => 'Mythical'],
+            ['class' => 'B1','name' => 'Bronze'],
+            ['class' => 'B2','name' => 'Silver'],
+            ['class' => 'B3','name' => 'Gold'],
+            ['class' => 'B4','name' => 'Diamond'],
+            ['class' => 'B5','name' => 'Black Diamond'],
         ];
 
         foreach($rarities as $rarity) {

@@ -106,7 +106,7 @@
 	},
 	{
 		"inputs": [],
-		"name": "MAX_MINTING_TOKENS",
+		"name": "MAX_CRATE_TOKEN_COUNT",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -115,6 +115,57 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "MAX_MINT_TOKEN_COUNT",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_crateId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_numTokens",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_faction",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_level",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_rarities",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_price",
+				"type": "uint256"
+			}
+		],
+		"name": "applyCrate",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -158,6 +209,19 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
+				"name": "_crateId",
+				"type": "uint256"
+			}
+		],
+		"name": "buyCrate",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
 				"name": "_tokenId",
 				"type": "uint256"
 			}
@@ -182,6 +246,63 @@
 		],
 		"name": "changeTokenPrice",
 		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "crateUmblData",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenCount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "enum UmblNFT.TokenFaction",
+				"name": "faction",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint256",
+				"name": "level",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isDeleted",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_index",
+				"type": "uint256"
+			}
+		],
+		"name": "deleteCrate",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -205,64 +326,19 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "getMintedCount",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "_tokenId",
+				"name": "_index",
 				"type": "uint256"
 			}
 		],
-		"name": "getTokenMetaData",
+		"name": "getCrateRarities",
 		"outputs": [
 			{
-				"internalType": "string",
+				"internalType": "uint256[]",
 				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_tokenId",
-				"type": "uint256"
-			}
-		],
-		"name": "getTokenOwner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getTotalNumberOfTokensOwnedByAnAddress",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
+				"type": "uint256[]"
 			}
 		],
 		"stateMutability": "view",
@@ -309,7 +385,22 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "numTokens",
+				"name": "_numTokens",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_faction",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_category",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_rarity",
 				"type": "uint256"
 			},
 			{
@@ -318,14 +409,8 @@
 				"type": "uint256"
 			}
 		],
-		"name": "mint",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"name": "mintToken",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -337,6 +422,19 @@
 				"internalType": "string",
 				"name": "",
 				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "nextCrateId",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -491,9 +589,9 @@
 				"type": "uint256"
 			},
 			{
-				"internalType": "enum UmblNFT.TokenStatus",
+				"internalType": "uint256",
 				"name": "_tokenStatus",
-				"type": "uint8"
+				"type": "uint256"
 			}
 		],
 		"name": "setTokenStatus",
@@ -625,6 +723,21 @@
 			{
 				"internalType": "enum UmblNFT.TokenStatus",
 				"name": "status",
+				"type": "uint8"
+			},
+			{
+				"internalType": "enum UmblNFT.TokenFaction",
+				"name": "faction",
+				"type": "uint8"
+			},
+			{
+				"internalType": "enum UmblNFT.TokenCategory",
+				"name": "category",
+				"type": "uint8"
+			},
+			{
+				"internalType": "enum UmblNFT.TokenRarity",
+				"name": "rarity",
 				"type": "uint8"
 			}
 		],

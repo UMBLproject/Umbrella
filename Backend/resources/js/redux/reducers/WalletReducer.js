@@ -60,7 +60,7 @@ const WalletReducer = (state = initState, action) => {
                 status: false,             
                 account: null,
                 error: "",
-            }
+            };
         default:
             return state;
     }

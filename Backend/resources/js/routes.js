@@ -135,7 +135,7 @@ var dashRoutes = [
         rtlMini: "ع",
         component: ToggleMarketPage,
         layout: "/admin"
-      }
+      },
     ]
   }  
 ];

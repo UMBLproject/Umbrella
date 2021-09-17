@@ -18,6 +18,7 @@ class FactionTableSeeder extends Seeder
         $factions = [
             ['name' => 'Survivors'],
             ['name' => 'Scientists'],
+            ['name' => 'Unspecified'],
         ];
 
         foreach($factions as $faction) {

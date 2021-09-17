@@ -1,32 +1,22 @@
 /*eslint-disable*/
 import React, { useEffect, } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-
-import { useWeb3React } from "@web3-react/core";
-
 import { useUmblContract } from "@/hooks";
 
-import PropTypes from "prop-types";
+// SweetAlert
 import SweetAlert from "react-bootstrap-sweetalert";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
-import Checkbox from "@material-ui/core/Checkbox";
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 // material ui icons
-import MailOutline from "@material-ui/icons/MailOutline";
-import Contacts from "@material-ui/icons/Contacts";
-import Check from "@material-ui/icons/Check";
 import Close from "@material-ui/icons/Close";
 
 // core components
@@ -44,17 +34,16 @@ import ImageUpload from "@/components/CustomUpload/ImageUpload.js";
 
 // style for this view
 import validationFormsStyle from "@/assets/jss/material-dashboard-pro-react/views/validationFormsStyle.js";
-
 import customSelectStyle from "@/assets/jss/material-dashboard-pro-react/customSelectStyle.js";
 import customCheckboxRadioSwitch from "@/assets/jss/material-dashboard-pro-react/customCheckboxRadioSwitch.js";
-
 import extendedFormStyle from "@/assets/jss/material-dashboard-pro-react/views/extendedFormsStyle.js";
-
 import sweetAlertStyle from "@/assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.js";
 
+// service and actions
 import { GetObjectCategoriesService, GetObjectRaritiesService, PostMintTokensService, } from '@/services/UserServices';
 import { LogoutAction } from '@/redux/actions/AuthActions';
 
+// mix styles
 const style = {
   backdrop: {
     zIndex: 99999,
@@ -76,31 +65,30 @@ const style = {
   cardTitleWhite: {
     color: "white !important"
   },
+  ...sweetAlertStyle,
   ...customSelectStyle,
   ...customCheckboxRadioSwitch,
   ...validationFormsStyle,
-  ...extendedFormStyle,
-  ...sweetAlertStyle
+  ...extendedFormStyle  
 };
+
 
 function MintNFTPage(props) {
   const { classes } = props;
   const dispatch = useDispatch();
-  const { active, account, chainId, error } = useSelector(
-    (state) => state.userWallet
-  );
-
-  // const { account, active } = useWeb3React();
+  const { status, account, } = useSelector((state) => state.userWallet);
   const umblNFTContract = useUmblContract();
   
-  //
+  // state variables
   const [accountError, setAccountError] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [totalSupply, setTotalSupply] = React.useState(null);
   const [itemCategories, setItemCategories] = React.useState([]);
   const [itemRarities, setItemRarities] = React.useState([]);
-  const [tokenCategory, setTokenCategory] = React.useState("");
-  const [tokenRarity, setTokenRarity] = React.useState("");
+  const [badgeRarities, setBadgeRarities] = React.useState([]);
+  const [tokenFaction, setTokenFaction] = React.useState('');
+  const [tokenCategory, setTokenCategory] = React.useState('');
+  const [tokenRarity, setTokenRarity] = React.useState('');
   const [tokenThumbnail, setTokenThumbnail] = React.useState(null);
   const [tokenName, setTokenName] = React.useState("");
   const [tokenNameState, setTokenNameState] = React.useState("");
@@ -108,10 +96,15 @@ function MintNFTPage(props) {
   const [tokenDescriptionState, setTokenDescriptionState] = React.useState("");
   const [tokenCount, setTokenCount] = React.useState(null);
   const [tokenCountState, setTokenCountState] = React.useState("");
+  const [tokenPrice, setTokenPrice] = React.useState(0.000);
   const [alert, setAlert] = React.useState(null);
 
+
   const handleCategory = event => {
-    setTokenCategory(event.target.value);
+    const categoryId = event.target.value;
+
+    setTokenCategory(categoryId);
+    setTokenFaction(itemCategories[categoryId].faction.id)
   };
   const handleRarity = event => {
     setTokenRarity(event.target.value);
@@ -119,14 +112,7 @@ function MintNFTPage(props) {
   const handletokenThumbnail = file => {
     setTokenThumbnail(file);
   };
-  // function that returns true if value is email, false otherwise
-  const verifyEmail = value => {
-    var emailRex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (emailRex.test(value)) {
-      return true;
-    }
-    return false;
-  };
+
   // function that verifies if a string has a given length or not
   const verifyLength = (value, length) => {
     if (value.length >= length) {
@@ -142,37 +128,7 @@ function MintNFTPage(props) {
     }
     return false;
   };
-  // verifies if value is a valid URL
-  const verifyUrl = value => {
-    try {
-      new URL(value);
-      return true;
-    } catch (_) {
-      return false;
-    }
-  };
-  const registerClick = () => {
-    if (registerEmailState === "") {
-      setregisterEmailState("error");
-    }
-    if (registerPasswordState === "") {
-      setregisterPasswordState("error");
-    }
-    if (registerConfirmPasswordState === "") {
-      setregisterConfirmPasswordState("error");
-    }
-    if (registerCheckboxState === "") {
-      setregisterCheckboxState("error");
-    }
-  };
-  const loginClick = () => {
-    if (loginEmailState === "") {
-      setloginEmailState("error");
-    }
-    if (loginPasswordState === "") {
-      setloginPasswordState("error");
-    }
-  };
+
   const typeClick = () => {
     if (tokenNameState === "") {
       setTokenNameState("error");
@@ -184,23 +140,6 @@ function MintNFTPage(props) {
       setTokenCountState("error");
     }
   };
-  const rangeClick = () => {
-    if (minLengthState === "") {
-      setminLengthState("error");
-    }
-    if (maxLengthState === "") {
-      setmaxLengthState("error");
-    }
-    if (rangeState === "") {
-      setrangeState("error");
-    }
-    if (minValueState === "") {
-      setminValueState("error");
-    }
-    if (maxValueState === "") {
-      setmaxValueState("error");
-    }
-  };  
 
   const showSuccessMsg = (message) => {
     setAlert(<SweetAlert
@@ -211,7 +150,7 @@ function MintNFTPage(props) {
         onCancel={() => hideAlertRefresh()}
         confirmBtnCssClass={classes.button + " " + classes.success}
       >
-        {message}
+        <p>{message}</p>
     </SweetAlert>);
   };
 
@@ -219,6 +158,7 @@ function MintNFTPage(props) {
     setAlert(
       <SweetAlert
         closeOnClickOutside={false}
+        html={true}
         style={{ display: "block", marginTop: "-100px" }}
         title="Error!"
         onConfirm={() => hideAlert()}
@@ -226,6 +166,26 @@ function MintNFTPage(props) {
         confirmBtnCssClass={classes.button + " " + classes.info}
       >
         {message}
+      </SweetAlert>
+    );
+  };
+
+  const showMultiErrorMsg = (messages) => {
+    setAlert(
+      <SweetAlert
+        closeOnClickOutside={false}
+        html={true}
+        style={{ display: "block", marginTop: "-100px" }}
+        title="Error!"
+        onConfirm={() => hideAlert()}
+        onCancel={() => hideAlert()}
+        confirmBtnCssClass={classes.button + " " + classes.info}
+      >
+        {messages.map((data, key) => {
+          return (
+            <p key={key}>{data}</p>
+          )
+        })}
       </SweetAlert>
     );
   };
@@ -241,71 +201,75 @@ function MintNFTPage(props) {
 
   const handleMint = async () => {
     var validation = true;
-    var errMsg = "";
+    var errMsg = [];
 
     typeClick();
 
-    if(tokenCategory === "") {
+    if(tokenCategory === '') {
       validation = false;
-      errMsg = "Token category cannot be empty.<br/>";
+      errMsg.push("Token category cannot be empty.");
     } 
     
-    if(tokenRarity === "") {
+    if(tokenRarity === '') {
       validation = false;
-      errMsg += "Token rarity cannot be empty.<br/>";
+      errMsg.push("Token rarity cannot be empty.");
     } 
     
     if(tokenThumbnail === null) {
       validation = false;
-      errMsg += "Token thumbnail cannot be empty.<br/>";
+      errMsg.push("Token thumbnail cannot be empty.");
     } 
     
     if(tokenNameState === "error") {
       validation = false;
-      errMsg += "Token Name cannot be empty.<br/>";
+      errMsg.push("Token name cannot be empty.");
     } 
     
     if(tokenDescriptionState === "error") {      
       validation = false;
-      errMsg += "Token Description cannot be empty.<br/>";
+      errMsg.push("Token description cannot be empty.");
     }
 
     if(tokenCount === null) {      
       validation = false;
-      errMsg += "Token Count cannot be empty.<br>";
+      errMsg.push("Token count cannot be empty.");
+    }
+
+    if(tokenPrice === 0) {      
+      validation = false;
+      errMsg.push("Token price cannot be zero.");
     }
 
     if(!validation) {
-      showErrorMsg(errMsg);
+      showMultiErrorMsg(errMsg);
       return;
     }
 
-    if (!umblNFTContract || !active) {
+    if (!umblNFTContract || !status) {
       errMsg = "Non-Ethereum browser detected. You should consider trying MetaMask!";
       showErrorMsg(errMsg);
       return;
     }
 
     setLoading(true);
-    
-    const tokenPrice = 1.0;
+
+    const previousTokenCount = totalSupply;
+
     const price = window.web3.utils.toWei(tokenPrice.toString(), "Ether");
     const transaction = await umblNFTContract.methods
-      .mint(tokenCount, price)
-      .send({ from: account });       
-    
-    console.log(transaction);  
-    
-    console.log('test#1');
-
-    const totalSupplyValue = await umblNFTContract.methods
+      .mintToken(tokenCount, parseInt(tokenFaction), parseInt(tokenCategory), parseInt(tokenRarity), price)
+      .send({ from: account }, (error, transactionHash) => {
+        if(transactionHash === undefined) {
+          setLoading(false);
+          return;
+        }
+      });
+    const nextTokenCount = await umblNFTContract.methods
       .totalSupply()
       .call({ from: account });
 
-    console.log(totalSupply);
-    console.log(totalSupplyValue);
-
-    if((parseInt(totalSupplyValue) - parseInt(totalSupply)) === parseInt(tokenCount)) {
+    if((parseInt(nextTokenCount) - parseInt(previousTokenCount)) === parseInt(tokenCount)) { // success
+      // make attributes
       let attributes = [];
       for(var i=0; i<5; i++) {
         var keyId = 'attribute_key_' + (i+1);
@@ -334,27 +298,30 @@ function MintNFTPage(props) {
           setLoading(false);              
           const msg = tokenCount.toString() + ' tokens was minted!';
           showSuccessMsg(msg);
-        } else if(res.hasOwnProperty('success') && res.success === false) {
+        } else {
           setLoading(false);
+          showErrorMsg(res);
           if(res.error === 'token') {
             dispatch(LogoutAction());
           }
         }
-      }, error => {
+      }).catch(error => {
+        console.log(error);
+        showErrorMsg(error);
         setLoading(false);
       });        
       
     } else {
       setLoading(false);
-      const errorMsg = "Unknown error!";
-      showErrorMsg(errorMsg);
+      showErrorMsg("Unknown error!");
       return;
     }
   };  
 
   useEffect(() => {
     const loadTotalSupply = async () => {
-      if (!umblNFTContract) {
+      if (!umblNFTContract || !status) {
+        setAccountError(true);
         return;
       }     
 
@@ -366,7 +333,7 @@ function MintNFTPage(props) {
     };
 
     loadTotalSupply();
-  }, [umblNFTContract, account]);
+  }, [umblNFTContract, status]);
 
   useEffect(() => {
     GetObjectCategoriesService().then((res) => {
@@ -384,7 +351,14 @@ function MintNFTPage(props) {
   useEffect(() => {
     GetObjectRaritiesService().then((res) => {
       if(res.hasOwnProperty('success') && res.success === true) {
-        setItemRarities(res.rarities);
+        let tempItemRarities = res.rarities.filter((data) => {
+          return data.id < 8;
+        })
+        setItemRarities(tempItemRarities);
+        let tempBadgeRarities = res.rarities.filter((data) => {
+          return data.id >= 8;
+        })
+        setBadgeRarities(tempBadgeRarities);
       } else if(res.hasOwnProperty('success') && res.success === false) {
         if(res.error === 'token') {
           dispatch(LogoutAction());
@@ -397,18 +371,16 @@ function MintNFTPage(props) {
   useEffect(() => {
     const checkAccunt = async () => {
       if (!umblNFTContract) {
+        setAccountError(true);
         return;
       }  
       const ownerAccount = await umblNFTContract.methods
         .owner()
         .call({ from: account });
 
-      console.log(ownerAccount);
-
-      if(ownerAccount !== account) {
-        const errMsg = "Please connect with owner account";
+      if(ownerAccount.toLowerCase() !== account) {
         setAccountError(true);
-        showErrorMsg(errMsg);
+        showErrorMsg("Please connect with owner account");
       } else {
         setAccountError(false);
       }
@@ -420,8 +392,8 @@ function MintNFTPage(props) {
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>        
         <Card>
-          <CardHeader color="rose" text>
-            <CardText color="rose">
+          <CardHeader color="info" text>
+            <CardText color="info">
               <h4 className={classes.cardTitle + ' ' + classes.cardTitleWhite}>UMBL TOKEN MINTING</h4>
             </CardText>
           </CardHeader>
@@ -436,12 +408,6 @@ function MintNFTPage(props) {
                 </GridItem>
                 <GridItem xs={12} sm={10}>
                   <FormControl fullWidth className={classes.selectFormControl}>
-                    {/* <InputLabel
-                      htmlFor="simple-select"
-                      className={classes.selectLabel}
-                    >
-                      Choose Category
-                    </InputLabel> */}
                     <Select
                       MenuProps={{
                         className: classes.selectMenu
@@ -464,7 +430,7 @@ function MintNFTPage(props) {
                       >
                         Choose Category
                       </MenuItem>
-                      {itemCategories.map((data) => {
+                      { itemCategories.map((data) => {
                         return (
                           <MenuItem
                             classes={{
@@ -490,12 +456,6 @@ function MintNFTPage(props) {
                 </GridItem>
                 <GridItem xs={12} sm={10}>
                   <FormControl fullWidth className={classes.selectFormControl}>
-                    {/* <InputLabel
-                      htmlFor="simple-select"
-                      className={classes.selectLabel}
-                    >
-                      Choose Rarity
-                    </InputLabel> */}
                     <Select
                       MenuProps={{
                         className: classes.selectMenu
@@ -516,9 +476,9 @@ function MintNFTPage(props) {
                           root: classes.selectMenuItem
                         }}
                       >
-                        Choose Category
+                        Choose Rarity
                       </MenuItem>
-                      {itemRarities.map((data) => {
+                      { tokenCategory !== 7 ? itemRarities.map((data) => {
                         return (
                           <MenuItem
                             classes={{
@@ -531,7 +491,20 @@ function MintNFTPage(props) {
                             {data.name}
                           </MenuItem>
                         )
-                      })}
+                      }) : badgeRarities.map((data) => {
+                        return (
+                          <MenuItem
+                            classes={{
+                              root: classes.selectMenuItem,
+                              selected: classes.selectMenuItemSelected
+                            }}
+                            value={data.id}
+                            key={data.id}
+                          >
+                            {data.name}
+                          </MenuItem>
+                        )
+                      }) }
                     </Select>
                   </FormControl>
                 </GridItem>
@@ -710,12 +683,37 @@ function MintNFTPage(props) {
                 </GridItem>
               </GridContainer>
               ))}
+              <GridContainer  className={classes.p20}>
+                <GridItem xs={12} sm={2}>
+                  <FormLabel className={classes.labelHorizontal}>
+                    Price
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={7}>
+                  <FormControl fullWidth className={classes.customInputFormControl}>
+                    <CustomInput
+                      id="token_price"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      value={tokenPrice}
+                      inputProps={{
+                        onChange: event => {
+                          setTokenPrice(parseFloat(event.target.value).toFixed(3));
+                        },
+                        type: "number",
+                      }}
+                    />
+                  </FormControl>
+                </GridItem>
+                <GridItem xs={12} sm={3}></GridItem>
+              </GridContainer> 
             </form>
-          ) : (<h4>Please connect with owner account, and refresh this page again</h4>)}
+          ) : (<h4 style={{margin: "30px"}}>Please connect with owner account, and refresh this page again</h4>)}
           </CardBody>
           <CardFooter className={classes.justifyContentCenter}>            
             {!accountError ? (
-            <Button color="rose" onClick={handleMint}>
+            <Button color="info" onClick={handleMint} style={{ margin: "30px 0 50px 0"}}>
               Mint
             </Button>
             ) : null}
@@ -730,4 +728,4 @@ function MintNFTPage(props) {
   );
 }
 
-export default withStyles(style)(MintNFTPage) ;
+export default withStyles(style)(MintNFTPage);

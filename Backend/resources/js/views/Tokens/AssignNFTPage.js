@@ -8,23 +8,9 @@ import SweetAlert from "react-bootstrap-sweetalert";
 
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Checkbox from "@material-ui/core/Checkbox";
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormLabel from "@material-ui/core/FormLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-// material ui icons
-import MailOutline from "@material-ui/icons/MailOutline";
-import Contacts from "@material-ui/icons/Contacts";
-import Check from "@material-ui/icons/Check";
-import Close from "@material-ui/icons/Close";
 
 // core components
 import GridContainer from "@/components/Grid/GridContainer.js";
@@ -34,10 +20,8 @@ import Button from "@/components/CustomButtons/Button.js";
 import Card from "@/components/Card/Card.js";
 import CardHeader from "@/components/Card/CardHeader.js";
 import CardText from "@/components/Card/CardText.js";
-import CardIcon from "@/components/Card/CardIcon.js";
 import CardBody from "@/components/Card/CardBody.js";
 import CardFooter from "@/components/Card/CardFooter.js";
-import ImageUpload from "@/components/CustomUpload/ImageUpload.js";
 import Table from "@/components/Table/Table.js";
 
 // style for this view
@@ -50,7 +34,7 @@ import extendedFormStyle from "@/assets/jss/material-dashboard-pro-react/views/e
 
 import sweetAlertStyle from "@/assets/jss/material-dashboard-pro-react/views/sweetAlertStyle.js";
 
-import { GetTokenInformationService, } from '@/services/UserServices';
+import { GetTokenInformationService, AssignTokenService, } from '@/services/UserServices';
 import { LogoutAction } from '@/redux/actions/AuthActions';
 
 const style = {
@@ -94,7 +78,7 @@ const style = {
 function AssignNFTPage(props) {
   const { classes } = props;
   const dispatch = useDispatch();
-  const { active, account, chainId, error } = useSelector(
+  const { status, account, } = useSelector(
     (state) => state.userWallet
   );
 
@@ -125,7 +109,7 @@ function AssignNFTPage(props) {
     setAlert(<SweetAlert
         success
         style={{ display: "block", marginTop: "-100px" }}
-        title="Success"
+        title="Success!"
         onConfirm={() => hideAlertRefresh()}
         onCancel={() => hideAlertRefresh()}
         confirmBtnCssClass={classes.button + " " + classes.success}
@@ -199,16 +183,29 @@ function AssignNFTPage(props) {
 
     await umblNFTContract.methods
       .safeTransferFrom(account, userAccount, tokenId)
-      .send({ from: account })
-      .then((res) => {
+      .send({ from: account }, (error, transactionHash) => {
+        if(transactionHash === undefined) {
+          setLoading(false);
+          return;
+        }
+      });
+
+    let postData = {
+      tokenId: tokenId
+    };
+
+    AssignTokenService(postData).then(res => {
+      if(res.hasOwnProperty('success') && res.success === true) {
         setLoading(false);
         const msg = 'Token Id ' + tokenId + ' was succesfully assigned to ' + userAccount + '.';
         showSuccessMsg(msg);
-      })
-      .catch((err) => {
+      } else {
         setLoading(false);
-        showErrorMsg(err);
-      });
+      }
+    }).catch(error => {
+      setLoading(false);
+      showErrorMsg(error);
+    });
   };
 
   useEffect(async () => {
@@ -299,7 +296,7 @@ function AssignNFTPage(props) {
         .owner()
         .call({ from: account });
 
-      if(ownerAccount !== account) {
+      if(ownerAccount.toLowerCase() !== account) {
         const errMsg = "Please connect with owner account";
         setAccountError(true);
         showErrorMsg(errMsg);
@@ -316,8 +313,8 @@ function AssignNFTPage(props) {
     <GridContainer>
       <GridItem xs={12} sm={12} md={12}>        
         <Card>
-          <CardHeader color="rose" text>
-            <CardText color="rose">
+          <CardHeader color="info" text>
+            <CardText color="info">
               <h4 className={classes.cardTitle + ' ' + classes.cardTitleWhite}>ASSIGN TOKEN</h4>
             </CardText>
           </CardHeader>
@@ -342,10 +339,10 @@ function AssignNFTPage(props) {
                   />
                 </GridItem>
                 <GridItem xs={12} sm={6} className={classes.p20}>
-                  <Button color="rose" onClick={handleTokenIdSearch}>
+                  <Button color="info" onClick={handleTokenIdSearch}>
                     Search
                   </Button>
-                  <Button color="info" className={classes.clearButton} onClick={handleTokenIdClear}>
+                  <Button color="danger" className={classes.clearButton} onClick={handleTokenIdClear}>
                     Clear
                   </Button>
                 </GridItem>
@@ -369,7 +366,7 @@ function AssignNFTPage(props) {
                 </GridItem>
                 <GridItem xs={12} sm={4}></GridItem>
               </GridContainer>
-                { tokenOwner && tokenOwner === account ? (
+                { tokenOwner && tokenOwner.toLowerCase() === account.toLowerCase() ? (
                 <GridContainer>
                   <GridItem xs={12} sm={2}>
                     <FormLabel className={classes.labelHorizontal}>
@@ -388,7 +385,7 @@ function AssignNFTPage(props) {
                     />
                   </GridItem>
                   <GridItem xs={12} sm={4} className={classes.p20}>
-                    <Button color="rose" onClick={handleAssign}>
+                    <Button color="info" onClick={handleAssign}>
                       Assign
                     </Button>
                   </GridItem>
@@ -406,7 +403,7 @@ function AssignNFTPage(props) {
               ) : null }
             </form>
             ) :             
-            (<h4>Please connect with owner account, and refresh this page again</h4>)}
+            (<h4 style={{margin: "30px"}}>Please connect with owner account, and refresh this page again</h4>)}
           </CardBody>
           <CardFooter className={classes.justifyContentCenter}>
           </CardFooter>          

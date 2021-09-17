@@ -15,7 +15,7 @@ class MintController extends Controller
             'category' => 'required|integer|gt:0',
             'rarity' => 'required|integer|gt:0',
             'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',            
-            'total' => 'required|integer|gt:0',
+            'total' => 'required|integer|gte:0',
             'count' => 'required|integer|gt:0',  
             'attributes' => "string",    
         ]);
@@ -41,8 +41,8 @@ class MintController extends Controller
                     'tokenId' => $tokenId,
                     'category_id' => $validated['category'],
                     'rarity_id' => $validated['rarity'],
-                    'name' => $validated['name'] . ' #' . $tokenId,
-                    'description' => $validated['description'],
+                    'name' => trim($validated['name']) . ' #' . $tokenId,
+                    'description' => trim($validated['description']),
                     'image' => $imageName,
                     'attributes' => is_null($attributes) ? null : json_encode(json_decode($attributes)),
                 ]
@@ -51,8 +51,7 @@ class MintController extends Controller
   
         return response()->json([
             'success' => true,
-            'message' => $count . ' tokens successfully has been registered',
-            'attributes' => json_decode($attributes),
+            'message' => $count . ' tokens successfully has been registered'
         ], 200);
     }
 
@@ -118,6 +117,32 @@ class MintController extends Controller
             'external_url' => 'http://umbrella.localhost',
             'image' => 'http://umbrella.localhost/img/' . $token->image,
             'attributes' => json_decode($token->attributes),
+        ], 200);
+    }
+
+    public function assign(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'tokenId' => 'required|integer|gt:0',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(), 400);
+        }
+
+        $validated = $validator->validated();
+        $equipment = Equipment::where('tokenId', $validated['tokenId'])->first();
+
+        if(!$equipment) {
+            return response()->json(['error' => 'tokenId is not registered'], 400);
+        }
+
+        $equipment->update([
+            'assigned' => true
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Token (#' . $validated['tokenId'] . ') successfully has been assigned'
         ], 200);
     }
 }

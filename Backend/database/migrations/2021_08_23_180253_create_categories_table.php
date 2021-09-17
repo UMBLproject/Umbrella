@@ -18,8 +18,8 @@ class CreateCategoriesTable extends Migration
 
             $table->string('name')->unique();
 
-            $table->unsignedBigInteger('faction_id')->nullable();       
-            $table->foreign('faction_id')->references('id')->on('factions')->onDelete('set null'); 
+            $table->unsignedBigInteger('faction_id');       
+            $table->foreign('faction_id')->references('id')->on('factions')->onDelete('cascade'); 
             
             $table->timestamps();
         });
