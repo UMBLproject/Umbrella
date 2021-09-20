@@ -36,7 +36,7 @@ export default function Pages(props) {
       if (prop.layout === "/user") {         
         return (
           <Route
-            exact
+            exact            
             path={prop.path}
             component={prop.component}
             key={key}

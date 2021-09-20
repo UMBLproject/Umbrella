@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
-
+import { useHistory } from 'react-router-dom'; 
 import { LogoutAction } from '@/redux/actions/AuthActions';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -34,6 +34,7 @@ import styles from "@/assets/jss/material-dashboard-pro-react/components/adminNa
 const useStyles = makeStyles(styles);
 
 export default function HeaderLinks(props) {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [openNotification, setOpenNotification] = React.useState(null);
   const handleClickNotification = event => {
@@ -60,7 +61,7 @@ export default function HeaderLinks(props) {
   const handleLogout = (e) => {
     e.preventDefault();    
 
-    dispatch(LogoutAction());
+    dispatch(LogoutAction(history));
   };
   const classes = useStyles();
   const { rtlActive } = props;
@@ -83,7 +84,7 @@ export default function HeaderLinks(props) {
   });
   
   return (
-    <div className={wrapper}>      
+    <div className={classes.wrapper}>      
       <ConnectWallet />
       <div className={managerClasses}>
         <Button

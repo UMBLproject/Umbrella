@@ -25,6 +25,8 @@ class CreateCratesTable extends Migration
             $table->unsignedTinyInteger('quantity')->default(4);
             $table->double('price', 8, 3)->default(0.000);
 
+            $table->string('model')->nullable();
+
             $table->timestamps();
         });
     }

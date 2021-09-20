@@ -162,7 +162,7 @@ const pagesHeaderStyle = theme => ({
     "&:hover,&:focus": {
       // color: whiteColor,
       color: warmRedColor,
-      fontWeight: "bold",
+      // fontWeight: "bold",
       // background: "rgba(" + hexToRgb(grayColor[17]) + ", 0.2)"
     },
   },
@@ -212,6 +212,17 @@ const pagesHeaderStyle = theme => ({
     color: "inherit",
     display: "inline-block"
   },
+  listItemImageIcon: {
+    marginTop: "-3px",
+    top: "0px",
+    position: "relative",
+    marginRight: "3px",
+    width: "32px",
+    height: "32px",
+    verticalAlign: "middle",
+    color: "inherit",
+    display: "inline-block"
+  },
   largeListItemIcon: {
     marginTop: "-3px",
     top: "0px",
@@ -234,7 +245,8 @@ const pagesHeaderStyle = theme => ({
     margin: 0,
     display: "inline-block",
     position: "relative",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
+    fontFamily: "Microgramma"
   },
   largeListItemText: {
     fontFamily: '"Microgramma"',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Validator;
 
 class CategoryController extends Controller
 {
@@ -18,6 +19,29 @@ class CategoryController extends Controller
         return response()->json([
             'success' => true,
             'categories' => $categories
+        ], 200);
+    }
+
+    public function getName(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'categoryId' => 'required|integer|gt:0',
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(), 400);
+        }
+
+        $validated = $validator->validated();
+        $category = Category::where('id', $validated['categoryId'])->first();
+
+        if(!$category) {
+            return response()->json(['error' => 'Category Id is not registered'], 400);
+        }
+
+        return response()->json([
+            'success' => true,
+            'category' => $category->name
         ], 200);
     }
 

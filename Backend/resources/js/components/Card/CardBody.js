@@ -26,6 +26,7 @@ export default function CardBody(props) {
     profile,
     calendar,
     border,
+    nopadding,
     ...rest
   } = props;
   const cardBodyClasses = classNames({
@@ -39,6 +40,7 @@ export default function CardBody(props) {
     [classes.cardBodyProfile]: profile,
     [classes.cardBodyCalendar]: calendar,
     [classes.cardBodyBorder]: border,
+    [classes.cardBodyNoPadding]: nopadding,
     [className]: className !== undefined
   });
   return (
@@ -59,5 +61,6 @@ CardBody.propTypes = {
   profile: PropTypes.bool,
   calendar: PropTypes.bool,
   children: PropTypes.node,
-  border: PropTypes.bool
+  border: PropTypes.bool,
+  nopadding: PropTypes.bool
 };

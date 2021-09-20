@@ -27,13 +27,22 @@ import ValidationForms from "@/views/Forms/ValidationForms.js";
 import VectorMap from "@/views/Maps/VectorMap.js";
 import Widgets from "@/views/Widgets/Widgets.js";
 import Wizard from "@/views/Forms/Wizard.js";
+
+
 import HomePage from "@/views/Pages/HomePage.js";
-import MarketplacePage from "@/views/Pages/MarketplacePage.js";
-import UserListPage from "@/views/Users/UserList.js";
-import MintNFTPage from "@/views/Tokens/MintNFTPage.js";
-import AssignNFTPage from "@/views/Tokens/AssignNFTPage.js";
-import ToggleMarketPage from "@/views/Market/ToggleMarketPage.js";
-import CratesPage from "@/views/Market/CratesPage.js";
+import MarketplacePage from "@/views/Market/MarketplacePage.js";
+import InventoryPage from "@/views/Inventory/Inventory.js";
+import CategoryPage from "@/views/Inventory/Category.js";
+import ItemPage from "@/views/Inventory/ItemPage.js";
+import AccountPage from "@/views/Account/Account.js";
+import ProfilePage from "@/views/Account/Profile.js";
+import SecurityPage from "@/views/Account/Security.js";
+
+import AdminUserListPage from "@/views/Users/AdminUserList.js";
+import AdminMintNFTPage from "@/views/Tokens/AdminMintNFTPage.js";
+import AdminAssignNFTPage from "@/views/Tokens/AdminAssignNFTPage.js";
+import AdminToggleMarketPage from "@/views/Market/AdminToggleMarketPage.js";
+import AdminCratesPage from "@/views/Market/AdminCratesPage.js";
 
 // @material-ui/icons
 import Apps from "@material-ui/icons/Apps";
@@ -62,6 +71,42 @@ var dashRoutes = [
     layout: "/user"
   },
   {
+    path: "/inventory",
+    name: "Inventory Page",
+    component: InventoryPage,
+    layout: "/user"
+  },
+  {
+    path: "/inventory/:category",
+    name: "Inventory Category Page",
+    component: CategoryPage,
+    layout: "/user"
+  },
+  {
+    path: "/inventory/:category/:tokenId",
+    name: "Inventory Item Page",
+    component: ItemPage,
+    layout: "/user"
+  },
+  {
+    path: "/account",
+    name: "Account Main Page",
+    component: AccountPage,
+    layout: "/user"
+  },
+  {
+    path: "/account/profile",
+    name: "Account Profile Page",
+    component: ProfilePage,
+    layout: "/user"
+  },
+  {
+    path: "/account/security",
+    name: "Account Security Page",
+    component: SecurityPage,
+    layout: "/user"
+  },
+  {
     path: "/dashboard",
     name: "Dashboard",
     rtlName: "لوحة القيادة",
@@ -81,7 +126,7 @@ var dashRoutes = [
         rtlName: "عالتسعير",
         mini: "L",
         rtlMini: "ع",
-        component: UserListPage,
+        component: AdminUserListPage,
         layout: "/admin"
       }
     ]
@@ -98,7 +143,7 @@ var dashRoutes = [
         rtlName: "عالتسعير",
         mini: "M",
         rtlMini: "ع",
-        component: MintNFTPage,
+        component: AdminMintNFTPage,
         layout: "/admin"
       },
       {
@@ -107,7 +152,7 @@ var dashRoutes = [
         rtlName: "عالتسعير",
         mini: "A",
         rtlMini: "ع",
-        component: AssignNFTPage,
+        component: AdminAssignNFTPage,
         layout: "/admin"
       }
     ]
@@ -124,7 +169,7 @@ var dashRoutes = [
         rtlName: "عالتسعير",
         mini: "C",
         rtlMini: "ع",
-        component: CratesPage,
+        component: AdminCratesPage,
         layout: "/admin"
       },
       {
@@ -133,7 +178,7 @@ var dashRoutes = [
         rtlName: "عالتسعير",
         mini: "M",
         rtlMini: "ع",
-        component: ToggleMarketPage,
+        component: AdminToggleMarketPage,
         layout: "/admin"
       },
     ]

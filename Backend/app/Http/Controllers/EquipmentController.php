@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Equipment;
 use Illuminate\Http\Request;
+use Validator;
 
 class EquipmentController extends Controller
 {
@@ -137,6 +138,33 @@ class EquipmentController extends Controller
             'success' => true,
             'message' => 'The equipment flag was updated',
             'equipment' => $equipment,
+        ], 201);
+    }
+
+    public function getList(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'tokenIdList' => 'required|string|min:1'
+        ]);
+
+        if($validator->fails()){
+            return response()->json($validator->errors(), 400);
+        }
+
+        $validated = $validator->validated();
+        $tokenIds = explode(',', $validated['tokenIdList']);
+
+        $tokenList = [];
+        foreach($tokenIds as $tokenId) {
+            $equipment = Equipment::where('tokenId', $tokenId)->first();
+            if($equipment) {
+                array_push($tokenList, $equipment);
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'tokenList' => $tokenList
         ], 201);
     }
 }

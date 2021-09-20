@@ -22,7 +22,8 @@ class Equipment extends Model
         'name', 
         'description', 
         'image', 
-        'attributes'
+        'attributes',
+        'model',
     ];
 
     protected $hidden = [

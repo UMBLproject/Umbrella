@@ -17,7 +17,7 @@ class MintController extends Controller
             'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',            
             'total' => 'required|integer|gte:0',
             'count' => 'required|integer|gt:0',  
-            'attributes' => "string",    
+            'attributes' => 'string'
         ]);
 
         if($validator->fails()){
@@ -45,6 +45,7 @@ class MintController extends Controller
                     'description' => trim($validated['description']),
                     'image' => $imageName,
                     'attributes' => is_null($attributes) ? null : json_encode(json_decode($attributes)),
+                    'model' => is_null($request->model) ? null : trim($request->model),
                 ]
             );
         }
@@ -83,6 +84,7 @@ class MintController extends Controller
             'external_url' => 'http://umbrella.localhost',
             'image' => 'http://umbrella.localhost/img/' . $token->image,
             'attributes' => json_decode($token->attributes),
+            'model' => $token->model,
         ], 200);
     }
 
@@ -117,6 +119,7 @@ class MintController extends Controller
             'external_url' => 'http://umbrella.localhost',
             'image' => 'http://umbrella.localhost/img/' . $token->image,
             'attributes' => json_decode($token->attributes),
+            'model' => $token->model,
         ], 200);
     }
 

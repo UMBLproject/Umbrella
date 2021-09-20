@@ -1,6 +1,8 @@
 /*eslint-disable*/
 import React, { useEffect, } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom'; 
+
 import { useUmblContract } from "@/hooks";
 
 // SweetAlert
@@ -75,6 +77,7 @@ const style = {
 
 function MintNFTPage(props) {
   const { classes } = props;
+  const history = useHistory();
   const dispatch = useDispatch();
   const { status, account, } = useSelector((state) => state.userWallet);
   const umblNFTContract = useUmblContract();
@@ -97,17 +100,17 @@ function MintNFTPage(props) {
   const [tokenCount, setTokenCount] = React.useState(null);
   const [tokenCountState, setTokenCountState] = React.useState("");
   const [tokenPrice, setTokenPrice] = React.useState(0.000);
+  const [tokenModel, setTokenModel] = React.useState('');
   const [alert, setAlert] = React.useState(null);
 
 
-  const handleCategory = event => {
-    const categoryId = event.target.value;
-
+  const handleCategory = event => {    
+    const categoryId = parseInt(event.target.value);
     setTokenCategory(categoryId);
-    setTokenFaction(itemCategories[categoryId].faction.id)
+    setTokenFaction(itemCategories[categoryId - 1].faction.id);
   };
   const handleRarity = event => {
-    setTokenRarity(event.target.value);
+    setTokenRarity(parseInt(event.target.value));
   };
   const handletokenThumbnail = file => {
     setTokenThumbnail(file);
@@ -249,7 +252,7 @@ function MintNFTPage(props) {
       errMsg = "Non-Ethereum browser detected. You should consider trying MetaMask!";
       showErrorMsg(errMsg);
       return;
-    }
+    }    
 
     setLoading(true);
 
@@ -271,7 +274,7 @@ function MintNFTPage(props) {
     if((parseInt(nextTokenCount) - parseInt(previousTokenCount)) === parseInt(tokenCount)) { // success
       // make attributes
       let attributes = [];
-      for(var i=0; i<5; i++) {
+      for(var i=0; i<10; i++) {
         var keyId = 'attribute_key_' + (i+1);
         var valueId = 'attribute_value_' + (i+1);
 
@@ -281,7 +284,7 @@ function MintNFTPage(props) {
             value: document.getElementById(valueId).value,
           });
         }
-      }
+      }      
 
       let formData = new FormData();
       formData.append('category', tokenCategory);
@@ -292,6 +295,7 @@ function MintNFTPage(props) {
       formData.append('count', tokenCount);
       formData.append('total', totalSupply);
       formData.append('attributes', JSON.stringify(attributes));
+      formData.append('model', tokenModel);
 
       PostMintTokensService(formData).then((res) => {
         if(res.hasOwnProperty('success') && res.success === true) {
@@ -302,7 +306,7 @@ function MintNFTPage(props) {
           setLoading(false);
           showErrorMsg(res);
           if(res.error === 'token') {
-            dispatch(LogoutAction());
+            dispatch(LogoutAction(history));
           }
         }
       }).catch(error => {
@@ -341,7 +345,7 @@ function MintNFTPage(props) {
         setItemCategories(res.categories);
       } else if(res.hasOwnProperty('success') && res.success === false) {
         if(res.error === 'token') {
-          dispatch(LogoutAction());
+          dispatch(LogoutAction(history));
         }
       }
     }, error => {
@@ -361,7 +365,7 @@ function MintNFTPage(props) {
         setBadgeRarities(tempBadgeRarities);
       } else if(res.hasOwnProperty('success') && res.success === false) {
         if(res.error === 'token') {
-          dispatch(LogoutAction());
+          dispatch(LogoutAction(history));
         }
       }
     }, error => {
@@ -430,7 +434,7 @@ function MintNFTPage(props) {
                       >
                         Choose Category
                       </MenuItem>
-                      { itemCategories.map((data) => {
+                      { itemCategories.map((data, key) => {
                         return (
                           <MenuItem
                             classes={{
@@ -438,7 +442,7 @@ function MintNFTPage(props) {
                               selected: classes.selectMenuItemSelected
                             }}
                             value={data.id}
-                            key={data.id}
+                            key={key}
                           >
                             {data.name}
                           </MenuItem>
@@ -478,7 +482,7 @@ function MintNFTPage(props) {
                       >
                         Choose Rarity
                       </MenuItem>
-                      { tokenCategory !== 7 ? itemRarities.map((data) => {
+                      { tokenCategory !== 7 ? itemRarities.map((data, key) => {
                         return (
                           <MenuItem
                             classes={{
@@ -486,12 +490,12 @@ function MintNFTPage(props) {
                               selected: classes.selectMenuItemSelected
                             }}
                             value={data.id}
-                            key={data.id}
+                            key={key}
                           >
                             {data.name}
                           </MenuItem>
                         )
-                      }) : badgeRarities.map((data) => {
+                      }) : badgeRarities.map((data, key) => {
                         return (
                           <MenuItem
                             classes={{
@@ -499,7 +503,7 @@ function MintNFTPage(props) {
                               selected: classes.selectMenuItemSelected
                             }}
                             value={data.id}
-                            key={data.id}
+                            key={key}
                           >
                             {data.name}
                           </MenuItem>
@@ -657,7 +661,7 @@ function MintNFTPage(props) {
                 <GridItem xs={12} sm={10}>                
                 </GridItem>
               </GridContainer>
-              {[...Array(5)].map((x, i) => (              
+              {[...Array(10)].map((x, i) => (              
               <GridContainer key={i}>
                 <GridItem xs={12} sm={2}>
                 </GridItem>
@@ -707,6 +711,32 @@ function MintNFTPage(props) {
                   </FormControl>
                 </GridItem>
                 <GridItem xs={12} sm={3}></GridItem>
+              </GridContainer> 
+              <GridContainer>
+                <GridItem xs={12} sm={2}>
+                  <FormLabel className={classes.labelHorizontal}>
+                    Model
+                  </FormLabel>
+                </GridItem>
+                <GridItem xs={12} sm={7}>
+                  <CustomInput
+                    id="token_model"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      onChange: event => {
+                        if (verifyLength(event.target.value, 0)) {
+                          setTokenModel(event.target.value);
+                        }
+                      },
+                      type: "text",
+                      endAdornment: (undefined)
+                    }}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={3}>                  
+                </GridItem>
               </GridContainer> 
             </form>
           ) : (<h4 style={{margin: "30px"}}>Please connect with owner account, and refresh this page again</h4>)}

@@ -108,7 +108,10 @@ class AuthController extends Controller
     public function logout() {
         auth()->logout();
 
-        return response()->json(['message' => 'User successfully signed out']);
+        return response()->json([
+            'success' => true,
+            'message' => 'User successfully signed out'
+        ]);
     }
 
     /**
@@ -126,7 +129,10 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getUserInfo() {
-        return response()->json(auth()->user());
+        return response()->json([
+            'success' => true,
+            'user' => auth()->user()
+        ]);
     }
 
     /**

@@ -29,7 +29,7 @@ contract UmblNFT is ERC721, ERC721Enumerable, Ownable, ReentrancyGuard {
     enum TokenStatus { 
         NEVER_USED,
         MINTED,
-        PURCHASED, 
+        OWNED, 
         EQUIPPED,
         STAKED 
     }
@@ -65,6 +65,7 @@ contract UmblNFT is ERC721, ERC721Enumerable, Ownable, ReentrancyGuard {
     struct UmblData {
         uint256 id;
         uint256 price;
+        uint256 health;
         TokenStatus status;
         TokenFaction faction;
         TokenCategory category;
@@ -163,6 +164,7 @@ contract UmblNFT is ERC721, ERC721Enumerable, Ownable, ReentrancyGuard {
             UmblData memory newUmblData = UmblData(
                 nextTokenId,
                 _price,
+                100,
                 TokenStatus.MINTED,
                 TokenFaction(_faction),
                 TokenCategory(_category),
@@ -245,14 +247,47 @@ contract UmblNFT is ERC721, ERC721Enumerable, Ownable, ReentrancyGuard {
         // get the token from all UmblData mapping and create a memory of it as defined
         UmblData memory umblData = tokenUmblData[_tokenId];
 
-        // check tokenstatus value is on available range
-        require(TokenStatus(_tokenStatus) >= TokenStatus.EQUIPPED && TokenStatus(_tokenStatus) <= TokenStatus.STAKED);
+        require(umblData.status != TokenStatus.NEVER_USED && umblData.status != TokenStatus.MINTED, "The token status cannot be updated") ;
 
         // check current token status is not same with parameter        
         require(umblData.status != TokenStatus(_tokenStatus));
 
+        if(_tokenStatus == uint256(TokenStatus.STAKED)) {
+            require(umblData.health == 0, "The token health is not zero");
+        }
+
+        // check tokenstatus value is on available range
+        require(TokenStatus(_tokenStatus) >= TokenStatus.OWNED && TokenStatus(_tokenStatus) <= TokenStatus.STAKED);        
+
         // update the token's forSale to false
         umblData.status = TokenStatus(_tokenStatus);
+
+        // set and update that token in the mapping
+        tokenUmblData[_tokenId] = umblData;
+    }
+
+    // Update token health value
+    function setTokenHealth(uint256 _tokenId, uint256 _tokenHealth) 
+        public payable
+    {
+        // require that token should exist
+        require(_exists(_tokenId));
+
+        // check current call is same with the token's owner
+        require(ownerOf(_tokenId) == msg.sender);
+
+        // get the token from all UmblData mapping and create a memory of it as defined
+        UmblData memory umblData = tokenUmblData[_tokenId];
+
+        require(umblData.status != TokenStatus.NEVER_USED && umblData.status != TokenStatus.MINTED, "The token health cannot be updated");
+
+        require(umblData.health != _tokenHealth);
+
+        // check current token status is not same with parameter        
+        require(_tokenHealth >= 0 && _tokenHealth <= 100, "Token health must be from zero to 100");
+
+        // update the token's forSale to false
+        umblData.health = _tokenHealth;
 
         // set and update that token in the mapping
         tokenUmblData[_tokenId] = umblData;
@@ -330,11 +365,11 @@ contract UmblNFT is ERC721, ERC721Enumerable, Ownable, ReentrancyGuard {
             // transfer tokens to buyer
             _transfer(tokenOwner, msg.sender, tokenId);
 
-            // update token status to purchased
+            // update token status to OWNED
             UmblData memory umblData = tokenUmblData[tokenId];
 
             // update the token's forSale to false
-            umblData.status = TokenStatus.PURCHASED;
+            umblData.status = TokenStatus.OWNED;
 
             // set and update that token in the mapping
             tokenUmblData[tokenId] = umblData;
@@ -375,7 +410,7 @@ contract UmblNFT is ERC721, ERC721Enumerable, Ownable, ReentrancyGuard {
         require(msg.value >= umblData.price);
 
         // token should be for sale
-        require(umblData.status == TokenStatus.PURCHASED);
+        require(umblData.status == TokenStatus.OWNED);
 
         // transfer the token from owner to the caller of the function (buyer)
         _transfer(tokenOwner, msg.sender, _tokenId);
@@ -448,6 +483,10 @@ contract UmblNFT is ERC721, ERC721Enumerable, Ownable, ReentrancyGuard {
         virtual 
     {
         _baseTokenURI = baseURI;
+    }
+
+    function _baseURI() internal view override returns (string memory) {
+        return _baseTokenURI;
     }
 
     // Administrative zone

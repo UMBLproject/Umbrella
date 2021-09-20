@@ -29,6 +29,8 @@ export default function Card(props) {
     chart,
     login,
     main,
+    transparent,
+    inventory,
     ...rest
   } = props;
   const cardClasses = classNames({
@@ -46,6 +48,8 @@ export default function Card(props) {
     [classes.cardChart]: chart,
     [classes.cardLogin]: login,
     [classes.cardMain]: main,
+    [classes.cardTransparent]: transparent,
+    [classes.cardInventory]: inventory,
     [className]: className !== undefined
   });
   return (
@@ -76,5 +80,7 @@ Card.propTypes = {
   chart: PropTypes.bool,
   login: PropTypes.bool,
   main: PropTypes.bool,
+  transparent: PropTypes.bool,
+  inventory: PropTypes.bool,
   children: PropTypes.node
 };

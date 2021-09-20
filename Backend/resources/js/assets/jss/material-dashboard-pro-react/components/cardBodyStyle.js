@@ -35,10 +35,13 @@ const cardBodyStyle = theme => ({
   },
   cardBodyBorder: {
     border: "3px solid transparent",
-    "&:hover,&:focus": {
-      transition: "border-color 1s ease",
+    transition: "border-color 1s ease-in-out",
+    "&:hover,&:focus": {      
       border: "3px solid #51202c",
     },
+  },
+  cardBodyNoPadding: {
+    padding: "0px"
   },
   cardBodyFormHorizontal: {
     paddingLeft: "15px",

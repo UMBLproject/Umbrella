@@ -35,13 +35,14 @@ class User extends Authenticatable implements JWTSubject
         'password',
         'remember_token',
         'referral_code',
-        '2fa',
         'status',
         'referrer_id',
         'pivot',
         'email_verified_at',
-        // 'created_at',
-        // 'updated_at',
+        'tfa_code',
+        'tfa_code_created_at',
+        'created_at',
+        'updated_at',
     ];
 
     /**
@@ -95,7 +96,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(User::class, 'referrer_id', 'id');
     }
 
-    // protected $appends = ['referral_link'];
+    protected $appends = ['referral_link'];
 
     public function getReferralLinkAttribute()
     {

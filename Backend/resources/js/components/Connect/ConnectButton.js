@@ -7,15 +7,18 @@ import { NoEthereumProviderError, UserRejectedRequestError as UserRejectedReques
 import { injected } from '@/utils/connectors';
 import { useEagerConnect, useInactiveListener } from '@/hooks';
 
-import Button from "@/components/CustomButtons/Button.js";
+// SweetAlert
+import SweetAlert from "react-bootstrap-sweetalert";
 
+import Button from "@/components/CustomButtons/Button.js";
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "@/assets/jss/material-dashboard-pro-react/components/connectWalletStyle.js";
 const useStyles = makeStyles(styles);
 
-import { WalletNonceAction, WalletAuthAction, WalletDisconnectAction, WalletDisableTriedAction, } from '@/redux/actions/WalletActions';
+import { WalletNonceAction, WalletAuthAction, WalletDisconnectAction, } from '@/redux/actions/WalletActions';
 
 export default function ConnectButton() {
+    // const { classes } = props;
     const dispatch = useDispatch();
     const classes = useStyles();
     const { status, nonce, tried, } = useSelector(
@@ -26,6 +29,7 @@ export default function ConnectButton() {
 
     const [ activatingConnector, setActivatingConnector ] = useState(null);
     const [ authTried, setAuthTried ] = useState(false);
+    const [ alert, setAlert ] = React.useState(null);
 
     const getErrorMessage = (error) => {
         if (error instanceof NoEthereumProviderError) {
@@ -57,7 +61,8 @@ export default function ConnectButton() {
 
             dispatch(WalletDisconnectAction());
 
-            window.alert(errMsg);
+            showErrorMsg(errMsg);
+            //window.alert(errMsg);
         }
     }, [error]);
 
@@ -94,6 +99,26 @@ export default function ConnectButton() {
         }
     };
 
+    const hideAlert = () => {
+        setAlert(null);
+    };
+
+    const showErrorMsg = (message) => {
+        setAlert(
+          <SweetAlert
+            closeOnClickOutside={false}
+            html={true}
+            style={{ display: "block", marginTop: "-100px" }}
+            title="Error!"
+            onConfirm={() => hideAlert()}
+            onCancel={() => hideAlert()}
+            confirmBtnCssClass={classes.button + " " + classes.info}
+          >
+            {message}
+          </SweetAlert>
+        );
+    };
+
     const showWalletAddress = (str) => {
         return str.substring(0, 6) + '...' + str.substring(str.length-4);
     };
@@ -105,9 +130,13 @@ export default function ConnectButton() {
     useInactiveListener(!triedEager || !!activatingConnector);
 
     return (
-        <Button color="auth" size="lgAuth" className={classes.connectWallet} onClick={handleConnect}>
-            {/* { account !== null && account && active ? showWalletAddress(account) : "CONNECT WALLET" } */}
-            { status ? "Disconnect" : "CONNECT WALLET" }
-        </Button>
+        <div>
+            <Button color="auth" size="lgAuth" className={classes.connectWallet} onClick={handleConnect}>
+                {/* { account !== null && account && active ? showWalletAddress(account) : "CONNECT WALLET" } */}
+                { status ? "Disconnect" : "CONNECT WALLET" }
+            </Button>
+            {alert}
+        </div>
     )
 }
+// export default withStyles(style)(ConnectButton);

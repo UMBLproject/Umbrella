@@ -15,7 +15,7 @@ export const GetUserListService = () => {
 
 export const GetObjectCategoriesService = () => {
     const http = new HttpService();
-    let getUrl = "admin/categories";
+    let getUrl = "categories";
     const tokenId = "user-token";
 
     return http.getData(getUrl, tokenId).then((data) => {
@@ -28,7 +28,7 @@ export const GetObjectCategoriesService = () => {
 
 export const GetObjectRaritiesService = () => {
     const http = new HttpService();
-    let getUrl = "admin/rarities";
+    let getUrl = "rarities";
     const tokenId = "user-token";
 
     return http.getData(getUrl, tokenId).then((data) => {
@@ -93,7 +93,7 @@ export const GetCratesService = () => {
 
 export const GetRaritiesService = () => {
     const http = new HttpService();
-    let getUrl = "admin/rarities";
+    let getUrl = "rarities";
     const tokenId = "user-token";
 
     return http.getData(getUrl, tokenId).then((data) => {
@@ -201,6 +201,45 @@ export const GetLoginCountService = () => {
     const tokenId = "user-token";
 
     return http.getData(getUrl, tokenId).then((data) => {
+        console.log(data);
+        return data;
+    }).catch((error) => {
+        return error;;
+    })
+}
+
+export const GetCategoryNameService = (data) => {
+    const http = new HttpService();
+    let postUrl = "user/category/name";
+    const tokenId = "user-token";
+
+    return http.postData(data, postUrl, tokenId).then((data) => {
+        console.log(data);
+        return data;
+    }).catch((error) => {
+        return error;;
+    })
+}
+
+export const GetTokenListService = (data) => {
+    const http = new HttpService();
+    let postUrl = "user/token/list";
+    const tokenId = "user-token";
+
+    return http.postData(data, postUrl, tokenId).then((data) => {
+        console.log(data);
+        return data;
+    }).catch((error) => {
+        return error;;
+    })
+}
+
+export const GetUserAccountProfileService = (data) => {
+    const http = new HttpService();
+    let postUrl = "user/account/profile";
+    const tokenId = "user-token";
+
+    return http.postData(data, postUrl, tokenId).then((data) => {
         console.log(data);
         return data;
     }).catch((error) => {

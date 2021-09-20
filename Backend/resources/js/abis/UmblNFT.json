@@ -590,6 +590,24 @@
 			},
 			{
 				"internalType": "uint256",
+				"name": "_tokenHealth",
+				"type": "uint256"
+			}
+		],
+		"name": "setTokenHealth",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
 				"name": "_tokenStatus",
 				"type": "uint256"
 			}
@@ -718,6 +736,11 @@
 			{
 				"internalType": "uint256",
 				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "health",
 				"type": "uint256"
 			},
 			{

@@ -27,6 +27,8 @@ use App\Http\Controllers\LoginHistoryController;
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::apiResource('rarities', RarityController::class)->only(['index']);
+Route::apiResource('categories', CategoryController::class)->only(['index']);
 
 Route::group([
     'middleware' => ['jwt.verify', 'role:user'],
@@ -41,6 +43,9 @@ Route::group([
     Route::post('/wallet/nonce', [WalletController::class, 'getNonce'])->name('wallet.nonce');
     Route::post('/wallet/auth', [WalletController::class, 'getAuth'])->name('wallet.auth');
     Route::post('/wallet/connect', [WalletController::class, 'connect'])->name('wallet.connect');
+    Route::post('/category/name', [CategoryController::class, 'getName'])->name('category.name');
+    Route::post('/token/list', [EquipmentController::class, 'getList'])->name('token.list');
+    Route::post('/account/profile', [AuthController::class, 'getUserInfo'])->name('account.profile');
 });
 
 Route::group([
@@ -49,9 +54,7 @@ Route::group([
 ], function() {
     Route::apiResource('crates', Cratecontroller::class);
     Route::apiResource('equipment', EquipmentController::class);
-    Route::apiResource('users', UserController::class);
-    Route::apiResource('categories', CategoryController::class)->only(['index']);
-    Route::apiResource('rarities', RarityController::class)->only(['index']);
+    Route::apiResource('users', UserController::class);    
     Route::post('/mint', [MintController::class, 'mint'])->name('mint');
     Route::post('/assign', [MintController::class, 'assign'])->name('assign');
     Route::get('/token/{id}', [MintController::class, 'getTokenInfo'])->name('token.info');

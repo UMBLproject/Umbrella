@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import cx from "classnames";
 import PropTypes from "prop-types";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 
 // @material-ui/core components
@@ -30,6 +30,7 @@ import styles from "@/assets/jss/material-dashboard-pro-react/components/userNav
 const useStyles = makeStyles(styles);
 
 export default function UserNavbar(props) {
+  const history = useHistory();
   const dispatch = useDispatch();
   const { isAdmin, isAuthenticated, } = useSelector(
     (state) => state.userAuth
@@ -105,14 +106,14 @@ export default function UserNavbar(props) {
       <List className={classes.list + ' ' + classes.rightSubNav}>
         <ListItem className={classes.listItem}>
           <NavLink 
-            to={"/profile"} 
+            to={"/account"} 
             className={cx(classes.navLink, {
-              [classes.navLinkActive]: activeRoute("/profile")
+              [classes.navLinkActive]: activeRoute("/account")
             })}>
             <AccountCircle className={classes.listItemIcon} />
             <Hidden mdUp>
               <ListItemText
-                primary={"Profile"}
+                primary={"Account"}
                 disableTypography={true}
                 className={classes.listItemText}
               />
@@ -129,6 +130,34 @@ export default function UserNavbar(props) {
       </ListItem>
     </List>
   );
+
+  const isTokenExpired = (token) => {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+  
+    const { exp } = JSON.parse(jsonPayload);
+    const expired = Date.now() >= exp * 1000
+    return expired;
+  }
+
+  useEffect(() => {
+    if(localStorage.getItem("user-token")) {
+      if(isTokenExpired(localStorage.getItem("user-token"))) {
+        console.log('Token Expired!');
+        localStorage.removeItem('user-token');
+        history.push('/');
+      }
+    }
+  }, [])
+  
   return (
     <AppBar position="static" className={classes.appBar + appBarClasses}>
       <div className={classes.content}>
@@ -138,7 +167,7 @@ export default function UserNavbar(props) {
             <div className={classes.mainTitle}>
               <div color="transparent">
                 <ListItemText
-                  primary={"UMBLRELLA"}
+                  primary={"UMBRELLA"}
                   disableTypography={true}
                   className={classes.largeListItemText}
                 />

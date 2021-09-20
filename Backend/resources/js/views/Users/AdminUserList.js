@@ -101,7 +101,7 @@ export default function UserList() {
 
   const closeModal = () => {
     setShowModal(false);
-    dispatch(LogoutAction());
+    dispatch(LogoutAction(history));
   };
 
   return (

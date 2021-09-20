@@ -9,9 +9,6 @@ export const WalletNonceAction = (account) => {
             if(res.hasOwnProperty('success') && res.success === true) {
                 dispatch({type: ActionTypes.WALLET_NONCE_SUCCESS, payload: res.nonce});
             } else {
-                if(res.error === 'token') {
-                    dispatch(LogoutAction());
-                }
                 dispatch({type: ActionTypes.WALLET_NONCE_ERROR, payload: res.error});
             }
         }).catch((err) => {
@@ -28,9 +25,6 @@ export const WalletAuthAction = (account, signature) => {
             if(res.hasOwnProperty('success') && res.success === true) {
                 dispatch({type: ActionTypes.WALLET_AUTH_SUCCESS, payload: res});
             } else {
-                if(res.error === 'token') {
-                    dispatch(LogoutAction());
-                }
                 dispatch({type: ActionTypes.WALLET_AUTH_ERROR, payload: res.error});
             }
         }).catch((err) => {

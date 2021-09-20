@@ -61,11 +61,12 @@ class CrateController extends Controller
 
         $validated = $validator->validated();
         $crate = Crate::create([
-            'name' => $validated['name'],
+            'name' => trim($validated['name']),
             'faction_id' => $validated['faction'],
             'level' => $validated['level'],
             'quantity' => $validated['quantity'],
             'price' => $validated['price'],
+            'model' => is_null($request->model) ? null : trim($request->model)
         ]);
 
         foreach($validated['rarity'] as $rarity) {
@@ -113,7 +114,7 @@ class CrateController extends Controller
             'quantity' => 'required|integer|gt:0',
             'price' => 'required|numeric|gt:0',
             'rarity' => 'required|array|min:1',
-            'rarity.*' => 'required|integer|gt:0',
+            'rarity.*' => 'required|integer|gt:0',            
         ]);
 
         if($validator->fails()){
@@ -123,11 +124,12 @@ class CrateController extends Controller
         $validated = $validator->validated();
         $crate = Crate::where('id', $validated['id'])->firstOrFail();
         $crate->update([
-            'name' => $validated['name'],
+            'name' => trim($validated['name']),
             'faction_id' => $validated['faction'],
             'level' => $validated['level'],
             'quantity' => $validated['quantity'],
             'price' => $validated['price'],
+            'model' => is_null($request->model) ? null : trim($request->model),
         ]);
 
         $crate_rarities = CrateRarity::where('crate_id', $crate->id)->get();        

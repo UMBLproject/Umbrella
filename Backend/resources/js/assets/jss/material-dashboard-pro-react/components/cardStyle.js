@@ -195,7 +195,27 @@ const cardStyle = {
       border: "1px solid #885964",
       cursor: "pointer"
     }
-  }
+  },
+  cardTransparent: {
+    marginBottom: "0",
+    backgroundColor: "transparent",
+  },
+  cardInventory: {
+    marginBottom: "0",
+    backgroundColor: "rgba(0,0,0,.35)",
+    backgroundSize: "cover",
+    background: "transparent",
+    boxShadow: "none",
+    borderRadius: "0px",
+    // border: "2px solid #fff",
+    "&:hover,&:focus": {
+      // transition: "border-color 1s ease",
+      backgroundColor: "rgba(0,0,0,.1);",
+      // border: "3px solid #fff",
+      // border: "2px solid #D84646",
+      // cursor: "pointer"
+    }
+  },
 };
 
 export default cardStyle;

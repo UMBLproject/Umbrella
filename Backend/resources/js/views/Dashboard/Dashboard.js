@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import React, { useEffect, } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-
+import { useHistory } from 'react-router-dom'; 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
@@ -35,6 +35,7 @@ import { LogoutAction } from '@/redux/actions/AuthActions';
 
 export default function Dashboard() {
   const classes = useStyles();
+  const history = useHistory();
   const dispatch = useDispatch();
 
   const [userCount, setUserCount] = React.useState(null);
@@ -48,7 +49,7 @@ export default function Dashboard() {
         setUserCount(res.users);
       } else {
         if(res.error === 'token') {
-          dispatch(LogoutAction());
+          dispatch(LogoutAction(history));
         }
       }
     }); 
@@ -58,7 +59,7 @@ export default function Dashboard() {
         setCrateCount(res.crates);
       } else {
         if(res.error === 'token') {
-          dispatch(LogoutAction());
+          dispatch(LogoutAction(history));
         }
       }
     }); 
@@ -68,7 +69,7 @@ export default function Dashboard() {
         setObjectCount(res.objects);
       } else {
         if(res.error === 'token') {
-          dispatch(LogoutAction());
+          dispatch(LogoutAction(history));
         }
       }
     }); 
@@ -78,7 +79,7 @@ export default function Dashboard() {
         setLoginCount(res.logins);
       } else {
         if(res.error === 'token') {
-          dispatch(LogoutAction());
+          dispatch(LogoutAction(history));
         }
       }
     }); 
@@ -136,6 +137,19 @@ export default function Dashboard() {
               </CardIcon>
               <p className={classes.cardCategory}>Today Logins</p>
               <h3 className={classes.cardTitle}>{loginCount}</h3>
+            </CardHeader>
+            <CardFooter stats>
+            </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={6} lg={3}>
+          <Card>
+            <CardHeader color="info" stats icon>
+              <CardIcon color="info">
+                <Icon>person_outline</Icon>
+              </CardIcon>
+              <p className={classes.cardCategory}>Contract Address</p>
+              <h3 className={classes.cardTitle}>{process.env.MIX_UMBL_NFT_ADDRESS}</h3>
             </CardHeader>
             <CardFooter stats>
             </CardFooter>

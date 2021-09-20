@@ -1,7 +1,7 @@
 /*eslint-disable*/
 import React, { useEffect, } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-
+import { useHistory } from 'react-router-dom'; 
 import { useUmblContract } from "@/hooks";
 
 import SweetAlert from "react-bootstrap-sweetalert";
@@ -124,6 +124,7 @@ const style = {
 function CratesPage(props) {
   const { classes } = props;
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const { status, account, } = useSelector(
     (state) => state.userWallet
@@ -144,6 +145,7 @@ function CratesPage(props) {
   const [crateQuantity, setCrateQuantity] = React.useState(1);
   const [cratePrice, setCratePrice] = React.useState(0.000);
   const [crateRarity, setCrateRarity] = React.useState([]);
+  const [crateModel, setCrateModel] = React.useState("");
   const [objectRarities, setObjectRarities] = React.useState([]);
   const [crateId, setCrateId] = React.useState(null);
 
@@ -357,6 +359,7 @@ function CratesPage(props) {
       'rarity': crateRarity,
       'quantity': crateQuantity,
       'price': cratePrice,
+      'model': crateModel,
     };
 
     setLoading(true);
@@ -454,7 +457,7 @@ function CratesPage(props) {
         });
         setCratesData(cratesDataValue);
       } else if(res.error === 'token') {
-        dispatch(LogoutAction());
+        dispatch(LogoutAction(history));
       }
     });  
   }, []);
@@ -495,7 +498,7 @@ function CratesPage(props) {
         })
         setObjectRarities(tempItemRarities);
       } else if(res.error === 'token') {
-        dispatch(LogoutAction());
+        dispatch(LogoutAction(history));
       }
     }); 
 
@@ -801,6 +804,31 @@ function CratesPage(props) {
                             setCratePrice(parseFloat(event.target.value).toFixed(3));
                           },
                           type: "number",
+                        }}
+                      />
+                    </FormControl>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} lg={3}></GridItem>
+                </GridContainer> 
+                <GridContainer  className={classes.p20}>
+                  <GridItem xs={12} sm={3}>
+                    <FormLabel className={classes.labelHorizontal}>
+                      Model
+                    </FormLabel>
+                  </GridItem>
+                  <GridItem xs={12} sm={9} lg={6}>
+                    <FormControl fullWidth className={classes.customInputFormControl}>
+                      <CustomInput
+                        id="crate_model"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        value={crateModel}
+                        inputProps={{
+                          onChange: event => {
+                            setCrateModel(event.target.value);
+                          },
+                          type: "string",
                         }}
                       />
                     </FormControl>

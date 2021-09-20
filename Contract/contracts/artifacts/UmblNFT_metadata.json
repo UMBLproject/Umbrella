@@ -596,6 +596,24 @@
 					},
 					{
 						"internalType": "uint256",
+						"name": "_tokenHealth",
+						"type": "uint256"
+					}
+				],
+				"name": "setTokenHealth",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
 						"name": "_tokenStatus",
 						"type": "uint256"
 					}
@@ -724,6 +742,11 @@
 					{
 						"internalType": "uint256",
 						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "health",
 						"type": "uint256"
 					},
 					{
@@ -1014,11 +1037,11 @@
 			]
 		},
 		"contracts/UmblNFT.sol": {
-			"keccak256": "0xc344f52c5c754b8dd47ffb3f067c1a0a15d66198cc8514912276ea4f697217f4",
+			"keccak256": "0x91593185a3175de9207ca369ab8eb5e0f38b75777dc4f83b54832a20f516e697",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://12a7bc80b08ffb3b24b907e875fc955bbac4c87224bca8bdf8be48918ddf7205",
-				"dweb:/ipfs/QmWTxwDCMPtAHgHm1TrkLQKQE7q9GtkqEMV7JN5xkQC2dW"
+				"bzz-raw://3164659f578be75fc2cd0e502db92a86a8057f6f1413a3fa8e56d07b0d211627",
+				"dweb:/ipfs/QmPQUmC63rsjkUaiLhsgEMkVKdJvmvNj6JhnQ6wGhM9CdC"
 			]
 		}
 	},

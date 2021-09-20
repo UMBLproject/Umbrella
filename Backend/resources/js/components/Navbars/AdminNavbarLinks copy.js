@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import PropTypes from "prop-types";
+import { useHistory } from 'react-router-dom'; 
 
 import { LogoutAction } from '@/redux/actions/AuthActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,6 +36,8 @@ const useStyles = makeStyles(styles);
 
 export default function HeaderLinks(props) {
   const dispatch = useDispatch();
+  const history = useHistory();
+  
   const [openNotification, setOpenNotification] = React.useState(null);
   const handleClickNotification = event => {
     if (openNotification && openNotification.contains(event.target)) {
@@ -60,7 +63,7 @@ export default function HeaderLinks(props) {
   const handleLogout = (e) => {
     e.preventDefault();    
 
-    dispatch(LogoutAction());
+    dispatch(LogoutAction(history));
   };
   const classes = useStyles();
   const { rtlActive } = props;

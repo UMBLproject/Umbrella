@@ -119,6 +119,10 @@ const adminNavbarLinksStyle = theme => ({
       marginRight: "8px"
     }
   },
+  wrapper: {
+    display: "flex",
+    alignItems: "center",
+  },
   wrapperRTL: {
     [theme.breakpoints.up("md")]: {
       paddingLeft: "16px"

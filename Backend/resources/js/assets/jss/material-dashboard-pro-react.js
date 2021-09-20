@@ -180,7 +180,8 @@ const dribbbleColor = "#ea4c89";
 const redditColor = "#ff4500";
 const darkRedColor = "#790606";
 const redColor = "#AC0000";
-const warmRedColor = "#AB3F3F";
+const warmRedColor = "#D84646";
+const lightBlueColor = "#569DBC";
 
 const boxShadow = {
   boxShadow:
@@ -418,6 +419,7 @@ export {
   redditColor,
   darkRedColor,
   warmRedColor,
+  lightBlueColor,
   primaryBoxShadow,
   infoBoxShadow,
   successBoxShadow,

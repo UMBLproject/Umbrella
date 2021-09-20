@@ -51,17 +51,46 @@ export const LoginAction = (credentials, history) => {
         })
     }
 }
-export const LogoutAction = () => {
+
+const isTokenExpired = (token) => {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+  
+    const { exp } = JSON.parse(jsonPayload);
+    const expired = Date.now() >= exp * 1000
+    return expired;
+}
+
+export const LogoutAction = (history) => {
     return (dispatch) => {
         dispatch({type: ActionTypes.RESTART_AUTH_RESPONSE});
-        LogOutUserService().then((res) => {
-            if(res.hasOwnProperty('success') && res.success === true) {
+
+        if(localStorage.getItem("user-token")) {
+            if(isTokenExpired(localStorage.getItem("user-token"))) {
                 dispatch({type: ActionTypes.LOGOUT_SUCCESS, payload: res});
-            } else if(res.hasOwnProperty('success') && res.success === false) {
-                dispatch({type: ActionTypes.LOGOUT_SUCCESS, payload: res});
+                history.push('/');
+            } else {
+                LogOutUserService().then((res) => {
+                    if(res.hasOwnProperty('success') && res.success === true) {
+                        dispatch({type: ActionTypes.LOGOUT_SUCCESS, payload: res});
+                        history.push('/');
+                    } else if(res.hasOwnProperty('success') && res.success === false) {
+                        dispatch({type: ActionTypes.CODE_ERROR, payload: res});
+                    }
+                }, error => {
+                    dispatch({type : ActionTypes.CODE_ERROR, payload: error})
+                })                
             }
-        }, error => {
-            dispatch({type : ActionTypes.CODE_ERROR, payload: error})
-        })
-    }
+        } else {
+            history.push('/');
+        }
+    }     
 }

@@ -15,6 +15,7 @@ class Crate extends Model
         'level',
         'quantity',
         'price',
+        'model',
     ];
 
     protected $hidden = [

@@ -32,6 +32,9 @@ class CreateEquipmentTable extends Migration
             $table->string('image');
             $table->json('attributes')->nullable();
 
+            $table->unsignedSmallInteger('health')->default(100);
+            $table->string('model')->nullable();
+
             $table->timestamps();
         });
     }

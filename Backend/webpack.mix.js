@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
 
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -11,7 +12,13 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.webpackConfig({
+mix.webpackConfig(
+    {
+        module: {
+            rules: [
+                
+            ]
+        },
         resolve: {
             extensions: [".js", ".jsx"],
             alias: {
@@ -27,7 +34,8 @@ mix.webpackConfig({
                 "os": false
             }
         }
-    }).js('resources/js/app.js', 'public/js')
+    })
+    .js('resources/js/app.js', 'public/js')
     .react()
     .extract(["react"])
     .sass('resources/sass/app.scss', 'public/css');

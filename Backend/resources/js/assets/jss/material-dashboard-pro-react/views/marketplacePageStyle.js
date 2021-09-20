@@ -14,21 +14,23 @@ const marketplacePageStyle = theme => ({
   },  
   mainBlock: {
     textTransform: "uppercase",
-    minHeight: "200px",
+    minHeight: "120px",
+    padding: "40px",
     display: "flex",
     flexDirection: "row",
     justifyContent: "start",
     alignItems: "center",
     color: grayColor[19],
+    transition: "all 1s ease-in-out",
     "&:hover" : {
       color: warmRedColor,
     }
   },
   mainTitle: {
     fontFamily: '"Microgramma"',
-    fontSize: "28px",
+    fontSize: "20px",
     [theme.breakpoints.down("sm")]: {
-      fontSize: "22px",
+      fontSize: "16px",
     },
     [theme.breakpoints.down("xs")]: {
       fontSize: "12px",

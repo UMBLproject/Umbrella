@@ -22,10 +22,16 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('referral_code')->unique();
-            $table->boolean('2fa')->default(false);
+            
             $table->enum('status', ['normal','banned'])->default('normal');
+
             $table->unsignedBigInteger('referrer_id')->nullable();
             $table->foreign('referrer_id')->references('id')->on('users')->onDelete('set null');
+
+            $table->boolean('tfa')->default(false);
+            $table->string('tfa_code')->nullable();
+            $table->timestamp('tfa_code_created_at')->nullable();
+
             $table->timestamps();
         });
     }
