@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Equipment;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 class MintController extends Controller
@@ -26,7 +27,9 @@ class MintController extends Controller
 
         $imageName = time().'.'.$request->thumbnail->extension();  
      
-        $request->thumbnail->move(public_path('img'), $imageName);        
+        // $request->thumbnail->move(public_path('img'), $imageName);   
+        
+        Storage::disk('s3')->put('thumbnails/' . $imageName, file_get_contents($request->thumbnail));
 
         $validated = $validator->validated();
 
@@ -43,7 +46,7 @@ class MintController extends Controller
                     'rarity_id' => $validated['rarity'],
                     'name' => trim($validated['name']) . ' #' . $tokenId,
                     'description' => trim($validated['description']),
-                    'image' => $imageName,
+                    'image' => Storage::disk('s3')->url('thumbnails/' . $imageName),
                     'attributes' => is_null($attributes) ? null : json_encode(json_decode($attributes)),
                     'model' => is_null($request->model) ? null : trim($request->model),
                 ]
@@ -82,7 +85,7 @@ class MintController extends Controller
             'name' => $token->name,
             'description' => $token->description,
             'external_url' => 'http://umbrella.localhost',
-            'image' => 'http://umbrella.localhost/img/' . $token->image,
+            'image' => $token->image,
             'attributes' => json_decode($token->attributes),
             'model' => $token->model,
         ], 200);
@@ -117,7 +120,7 @@ class MintController extends Controller
             'name' => $token->name,
             'description' => $token->description,
             'external_url' => 'http://umbrella.localhost',
-            'image' => 'http://umbrella.localhost/img/' . $token->image,
+            'image' => $token->image,
             'attributes' => json_decode($token->attributes),
             'model' => $token->model,
         ], 200);
