@@ -12,6 +12,7 @@ use App\Models\CrateEquipment;
 use App\Models\Inventory;
 use App\Models\CrateRarity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 class CrateController extends Controller
@@ -51,12 +52,23 @@ class CrateController extends Controller
             'level' => 'required|integer|gt:0',
             'quantity' => 'required|integer|gt:0',
             'price' => 'required|numeric|gt:0',
-            'rarity' => 'required|array|min:1',
-            'rarity.*' => 'required|integer|gt:0',
+            'rarity' => 'required|string|min:1',
+            // 'rarity.*' => 'required|integer|gt:0',
         ]);
 
         if($validator->fails()){
             return response()->json($validator->errors(), 400);
+        }
+
+        // Upload collection images to S3 Bucket
+        $collection_path = time();
+        $collection_count = 0;
+
+        if($request->hasfile('collection')) {            
+            foreach($request->file('collection') as $collection_item) {
+                $collection_count++;
+                Storage::disk('s3')->put('collections/' . $collection_path . '/' . $collection_count . '.' . $collection_item->extension(), file_get_contents($collection_item));
+            }
         }
 
         $validated = $validator->validated();
@@ -66,10 +78,13 @@ class CrateController extends Controller
             'level' => $validated['level'],
             'quantity' => $validated['quantity'],
             'price' => $validated['price'],
-            'model' => is_null($request->model) ? null : trim($request->model)
+            'collection_path' => $request->hasfile('collection') ? $collection_path : null,
+            'collection_count' => $collection_count,
         ]);
 
-        foreach($validated['rarity'] as $rarity) {
+        $array_rarity = explode(',', $validated['rarity']);
+
+        foreach($array_rarity as $rarity) {
             CrateRarity::create([
                 'crate_id' => $crate->id,
                 'rarity_id' => $rarity
@@ -123,14 +138,45 @@ class CrateController extends Controller
 
         $validated = $validator->validated();
         $crate = Crate::where('id', $validated['id'])->firstOrFail();
-        $crate->update([
-            'name' => trim($validated['name']),
-            'faction_id' => $validated['faction'],
-            'level' => $validated['level'],
-            'quantity' => $validated['quantity'],
-            'price' => $validated['price'],
-            'model' => is_null($request->model) ? null : trim($request->model),
-        ]);
+
+        if(!$crate) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Crate ID is not valid',
+            ], 201);
+        }
+
+        // Upload collection images to S3 Bucket
+        $collection_path = time();
+        $collection_count = 0;
+
+        if($request->hasfile('collection')) { 
+            // delete original folder
+            Storage::disk('s3')->deleteDirectory('collections/' . $crate->collection_path);
+
+            foreach($request->file('collection') as $collection_item) {
+                $collection_count++;
+                Storage::disk('s3')->put('collections/' . $collection_path . '/' . $collection_count . '.' . $collection_item->extension(), file_get_contents($collection_item));
+            }
+
+            $crate->update([
+                'name' => trim($validated['name']),
+                'faction_id' => $validated['faction'],
+                'level' => $validated['level'],
+                'quantity' => $validated['quantity'],
+                'price' => $validated['price'],
+                'collection_path' => $request->hasfile('collection') ? $collection_path : null,
+                'collection_count' => $collection_count,
+            ]);
+        } else {
+            $crate->update([
+                'name' => trim($validated['name']),
+                'faction_id' => $validated['faction'],
+                'level' => $validated['level'],
+                'quantity' => $validated['quantity'],
+                'price' => $validated['price']
+            ]);
+        }
 
         $crate_rarities = CrateRarity::where('crate_id', $crate->id)->get();        
         foreach($crate_rarities as $crate_rarity) {
@@ -159,6 +205,10 @@ class CrateController extends Controller
      */
     public function destroy(Crate $crate)
     {
+        if($crate->collection_path) {
+            // delete original folder
+            Storage::disk('s3')->deleteDirectory('collections/' . $crate->collection_path);
+        }
         $crate->delete();
 
         return response()->json([

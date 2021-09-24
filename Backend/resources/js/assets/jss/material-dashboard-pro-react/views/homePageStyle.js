@@ -31,7 +31,7 @@ const homePageStyle = theme => ({
     lineHeight: "3"
   },
   welcomTitle: {
-    fontFamily: '"Microgramma"',
+    fontFamily: 'Microgramma',
     color: grayColor[19],
     fontSize: "28px",
     [theme.breakpoints.down("sm")]: {
@@ -44,7 +44,7 @@ const homePageStyle = theme => ({
     fontWeight: "bold"
   },
   authCardTitle: {
-    fontFamily: '"Microgramma"',
+    fontFamily: 'Microgramma',
     color: whiteColor,
     textTransform: "uppercase",
     textShadow: "2px 2px 2px #333",
@@ -59,7 +59,7 @@ const homePageStyle = theme => ({
     fontWeight: "bold"
   },
   authCardDesc: {
-    fontFamily: '"Microgramma"',
+    fontFamily: 'Microgramma',
     color: redColor,
     textTransform: "uppercase",
     textShadow: "2px 2px 2px #111",

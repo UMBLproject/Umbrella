@@ -1,8 +1,6 @@
 /* michroma-regular - latin */
 @font-face {
-    font-family: 'Michroma';
-    font-style: normal;
-    font-weight: 400;
+    font-family: Michroma;
     src: url('./assets/fonts/michroma-v11-latin-regular.eot'); /* IE9 Compat Modes */
     src: local(''),
          url('./assets/fonts/michroma-v11-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
@@ -14,8 +12,12 @@
 
 /* michroma-regular - latin */
 @font-face {
-    font-family: 'Microgramma';
-    font-style: normal;
-    font-weight: 400;
+    font-family: Microgramma;
     src: url('./assets/fonts/Microgramma D Extended Bold.otf'); 
   }
+
+/* michroma-regular - latin */
+@font-face {
+  font-family: Resident;
+  src: url('./assets/fonts/resident_evil_7_biohazard_game_font_final_version_by_peter_jonca.otf'); 
+}

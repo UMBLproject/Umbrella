@@ -109,7 +109,7 @@ export const AddNewCrateService = (crate) => {
     let postUrl = "admin/crates";
     const tokenId = "user-token";
 
-    return http.postData(crate, postUrl, tokenId).then((data) => {
+    return http.formData(crate, postUrl, tokenId).then((data) => {
         console.log(data);
         return data;
     }).catch((error) => {
@@ -135,7 +135,7 @@ export const UpdateCrateService = (id, crateData) => {
     let patchUrl = "admin/crates/" + id;
     const tokenId = "user-token";
 
-    return http.patchData(crateData, patchUrl, tokenId).then((data) => {
+    return http.formData(crateData, patchUrl, tokenId).then((data) => {
         console.log(data);
         return data;
     }).catch((error) => {
@@ -240,6 +240,19 @@ export const GetUserAccountProfileService = (data) => {
     const tokenId = "user-token";
 
     return http.postData(data, postUrl, tokenId).then((data) => {
+        console.log(data);
+        return data;
+    }).catch((error) => {
+        return error;;
+    })
+}
+
+export const GetCrateInfoService = (id) => {
+    const http = new HttpService();
+    let getUrl = "user/crates/" + id;
+    const tokenId = "user-token";
+
+    return http.getData(getUrl, tokenId).then((data) => {
         console.log(data);
         return data;
     }).catch((error) => {

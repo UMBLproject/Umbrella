@@ -27,7 +27,7 @@ const marketplacePageStyle = theme => ({
     }
   },
   mainTitle: {
-    fontFamily: '"Microgramma"',
+    fontFamily: 'Microgramma',
     fontSize: "20px",
     [theme.breakpoints.down("sm")]: {
       fontSize: "16px",

@@ -1,7 +1,7 @@
 import Buttons from "@/views/Components/Buttons.js";
 import Calendar from "@/views/Calendar/Calendar.js";
 import Charts from "@/views/Charts/Charts.js";
-import Dashboard from "@/views/Dashboard/Dashboard.js";
+
 import ErrorPage from "@/views/Pages/ErrorPage.js";
 import ExtendedForms from "@/views/Forms/ExtendedForms.js";
 import ExtendedTables from "@/views/Tables/ExtendedTables.js";
@@ -29,20 +29,24 @@ import Widgets from "@/views/Widgets/Widgets.js";
 import Wizard from "@/views/Forms/Wizard.js";
 
 
-import HomePage from "@/views/Pages/HomePage.js";
-import MarketplacePage from "@/views/Market/MarketplacePage.js";
-import InventoryPage from "@/views/Inventory/Inventory.js";
-import CategoryPage from "@/views/Inventory/Category.js";
-import ItemPage from "@/views/Inventory/ItemPage.js";
-import AccountPage from "@/views/Account/Account.js";
-import ProfilePage from "@/views/Account/Profile.js";
-import SecurityPage from "@/views/Account/Security.js";
+import HomePage from "@/views/HomePage.js";
+import MarketplacePage from "@/views/User/Market/MarketplacePage.js";
+import InventoryPage from "@/views/User/Inventory/Inventory.js";
+import CategoryPage from "@/views/User/Inventory/Category.js";
+import ItemPage from "@/views/User/Inventory/ItemPage.js";
+import AccountPage from "@/views/User/Account/Account.js";
+import ProfilePage from "@/views/User/Account/Profile.js";
+import SecurityPage from "@/views/User/Account/Security.js";
 
-import AdminUserListPage from "@/views/Users/AdminUserList.js";
-import AdminMintNFTPage from "@/views/Tokens/AdminMintNFTPage.js";
-import AdminAssignNFTPage from "@/views/Tokens/AdminAssignNFTPage.js";
-import AdminToggleMarketPage from "@/views/Market/AdminToggleMarketPage.js";
-import AdminCratesPage from "@/views/Market/AdminCratesPage.js";
+import CrateMainPage from "@/views/User/Crate/CrateMainPage.js";
+import CrateItemPage from "@/views/User/Crate/CrateItemPage.js";
+
+import AdminDashboard from "@/views/Admin/AdminDashboard.js";
+import AdminUserListPage from "@/views/Admin/AdminUserList.js";
+import AdminMintNFTPage from "@/views/Admin/AdminMintNFTPage.js";
+import AdminAssignNFTPage from "@/views/Admin/AdminAssignNFTPage.js";
+import AdminToggleMarketPage from "@/views/Admin/AdminToggleMarketPage.js";
+import AdminCratesPage from "@/views/Admin/AdminCratesPage.js";
 
 // @material-ui/icons
 import Apps from "@material-ui/icons/Apps";
@@ -107,11 +111,23 @@ var dashRoutes = [
     layout: "/user"
   },
   {
+    path: "/crates",
+    name: "Crate Main Page",
+    component: CrateMainPage,
+    layout: "/user"
+  },
+  {
+    path: "/crates/:crateId",
+    name: "Crate Item Page",
+    component: CrateItemPage,
+    layout: "/user"
+  },
+  {
     path: "/dashboard",
     name: "Dashboard",
     rtlName: "لوحة القيادة",
     icon: DashboardIcon,
-    component: Dashboard,
+    component: AdminDashboard,
     layout: "/admin"
   },
   {

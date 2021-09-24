@@ -15,7 +15,8 @@ class Crate extends Model
         'level',
         'quantity',
         'price',
-        'model',
+        'collection_path',
+        'collection_count',
     ];
 
     protected $hidden = [

@@ -23,7 +23,8 @@ class Equipment extends Model
         'description', 
         'image', 
         'attributes',
-        'model',
+        'collection_path',
+        'collection_count',
     ];
 
     protected $hidden = [

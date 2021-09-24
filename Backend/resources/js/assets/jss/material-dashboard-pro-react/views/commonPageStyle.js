@@ -28,14 +28,14 @@ const commonPageStyle = theme => ({
     marginTop: "10px !important",
   },
   warmRedTitleText: {
-    fontFamily: "Microgramma",
+    fontFamily: 'Microgramma',
     color: warmRedColor,
     fontSize: "24px",
     textTransform: "uppercase",
     fontWeight: "600",
   },
   lightBlueSmallText: {
-    fontFamily: "Microgramma",
+    fontFamily: 'Microgramma',
     color: lightBlueColor,
     fontSize: "12px",
     textTransform: "uppercase",

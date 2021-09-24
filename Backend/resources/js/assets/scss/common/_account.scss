@@ -6,7 +6,7 @@ $danger-color: #C24F5E;
 $border-color: rgba(86,157,188,.5);
 
 .account-navbar {
-    font-family: "Microgramma";
+    font-family: Microgramma;
     text-transform: uppercase;
     margin: 30px 20px 20px 20px;
     display: flex;
@@ -42,7 +42,7 @@ $border-color: rgba(86,157,188,.5);
 }
 
 .account-block {
-    font-family: "Microgramma";
+    font-family: Microgramma;
     text-transform: uppercase;
     padding: 20px;
     width: 100%;
@@ -57,7 +57,7 @@ $border-color: rgba(86,157,188,.5);
         margin-bottom: 20px;
 
         .account-name-text {
-            font-family: "Microgramma";
+            font-family: Microgramma;
             text-transform: uppercase;
             font-weight: bold;
             font-size: 24px;
@@ -73,7 +73,7 @@ $border-color: rgba(86,157,188,.5);
     .account-warning {
         text-transform: uppercase;
         .account-warning-text {
-            font-family: "Microgramma";
+            font-family: Microgramma;
             color: $danger-color;
             font-size: 18px;
         }

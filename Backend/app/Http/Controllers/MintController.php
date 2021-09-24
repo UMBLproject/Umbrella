@@ -17,8 +17,8 @@ class MintController extends Controller
             'rarity' => 'required|integer|gt:0',
             'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',            
             'total' => 'required|integer|gte:0',
-            'count' => 'required|integer|gt:0',  
-            'attributes' => 'string'
+            'count' => 'required|integer|gt:0',
+            'attributes' => 'required|string',
         ]);
 
         if($validator->fails()){
@@ -27,15 +27,27 @@ class MintController extends Controller
 
         $imageName = time().'.'.$request->thumbnail->extension();  
      
+        // save thumbnail to public folder
         // $request->thumbnail->move(public_path('img'), $imageName);   
         
+        // Upload thumbnail image to S3 Bucket
         Storage::disk('s3')->put('thumbnails/' . $imageName, file_get_contents($request->thumbnail));
+
+        // Upload collection images to S3 Bucket
+        $collection_path = time();
+        $collection_count = 0;
+
+        if($request->hasfile('collection')) {            
+            foreach($request->file('collection') as $collection_item) {
+                $collection_count++;
+                Storage::disk('s3')->put('collections/' . $collection_path . '/' . $collection_count . '.' . $collection_item->extension(), file_get_contents($collection_item));
+            }
+        }
 
         $validated = $validator->validated();
 
         $total = intval($validated['total']);
         $count = intval($validated['count']);
-        $attributes = $validated['attributes'];
 
         for($i = 0; $i < $count; $i++ ) {
             $tokenId = $total + $i + 1;
@@ -47,8 +59,9 @@ class MintController extends Controller
                     'name' => trim($validated['name']) . ' #' . $tokenId,
                     'description' => trim($validated['description']),
                     'image' => Storage::disk('s3')->url('thumbnails/' . $imageName),
-                    'attributes' => is_null($attributes) ? null : json_encode(json_decode($attributes)),
-                    'model' => is_null($request->model) ? null : trim($request->model),
+                    'attributes' => json_encode(json_decode($validated['attributes'])),
+                    'collection_path' => $request->hasfile('collection') ? $collection_path : null,
+                    'collection_count' => $collection_count,
                 ]
             );
         }
@@ -87,7 +100,6 @@ class MintController extends Controller
             'external_url' => 'http://umbrella.localhost',
             'image' => $token->image,
             'attributes' => json_decode($token->attributes),
-            'model' => $token->model,
         ], 200);
     }
 
@@ -122,7 +134,8 @@ class MintController extends Controller
             'external_url' => 'http://umbrella.localhost',
             'image' => $token->image,
             'attributes' => json_decode($token->attributes),
-            'model' => $token->model,
+            'collection_path' => $token->collection_path,
+            'collection_count' => $token->collection_count,
         ], 200);
     }
 

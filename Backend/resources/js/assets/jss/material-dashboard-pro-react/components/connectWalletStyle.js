@@ -3,7 +3,7 @@ import sweetAlertStyle from "@/assets/jss/material-dashboard-pro-react/views/swe
 const connectWalletStyle = theme => ({
   ...sweetAlertStyle,
   connectWallet: {
-    // fontFamily: "Microgramma",
+    // fontFamily: 'Microgramma',
     background: "linear-gradient(to right, #500909, #7D2E2E)",
     textTransform: "uppercase",
     border: "2px solid #FF7777",

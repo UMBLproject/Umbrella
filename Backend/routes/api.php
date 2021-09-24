@@ -46,6 +46,7 @@ Route::group([
     Route::post('/category/name', [CategoryController::class, 'getName'])->name('category.name');
     Route::post('/token/list', [EquipmentController::class, 'getList'])->name('token.list');
     Route::post('/account/profile', [AuthController::class, 'getUserInfo'])->name('account.profile');
+    Route::get('/crates/{crate}', [CrateController::class, 'show'])->name('crate.info');
 });
 
 Route::group([

@@ -246,10 +246,10 @@ const pagesHeaderStyle = theme => ({
     display: "inline-block",
     position: "relative",
     whiteSpace: "nowrap",
-    fontFamily: "Microgramma"
+    fontFamily: 'Microgramma'
   },
   largeListItemText: {
-    fontFamily: '"Microgramma"',
+    fontFamily: 'Microgramma',
     letterSpacing: "1px !important",
     paddingTop: "4px !important",
     flex: "none",
@@ -263,7 +263,7 @@ const pagesHeaderStyle = theme => ({
     borderBottomColor: darkRedColor
   },
   smallListItemText: {
-    fontFamily: '"Michroma"',
+    fontFamily: 'Michroma',
     letterSpacing: "1px !important",
     padding: "0px",
     margin: "0px",
